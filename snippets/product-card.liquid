@@ -1,0 +1,114 @@
+{% comment %}
+  Estelle Atelier - Product Card Snippet
+  Reusable product card component
+
+  Usage:
+    {% render 'product-card', product: product, show_vendor: false, show_quick_add: true %}
+
+  Parameters:
+    - product: Product object (required)
+    - show_vendor: Show vendor/product type (default: false)
+    - show_quick_add: Show quick add button (default: true)
+    - show_badge: Show sale/new badges (default: true)
+    - card_style: 'portrait' (3:4) or 'landscape' (16:10) or 'square' (1:1)
+    - text_alignment: 'left', 'center', or 'right'
+{% endcomment %}
+
+{%- liquid
+  assign show_vendor = show_vendor | default: false
+  assign show_quick_add = show_quick_add | default: true
+  assign show_badge = show_badge | default: true
+  assign card_style = card_style | default: 'portrait'
+  assign text_alignment = text_alignment | default: 'left'
+
+  case card_style
+    when 'landscape'
+      assign aspect_ratio = 'aspect-[16/10]'
+    when 'square'
+      assign aspect_ratio = 'aspect-square'
+    else
+      assign aspect_ratio = 'aspect-[3/4]'
+  endcase
+
+  if text_alignment == 'center'
+    assign text_align_class = 'text-center'
+  elsif text_alignment == 'right'
+    assign text_align_class = 'text-right'
+  else
+    assign text_align_class = 'text-left'
+  endif
+-%}
+
+<div class="product-card group" data-product-id="{{ product.id }}">
+  <a href="{{ product.url }}" class="block">
+    <!-- Product Image -->
+    <div class="relative {{ aspect_ratio }} rounded-xl overflow-hidden mb-4 bg-sage-pale/30">
+      {% if product.featured_media %}
+        {{
+          product.featured_media
+          | image_url: width: 600
+          | image_tag: class: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105', loading: 'lazy'
+        }}
+
+        <!-- Badges -->
+        {% if show_badge %}
+          <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
+            {% if product.available == false %}
+              <span class="px-3 py-1 bg-text-olive-deep text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                {{ 'products.product.sold_out' | t }}
+              </span>
+            {% elsif product.compare_at_price > product.price %}
+              <span class="px-3 py-1 bg-sage-dark text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                {{ 'products.product.on_sale' | t }}
+              </span>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Quick View Button -->
+        {% if show_quick_add and product.available %}
+          <div class="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <button
+              type="button"
+              class="quick-view-trigger w-full bg-white text-text-olive-deep py-3 rounded-lg text-xs font-bold uppercase tracking-widest shadow-xl hover:bg-sage-pale transition-colors"
+              data-product-handle="{{ product.handle }}"
+              aria-label="{{ 'products.product.quick_view' | t | default: 'Quick View' }}"
+            >
+              {{ 'products.product.quick_view' | t | default: 'Quick View' }}
+            </button>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center">
+          {{ 'product-1' | placeholder_svg_tag: 'w-1/2 h-1/2 text-sage-dark/20' }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Product Info -->
+    <div class="space-y-1 {{ text_align_class }}">
+      {% if show_vendor and product.vendor %}
+        <p class="text-[10px] uppercase tracking-[0.2em] text-muted">
+          {{ product.vendor }}
+        </p>
+      {% endif %}
+
+      <h3 class="text-base font-medium text-text-olive-deep">
+        {{ product.title }}
+      </h3>
+
+      {% if product.price %}
+        <div class="flex items-center gap-2 {% if text_alignment == 'center' %}justify-center{% elsif text_alignment == 'right' %}justify-end{% else %}justify-start{% endif %}">
+          {% if product.compare_at_price > product.price %}
+            <span class="text-muted line-through text-sm">
+              {{ product.compare_at_price | money }}
+            </span>
+          {% endif %}
+          <span class="text-sage-dark font-sans text-sm font-semibold tracking-wide">
+            {{ product.price | money }}
+          </span>
+        </div>
+      {% endif %}
+    </div>
+  </a>
+</div>

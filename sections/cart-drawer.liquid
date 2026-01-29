@@ -1,0 +1,197 @@
+{% comment %}
+  Estelle Atelier - Cart Drawer Section
+  Slide-out cart drawer with vanilla JS
+{% endcomment %}
+
+{% style %}
+  .cart-drawer {
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cart-drawer.cart-drawer-open {
+    transform: translateX(0);
+  }
+  .cart-drawer-backdrop {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .cart-drawer-backdrop.cart-drawer-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  body.cart-drawer-open {
+    overflow: hidden;
+  }
+  .cart-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+  }
+  #cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    z-index: 1000;
+    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 480px) {
+    #cart-drawer {
+      max-width: 100%;
+    }
+  }
+  .cart-scrollbar::-webkit-scrollbar {
+    width: 2px;
+  }
+  .cart-scrollbar::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  .cart-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--sage-accent, #e1e8df);
+    border-radius: 2px;
+  }
+{% endstyle %}
+
+<!-- Cart Drawer Backdrop -->
+<div
+  data-cart-drawer-backdrop
+  class="cart-drawer-backdrop"
+  aria-hidden="true"
+></div>
+
+<!-- Cart Drawer -->
+<div
+  id="cart-drawer"
+  class="cart-drawer flex flex-col"
+  aria-label="{{ 'cart.general.title' | t }}"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Cart Header -->
+  <div class="flex items-center justify-between px-8 py-6 border-b border-sage-accent">
+    <div class="flex flex-col">
+      <h1 class="text-xl font-serif tracking-wide font-light text-text-olive-deep">{{ 'cart.general.title' | t }}</h1>
+      <p class="text-[9px] text-muted uppercase tracking-[0.2em] mt-1" data-cart-item-count>(0)</p>
+    </div>
+    <button
+      data-cart-drawer-close
+      class="group p-2 flex items-center justify-center text-text-olive-deep hover:text-sage-dark transition-colors"
+      aria-label="{{ 'accessibility.close' | t }}"
+    >
+      <span class="material-symbols-outlined group-hover:rotate-90 transition-transform duration-300">close</span>
+    </button>
+  </div>
+
+  <!-- Free Shipping Progress (Optional) -->
+  {% if section.settings.show_free_shipping_progress %}
+    <div class="px-8 py-4 border-b border-sage-accent bg-sage-pale/30">
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between items-end">
+          <p class="text-[10px] uppercase tracking-[0.2em] text-sage-dark font-medium">{{ section.settings.free_shipping_text }}</p>
+          <p class="text-[11px] font-sans text-text-olive-deep" data-free-shipping-remaining>{{ section.settings.free_shipping_remaining }}</p>
+        </div>
+        <div class="h-[2px] w-full bg-sage-accent/30">
+          <div class="h-full bg-sage-dark transition-all duration-500" style="width: 60%;" data-free-shipping-progress></div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Cart Items -->
+  <div class="flex-1 overflow-y-auto cart-scrollbar px-8" data-cart-items-container>
+    <!-- Cart items will be injected here by JavaScript -->
+    <div class="flex flex-col items-center justify-center py-20 text-center">
+      <span class="material-symbols-outlined text-6xl text-sage-dark/20 mb-4">shopping_bag</span>
+      <p class="text-text-olive-deep/70 text-lg">{{ 'cart.empty.title' | t }}</p>
+      <a href="/collections/all" class="mt-4 text-sage-dark font-medium border-b border-sage-dark/30 pb-0.5 hover:border-sage-dark transition-all">
+        {{ 'cart.empty.button' | t }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Cart Footer -->
+  <div class="p-8 space-y-6 border-t border-sage-accent bg-white">
+    <div class="space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="text-[10px] uppercase tracking-[0.2em] text-muted font-medium">{{ 'cart.general.subtotal' | t }}</span>
+        <span class="text-xl font-serif text-text-olive-deep tracking-tight" data-cart-subtotal>{{ 0 | money }}</span>
+      </div>
+      <p class="text-[10px] text-muted font-light leading-relaxed italic">
+        {{ 'cart.general.shipping_at_checkout' | t }}
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <a href="/checkout" class="w-full bg-sage-dark hover:bg-sage-accent text-white h-14 font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-300 shadow-sm flex items-center justify-center">
+        {{ 'cart.general.checkout' | t }}
+      </a>
+      <button data-cart-drawer-close class="w-full text-center text-[10px] tracking-[0.2em] uppercase text-muted hover:text-text-olive-deep transition-colors">
+        {{ 'cart.general.continue_shopping' | t }}
+      </button>
+    </div>
+
+    <!-- Trust Badges -->
+    {% if section.settings.show_trust_badges %}
+      <div class="flex justify-center gap-8 pt-4 opacity-60">
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-sage-dark text-xl">verified_user</span>
+          <span class="text-[8px] uppercase tracking-[0.2em] text-muted">{{ 'cart.trust.secure' | t }}</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-sage-dark text-xl">public</span>
+          <span class="text-[8px] uppercase tracking-[0.2em] text-muted">{{ 'cart.trust.global' | t }}</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-sage-dark text-xl">eco</span>
+          <span class="text-[8px] uppercase tracking-[0.2em] text-muted">{{ 'cart.trust.sustainable' | t }}</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_free_shipping_progress",
+      "label": "Show free shipping progress",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_text",
+      "label": "Free shipping text",
+      "default": "Complimentary Shipping"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_remaining",
+      "label": "Remaining amount text",
+      "default": "$15.00 remaining"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "default": 150,
+      "info": "Minimum order amount for free shipping"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "header": {
+      "type": "editorial-hero",
+      "settings": {
+        "heading": "Shopping Cart",
+        "text": "Review your items before checkout."
+      }
+    },
+    "main-cart": {
+      "type": "main-cart"
+    }
+  },
+  "order": [
+    "header",
+    "main-cart"
+  ]
+}

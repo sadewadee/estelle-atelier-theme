@@ -1,0 +1,103 @@
+{% comment %}
+  Estelle Atelier - Recently Viewed Products Section
+  Displays carousel of recently viewed products
+{% endcomment %}
+
+{% style %}
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+{% endstyle %}
+
+<div data-section-id="{{ section.id }}" data-recently-viewed-container class="px-6 md:px-12 py-16 {% if section.settings.background_style == 'sage' %}bg-sage-pale{% endif %}">
+  <div class="max-w-[1800px] mx-auto">
+    <!-- Section Header -->
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        {% if section.settings.show_label %}
+          <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em] mb-2 block">{{ section.settings.label_text }}</span>
+        {% endif %}
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-text-charcoal">{{ section.settings.heading }}</h2>
+      </div>
+      {% if section.settings.show_navigation %}
+        <div class="flex gap-2">
+          <button data-carousel-prev class="size-10 rounded-lg flex items-center justify-center bg-sage-dark/10 hover:bg-sage-dark transition-all group" aria-label="{{ 'accessibility.previous' | t }}">
+            <span class="material-symbols-outlined text-xl group-hover:text-white">chevron_left</span>
+          </button>
+          <button data-carousel-next class="size-10 rounded-lg flex items-center justify-center bg-sage-dark/10 hover:bg-sage-dark transition-all group" aria-label="{{ 'accessibility.next' | t }}">
+            <span class="material-symbols-outlined text-xl group-hover:text-white">chevron_right</span>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Carousel Component -->
+    <div class="relative">
+      <div
+        data-recently-viewed-carousel
+        class="flex gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-8"
+      >
+        <!-- Products will be injected here by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_label",
+      "label": "Show label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label text",
+      "default": "Your History"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sage",
+          "label": "Sage pale"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently Viewed",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

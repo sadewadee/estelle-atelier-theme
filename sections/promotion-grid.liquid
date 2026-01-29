@@ -1,0 +1,173 @@
+{% comment %}
+  Estelle Atelier - Promotion Grid Section
+  Flexible 6-type promotional grid layout
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-[1800px] mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      {% if section.settings.overline != blank %}
+        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-2 block">
+          {{ section.settings.overline }}
+        </span>
+      {% endif %}
+      {% if section.settings.heading != blank %}
+        <h2 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight serif">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+      {% for block in section.blocks %}
+        <div
+          class="promotion-item group relative overflow-hidden rounded-xl {% if block.settings.span == 'large' %}col-span-2 row-span-2{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 800
+              | image_tag: class: 'absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110', loading: 'lazy'
+            }}
+          {% else %}
+            <div class="absolute inset-0 bg-sage-pale"></div>
+          {% endif %}
+
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/60 via-text-olive-deep/20 to-transparent"></div>
+
+          <!-- Content -->
+          <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
+            {% if block.settings.overline != blank %}
+              <span class="text-white/80 text-[10px] font-bold uppercase tracking-[0.2em] mb-2">
+                {{ block.settings.overline }}
+              </span>
+            {% endif %}
+
+            {% if block.settings.title != blank %}
+              <h3 class="text-white text-lg md:text-xl font-bold serif mb-2">
+                {{ block.settings.title }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.link_text != blank and block.settings.link != blank %}
+              <a
+                href="{{ block.settings.link }}"
+                class="inline-flex items-center gap-2 text-white text-sm font-medium mt-2 group-hover:gap-4 transition-all"
+              >
+                {{ block.settings.link_text }}
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promotion Grid",
+  "tag": "section",
+  "class": "section-promotion-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Discover"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion",
+      "name": "Promotion Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "span",
+          "label": "Size",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal (1x1)"
+            },
+            {
+              "value": "large",
+              "label": "Large (2x2)"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "text",
+          "id": "overline",
+          "label": "Overline",
+          "default": "New"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Summer Collection"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotion Grid",
+      "category": "Promotional",
+      "blocks": [
+        {
+          "type": "promotion",
+          "settings": {
+            "span": "large"
+          }
+        },
+        {
+          "type": "promotion"
+        },
+        {
+          "type": "promotion"
+        },
+        {
+          "type": "promotion"
+        },
+        {
+          "type": "promotion"
+        },
+        {
+          "type": "promotion"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

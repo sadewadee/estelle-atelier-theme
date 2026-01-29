@@ -1,0 +1,249 @@
+{% comment %}
+  Estelle Atelier - Testimonial Slider Section
+  Pure vanilla JS carousel - no third-party dependencies
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24 overflow-hidden {% if section.settings.background_style == 'sage' %}bg-sage-pale{% endif %}" data-section-id="{{ section.id }}">
+  <div class="max-w-5xl mx-auto flex flex-col items-center">
+    <!-- Carousel Container -->
+    <div class="relative w-full flex items-center justify-between" data-testimonial-carousel>
+      <!-- Left Navigation Arrow -->
+      {% if section.settings.show_arrows %}
+        <button data-testimonial-prev class="hidden md:flex items-center justify-center p-2 text-text-olive-deep/40 hover:text-sage-dark transition-colors duration-300" aria-label="{{ 'accessibility.previous' | t }}">
+          <span class="material-symbols-outlined text-3xl">chevron_left</span>
+        </button>
+      {% endif %}
+
+      <!-- Slides Container -->
+      <div class="flex-1 mx-auto text-center {% if section.settings.show_arrows %}px-8{% endif %}">
+        <div class="testimonial-slides overflow-hidden">
+          {% for block in section.blocks %}
+            <div class="testimonial-slide {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              <div class="mb-8">
+                <span class="material-symbols-outlined text-sage-dark/30 text-4xl mb-6">format_quote</span>
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed text-text-olive-deep serif">
+                  {{ block.settings.quote }}
+                </h2>
+              </div>
+              <div class="flex flex-col items-center gap-3">
+                <div class="w-12 h-[1px] bg-sage-dark/30"></div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-sm font-medium tracking-widest text-text-olive-deep uppercase">
+                    {{ block.settings.author }}
+                  </p>
+                  {% if block.settings.verified %}
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-sage-dark font-bold">{{ 'testimonials.verified' | t | default: 'Verified Buyer' }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Right Navigation Arrow -->
+      {% if section.settings.show_arrows %}
+        <button data-testimonial-next class="hidden md:flex items-center justify-center p-2 text-text-olive-deep/40 hover:text-sage-dark transition-colors duration-300" aria-label="{{ 'accessibility.next' | t }}">
+          <span class="material-symbols-outlined text-3xl">chevron_right</span>
+        </button>
+      {% endif %}
+    </div>
+
+    <!-- Pagination Dots -->
+    <div class="mt-12 flex items-center justify-center gap-3" data-testimonial-dots>
+      {% for block in section.blocks %}
+        <button
+          data-dot-index="{{ forloop.index0 }}"
+          aria-label="{{ 'accessibility.go_to_slide' | t: index: forloop.index }}"
+          class="testimonial-dot w-2 h-2 rounded-full {% if forloop.first %}bg-sage-dark{% else %}bg-text-olive-deep/20{% endif %} transition-all duration-300"
+        ></button>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .testimonial-slides {
+    position: relative;
+  }
+  .testimonial-slide {
+    display: none;
+  }
+  .testimonial-slide.active {
+    display: block;
+  }
+  .testimonial-dot.active {
+    background-color: var(--sage-dark, #8ba888) !important;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    'use strict';
+
+    const carousel = document.querySelector('[data-testimonial-carousel]');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.testimonial-slide');
+    const dots = carousel.querySelectorAll('.testimonial-dot');
+    const prevBtn = carousel.querySelector('[data-testimonial-prev]');
+    const nextBtn = carousel.querySelector('[data-testimonial-next]');
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function showSlide(index) {
+      // Validate index
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+
+      // Update slides
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+
+      // Update dots
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    // Event listeners
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => showSlide(index));
+    });
+
+    // Autoplay
+    function startAutoplay() {
+      const delay = {{ section.settings.autoplay_delay | default: 5000 }};
+      if (delay > 0) {
+        autoplayInterval = setInterval(nextSlide, delay);
+      }
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
+    }
+
+    if ({{ section.settings.autoplay | default: false }}) {
+      startAutoplay();
+      carousel.addEventListener('mouseenter', stopAutoplay);
+      carousel.addEventListener('mouseleave', startAutoplay);
+    }
+
+    // Keyboard navigation
+    carousel.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Clients Say"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sage",
+          "label": "Sage pale"
+        }
+      ],
+      "default": "sage"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 2000,
+      "max": 10000,
+      "step": 1000,
+      "default": 5000,
+      "unit": "ms",
+      "label": "Change slides every"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "The craftsmanship is unparalleled; every piece feels like a work of art tailored just for me."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Alexandra V."
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show verified badge",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "category": "Social",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,256 @@
+{%- comment -%}
+  Artisanal Product Detail Section
+  Based on product_detail_view_1/code.html
+{%- endcomment -%}
+
+{%- style -%}
+  .product-{{ section.id }} .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+  .product-{{ section.id }} .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .product-{{ section.id }} .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--sage-dark);
+  }
+  .product-{{ section.id }} details > summary::-webkit-details-marker {
+    display: none;
+  }
+{%- endstyle -%}
+
+<div class="max-w-[1800px] mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+    <!-- Image Gallery - Left Column (8 cols) -->
+    <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-1 p-1 bg-[var(--border-light)]">
+      {%- if product.media.size > 0 -%}
+        {%- for media in product.media limit: 4 -%}
+          <div class="aspect-[3/4] overflow-hidden bg-[var(--sage-pale)]/40 group">
+            {%- if media.media_type == 'image' -%}
+              {{ media | image_url: width: 800 | image_tag:
+                loading: 'lazy',
+                class: 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 cursor-pointer',
+                onclick: "window.dispatchEvent(new CustomEvent('product:image-click', {detail: {index: {{ forloop.index0 }}, mediaId: '{{ media.id }}'}}))"
+              }}
+            {%- elsif media.media_type == 'external_video' or media.media_type == 'video' -%}
+              {{ media | video_tag:
+                class: 'w-full h-full object-cover',
+                image_size: '800x',
+                autoplay: false,
+                loop: false,
+                muted: false,
+                controls: true
+              }}
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <div class="aspect-[3/4] overflow-hidden bg-[var(--sage-pale)]/40">
+            {{ 'product-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover' }}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <!-- Product Details - Right Column (4 cols) -->
+    <div class="lg:col-span-4 p-8 lg:p-16 xl:p-20 bg-white lg:sticky lg:top-[73px] lg:h-[calc(100vh-73px)] overflow-y-auto custom-scrollbar product-{{ section.id }}">
+      <!-- Breadcrumb -->
+      <nav class="flex gap-2 mb-12">
+        {%- if collection -%}
+          <a class="text-[9px] uppercase tracking-widest text-gray-400 hover:text-[var(--sage-dark)] transition-colors" href="{{ collection.url }}">
+            {{ collection.title }}
+          </a>
+        {%- else -%}
+          <a class="text-[9px] uppercase tracking-widest text-gray-400 hover:text-[var(--sage-dark)] transition-colors" href="{{ routes.all_products_collection_url }}">
+            All Products
+          </a>
+        {%- endif -%}
+        <span class="text-[9px] text-gray-300">/</span>
+        <span class="text-[9px] uppercase tracking-widest text-[var(--sage-dark)] font-medium">{{ product.type }}</span>
+      </nav>
+
+      <!-- Title & Price -->
+      <div class="space-y-6">
+        <h1 class="text-4xl lg:text-5xl font-medium tracking-tight leading-tight italic text-slate-800">{{ product.title }}</h1>
+        <div class="flex items-baseline gap-4 border-b border-[var(--border-light)] pb-8">
+          <p class="text-2xl font-light text-slate-700">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="line-through text-gray-400 mr-2">{{ product.compare_at_price | money }}</span>
+              {{ product.price | money }}
+            {%- else -%}
+              {{ product.price | money }}
+            {%- endif -%}
+          </p>
+          {%- if product.compare_at_price > product.price -%}
+            <span class="text-[9px] text-gray-400 uppercase tracking-[0.2em]">Sale</span>
+          {%- else -%}
+            <span class="text-[9px] text-gray-400 uppercase tracking-[0.2em]">Exclusively Artisanal</span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Product Form -->
+      <div class="py-10 space-y-12">
+        {%- form 'product', product -%}
+          <!-- Color Swatches -->
+          {%- if product.options_by_name['Color'].values.size > 0 -%}
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] mb-5 text-gray-600">
+                Selected Hue: <span class="font-normal italic text-[var(--sage-dark)]" id="SelectedColor">Moss Whisper</span>
+              </p>
+              <div class="flex gap-5">
+                {%- for color in product.options_by_name['Color'].values -%}
+                  <button
+                    type="button"
+                    class="w-9 h-9 rounded-full ring-1 ring-offset-4 ring-[var(--sage-dark)] bg-[{{ color }}] hover:ring-2 hover:ring-offset-2 hover:ring-[var(--sage-dark)] transition-all"
+                    data-color="{{ color }}"
+                    onclick="document.getElementById('SelectedColor').textContent = '{{ color }}'"
+                    aria-label="Select {{ color }}"
+                  ></button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <!-- Size Selector -->
+          {%- if product.options_by_name['Size'].values.size > 0 -%}
+            <div>
+              <div class="flex justify-between items-center mb-5">
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-600">Select Size</p>
+                <button type="button" class="text-[9px] uppercase tracking-widest text-[var(--sage-dark)] border-b border-[var(--sage-accent)] pb-0.5">
+                  Fit Analysis
+                </button>
+              </div>
+              <div class="grid grid-cols-4 gap-2">
+                {%- for size in product.options_by_name['Size'].values -%}
+                  <input type="radio" name="id" value="{{ variant.id }}" id="Size-{{ forloop.index }}" class="hidden" {% if forloop.first %}checked{% endif %}>
+                  <label for="Size-{{ forloop.index }}" class="py-4 border border-[var(--border-light)] text-[10px] tracking-widest hover:border-[var(--sage-accent)] hover:bg-[var(--sage-pale)]/40 transition-colors cursor-pointer text-center has-[:checked]:border-[var(--sage-dark)] has-[:checked]:bg-[var(--sage-dark)] has-[:checked]:text-white">
+                    {{ size }}
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <!-- Add to Cart Buttons -->
+          <div class="space-y-4">
+            <button type="submit" name="add" class="w-full bg-[var(--sage-pale)] text-[var(--sage-dark)] py-5 text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-[var(--sage-accent)] hover:text-white transition-all shadow-lg border border-[var(--sage-accent)]/20 disabled:opacity-50 disabled:cursor-not-allowed" {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}
+                Add to Bag
+              {%- else -%}
+                Sold Out
+              {%- endif -%}
+            </button>
+            <button type="button" class="w-full border border-[var(--border-light)] py-5 text-[10px] font-bold uppercase tracking-[0.3em] hover:border-[var(--sage-dark)] hover:text-[var(--sage-dark)] transition-all text-gray-500">
+              Check Boutique Availability
+            </button>
+          </div>
+        {%- endform -%}
+
+        <!-- Product Details Accordion -->
+        <div class="pt-10 border-t border-[var(--border-light)] space-y-1">
+          <!-- Description -->
+          <details class="group" {% if forloop.first %}open{% endif %}>
+            <summary class="flex justify-between items-center py-5 cursor-pointer list-none">
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">The Design</span>
+              <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <div class="pb-8 text-[13px] font-light leading-relaxed text-gray-500 italic">
+              {{ product.description }}
+            </div>
+          </details>
+
+          <!-- Materials -->
+          {%- if product.metafields.global.materials != blank -%}
+            <details class="group">
+              <summary class="flex justify-between items-center py-5 border-t border-[var(--border-light)] cursor-pointer list-none">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">Materials & Origin</span>
+                <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+              </summary>
+              <div class="pb-8 text-[11px] font-medium leading-loose uppercase tracking-widest space-y-2 text-[var(--sage-dark)]">
+                {{ product.metafields.global.materials | newline_to_br }}
+              </div>
+            </details>
+          {%- endif -%}
+
+          <!-- Care -->
+          {%- if product.metafields.global.care != blank -%}
+            <details class="group">
+              <summary class="flex justify-between items-center py-5 border-t border-[var(--border-light)] cursor-pointer list-none">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">Care Ritual</span>
+                <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+              </summary>
+              <div class="pb-8 text-[13px] font-light leading-relaxed text-gray-500">
+                {{ product.metafields.global.care }}
+              </div>
+            </details>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Complete the Aesthetic Section -->
+{%- if section.settings.show_recommendations -%}
+<section class="py-32 px-8 md:px-16 border-t border-[var(--border-light)] bg-[var(--sage-pale)]/30">
+  <h2 class="text-center text-[11px] font-bold uppercase tracking-[0.6em] mb-20 text-[var(--sage-dark)]">Complete the Aesthetic</h2>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-14">
+    {%- assign recommendations_count = 0 -%}
+    {%- for recommendation in product.recommendations.products limit: 4 -%}
+      {%- assign recommendations_count = recommendations_count | plus: 1 -%}
+      <div class="group cursor-pointer">
+        <a href="{{ recommendation.url }}">
+          <div class="aspect-[3/4] overflow-hidden mb-6 bg-white">
+            {{ recommendation.featured_media | image_url: width: 600 | image_tag:
+              loading: 'lazy',
+              class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]'
+            }}
+          </div>
+          <h3 class="text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-800">{{ recommendation.title }}</h3>
+          <p class="text-[11px] font-light italic text-[var(--sage-dark)]">{{ recommendation.price | money }}</p>
+        </a>
+      </div>
+    {%- endfor -%}
+
+    {%- if recommendations_count == 0 -%}
+      {%- assign collection = section.settings.fallback_collection -%}
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: 4 -%}
+          <div class="group cursor-pointer">
+            <a href="{{ product.url }}">
+              <div class="aspect-[3/4] overflow-hidden mb-6 bg-white">
+                {{ product.featured_media | image_url: width: 600 | image_tag:
+                  loading: 'lazy',
+                  class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]'
+                }}
+              </div>
+              <h3 class="text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-800">{{ product.title }}</h3>
+              <p class="text-[11px] font-light italic text-[var(--sage-dark)]">{{ product.price | money }}</p>
+            </a>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Main Product Artisanal",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show product recommendations",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection for recommendations"
+    }
+  ]
+}
+{% endschema %}

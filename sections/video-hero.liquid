@@ -1,0 +1,201 @@
+{% comment %}
+  Estelle Atelier - Video Hero Section
+  Full-width 16:9 video background with overlay content
+{% endcomment %}
+
+{% style %}
+  .video-hero-section {
+    position: relative;
+    height: {{ section.settings.section_height }};
+    min-height: 400px;
+    overflow: hidden;
+  }
+  .video-hero-section.video-autoplay .video-hero-fallback {
+    display: none;
+  }
+  .video-hero-section:not(.video-autoplay) .video-hero-video {
+    display: none;
+  }
+  .video-hero-video,
+  .video-hero-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(45, 49, 45, 0.3), rgba(60, 68, 59, 0.5));
+    pointer-events: none;
+  }
+  .video-hero-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+{% endstyle %}
+
+<div
+  class="video-hero-section {% if section.settings.video_url != blank %}video-autoplay{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  {% if section.settings.video_url != blank %}
+    <video
+      class="video-hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster="{% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1920 }}{% endif %}"
+    >
+      <source src="{{ section.settings.video_url }}" type="video/mp4">
+    </video>
+  {% endif %}
+
+  {% if section.settings.image != blank %}
+    {{
+      section.settings.image
+      | image_url: width: 1920
+      | image_tag: class: 'video-hero-fallback', alt: section.settings.image.alt
+    }}
+  {% else %}
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'video-hero-fallback absolute inset-0 w-full h-full bg-sage-pale' }}
+  {% endif %}
+
+  <div class="video-hero-overlay"></div>
+
+  <div class="video-hero-content">
+    {% if section.settings.overline != blank %}
+      <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-4 animate-entrance delay-100">
+        {{ section.settings.overline }}
+      </span>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h1 class="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl serif animate-entrance delay-200">
+        {{ section.settings.heading }}
+      </h1>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+      <p class="text-white/90 text-lg md:text-xl font-light max-w-2xl mb-8 animate-entrance delay-300">
+        {{ section.settings.text }}
+      </p>
+    {% endif %}
+
+    {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+      <a
+        href="{{ section.settings.button_link }}"
+        class="inline-flex items-center gap-2 bg-white text-text-olive-deep px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-sage-pale transition-all animate-entrance delay-300"
+      >
+        {{ section.settings.button_label }}
+        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video Hero",
+  "tag": "section",
+  "class": "section-video-hero",
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Section height",
+      "options": [
+        {
+          "value": "60vh",
+          "label": "60% viewport height"
+        },
+        {
+          "value": "70vh",
+          "label": "70% viewport height"
+        },
+        {
+          "value": "80vh",
+          "label": "80% viewport height"
+        },
+        {
+          "value": "85vh",
+          "label": "85% viewport height"
+        },
+        {
+          "value": "100vh",
+          "label": "Full viewport height"
+        }
+      ],
+      "default": "85vh"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Upload MP4 video to Settings > Files and paste URL here"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "New Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Art of Sustainable Luxury"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Discover our latest collection crafted from ethically sourced materials."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "default": "/collections/all"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Hero",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,105 @@
+<section class="py-32 px-12 bg-white">
+  <div class="flex justify-between items-end mb-20">
+    <div>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-3xl serif font-light text-[var(--text-charcoal)] mb-4">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="text-[10px] uppercase tracking-[0.4em] text-[var(--text-muted)]">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.blog != blank -%}
+      <a class="nav-link text-[10px] uppercase tracking-[0.3em] font-medium" href="{{ section.settings.blog.url }}">View All Stories</a>
+    {%- endif -%}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-{{ section.settings.columns_desktop }} gap-12">
+    {%- assign blog = section.settings.blog -%}
+    {%- if blog != blank -%}
+      {%- for article in blog.articles limit: section.settings.post_limit -%}
+        <article class="group cursor-pointer">
+          <a href="{{ article.url }}">
+            <div class="aspect-[16/10] overflow-hidden bg-sage-pale/40 mb-8">
+              {%- if article.image -%}
+                {{ article.image | image_url: width: 800 | image_tag:
+                  loading: 'lazy',
+                  class: 'w-full h-full object-cover grayscale-[15%] group-hover:scale-105 transition-transform duration-1000'
+                }}
+              {%- endif -%}
+            </div>
+            <span class="text-[8px] uppercase tracking-[0.3em] text-[var(--text-muted)] font-medium">{{ article.published_at | date: "%B %d, %Y" }}</span>
+            <h3 class="text-xl serif italic font-light mt-4 group-hover:text-[var(--sage-dark)] transition-colors">{{ article.title }}</h3>
+            {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+              <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-4 line-clamp-2">
+                {%- if article.excerpt.size > 0 -%}
+                  {{ article.excerpt | strip_html }}
+                {%- else -%}
+                  {{ article.content | strip_html | truncatewords: 30 }}
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </a>
+        </article>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..section.settings.post_limit) -%}
+        <article class="group cursor-pointer">
+          <div class="aspect-[16/10] overflow-hidden bg-sage-pale/40 mb-8">
+            {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover grayscale-[15%] group-hover:scale-105 transition-transform duration-1000' }}
+          </div>
+          <span class="text-[8px] uppercase tracking-[0.3em] text-[var(--text-muted)] font-medium">October {{ i | plus: 10 }}, 2024</span>
+          <h3 class="text-xl serif italic font-light mt-4 group-hover:text-[var(--sage-dark)] transition-colors">Sample Journal Post {{ i }}</h3>
+          <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-4 line-clamp-2">This is a sample journal post description to showcase the layout of the journal section.</p>
+        </article>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal Posts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From the Journal"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Seasonal narratives and atelier insights"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Post limit"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns on desktop"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Journal Posts"
+    }
+  ]
+}
+{% endschema %}

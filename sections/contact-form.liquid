@@ -1,0 +1,147 @@
+{% comment %}
+  Estelle Atelier - Contact Form Section
+  Minimalist contact form with validation
+{% endcomment %}
+
+<div class="px-6 md:px-12 lg:px-20 xl:px-32 py-16 md:py-24">
+  <div class="max-w-3xl mx-auto">
+    <!-- Section Header -->
+    {% render 'section-header',
+      overline: section.settings.overline,
+      heading: section.settings.heading,
+      description: section.settings.description,
+      alignment: 'center'
+    %}
+
+    <!-- Contact Form -->
+    <div class="max-w-xl mx-auto">
+      {% form 'contact', class: 'space-y-6' %}
+        {% if form.posted_successfully? %}
+          <div class="p-4 bg-sage-dark/10 rounded-lg text-center mb-6">
+            <p class="text-sm font-medium text-sage-dark">
+              {{ 'contact.form.post_success' | t | default: 'Thank you for your message. We will get back to you soon.' }}
+            </p>
+          </div>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="p-4 bg-red-50 rounded-lg text-center mb-6">
+            <p class="text-sm font-medium text-red-600">
+              {{ 'contact.form.error' | t | default: 'Please fill in all required fields.' }}
+            </p>
+          </div>
+        {% endif %}
+
+        <!-- Name Field -->
+        <div class="space-y-2">
+          <label for="ContactName" class="text-sm font-medium text-text-olive-deep">
+            {{ 'contact.form.name' | t | default: 'Name' }}
+          </label>
+          <input
+            type="text"
+            name="contact[{{ 'contact.form.name' | t | default: 'Name' }}]"
+            id="ContactName"
+            class="w-full border-b border-sage-accent bg-transparent py-3 px-0 text-text-olive-deep focus:outline-0 focus:border-sage-dark transition-colors placeholder:text-text-olive-deep/30"
+            placeholder="{{ 'contact.form.name_placeholder' | t | default: 'Your name' }}"
+            required
+          >
+        </div>
+
+        <!-- Email Field -->
+        <div class="space-y-2">
+          <label for="ContactEmail" class="text-sm font-medium text-text-olive-deep">
+            {{ 'contact.form.email' | t | default: 'Email' }}
+          </label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="ContactEmail"
+            class="w-full border-b border-sage-accent bg-transparent py-3 px-0 text-text-olive-deep focus:outline-0 focus:border-sage-dark transition-colors placeholder:text-text-olive-deep/30"
+            placeholder="{{ 'contact.form.email_placeholder' | t | default: 'your@email.com' }}"
+            required
+          >
+        </div>
+
+        <!-- Subject Field -->
+        <div class="space-y-2">
+          <label for="ContactSubject" class="text-sm font-medium text-text-olive-deep">
+            {{ 'contact.form.subject' | t | default: 'Subject' }}
+          </label>
+          <input
+            type="text"
+            name="contact[{{ 'contact.form.subject' | t | default: 'Subject' }}]"
+            id="ContactSubject"
+            class="w-full border-b border-sage-accent bg-transparent py-3 px-0 text-text-olive-deep focus:outline-0 focus:border-sage-dark transition-colors placeholder:text-text-olive-deep/30"
+            placeholder="{{ 'contact.form.subject_placeholder' | t | default: 'How can we help?' }}"
+            required
+          >
+        </div>
+
+        <!-- Message Field -->
+        <div class="space-y-2">
+          <label for="ContactMessage" class="text-sm font-medium text-text-olive-deep">
+            {{ 'contact.form.message' | t | default: 'Message' }}
+          </label>
+          <textarea
+            name="contact[{{ 'contact.form.message' | t | default: 'Message' }}]"
+            id="ContactMessage"
+            rows="5"
+            class="w-full border border-sage-accent bg-transparent py-3 px-4 text-text-olive-deep focus:outline-0 focus:border-sage-dark transition-colors placeholder:text-text-olive-deep/30 resize-none"
+            placeholder="{{ 'contact.form.message_placeholder' | t | default: 'Tell us more...' }}"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center bg-sage-dark text-white h-14 px-8 text-sm font-medium uppercase tracking-[0.1em] hover:bg-sage-accent hover:text-text-olive-deep transition-all"
+          >
+            {{ section.settings.button_text | default: 'Send Message' }}
+          </button>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "tag": "section",
+  "class": "section-contact-form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "overline",
+      "label": "Overline",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Send Message"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form",
+      "category": "Forms"
+    }
+  ]
+}
+{% endschema %}

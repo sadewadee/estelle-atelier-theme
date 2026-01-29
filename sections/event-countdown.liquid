@@ -1,0 +1,152 @@
+<section class="relative h-[700px] w-full flex items-center justify-center overflow-hidden" id="event-countdown-{{ section.id }}">
+  <div class="absolute inset-0 overflow-hidden">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2000 | image_tag:
+        loading: 'lazy',
+        class: 'w-full h-full object-cover brightness-75 grayscale-[20%] ken-burns'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover brightness-75 grayscale-[20%] ken-burns bg-black' }}
+    {%- endif -%}
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
+  <div class="relative z-10 text-center text-white flex flex-col items-center gap-10">
+    <div class="flex flex-col items-center gap-4">
+      {%- if section.settings.subheading != blank -%}
+        <span class="text-[10px] uppercase tracking-[0.8em] font-medium text-sage-pale/80">{{ section.settings.subheading }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-6xl md:text-7xl serif italic font-light">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      <div class="h-px w-24 bg-white/30 my-2"></div>
+      {%- if section.settings.event_text != blank -%}
+        <p class="text-[10px] tracking-[0.4em] uppercase font-light">{{ section.settings.event_text }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="sage-glow-pulse flex gap-8 md:gap-16 py-12 px-16 rounded-full border border-white/10 backdrop-blur-sm bg-white/5" data-countdown="{{ section.settings.end_date }}">
+      <div class="flex flex-col items-center group">
+        <div class="h-16 flex items-center justify-center">
+          <span class="text-5xl md:text-6xl serif font-bold count-fade tracking-tighter days">00</span>
+        </div>
+        <span class="text-[9px] font-sans uppercase tracking-[0.3em] mt-4 text-white/70">Days</span>
+      </div>
+      <div class="flex flex-col items-center group">
+        <div class="h-16 flex items-center justify-center">
+          <span class="text-5xl md:text-6xl serif font-bold count-fade tracking-tighter hours" style="animation-delay: 0.1s">00</span>
+        </div>
+        <span class="text-[9px] font-sans uppercase tracking-[0.3em] mt-4 text-white/70">Hours</span>
+      </div>
+      <div class="flex flex-col items-center group">
+        <div class="h-16 flex items-center justify-center">
+          <span class="text-5xl md:text-6xl serif font-bold count-fade tracking-tighter minutes" style="animation-delay: 0.2s">00</span>
+        </div>
+        <span class="text-[9px] font-sans uppercase tracking-[0.3em] mt-4 text-white/70">Minutes</span>
+      </div>
+      <div class="flex flex-col items-center group">
+        <div class="h-16 flex items-center justify-center">
+          <span class="text-5xl md:text-6xl serif font-bold count-fade tracking-tighter seconds" style="animation-delay: 0.3s">00</span>
+        </div>
+        <span class="text-[9px] font-sans uppercase tracking-[0.3em] mt-4 text-white/70">Seconds</span>
+      </div>
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_link }}" class="inline-flex items-center justify-center px-14 py-5 bg-white text-[var(--text-charcoal)] text-[10px] uppercase tracking-[0.5em] font-medium hover:bg-sage-pale transition-all duration-700 hover:px-16">
+        {{ section.settings.button_label }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function() {
+    const countdownElement = document.querySelector('#event-countdown-{{ section.id }} [data-countdown]');
+    if (!countdownElement) return;
+
+    const endDate = new RegExp('^\\d{4}-\\d{2}-\\d{2}$').test(countdownElement.dataset.countdown)
+      ? new Date(countdownElement.dataset.countdown + 'T00:00:00')
+      : new Date(countdownElement.dataset.countdown);
+
+    if (isNaN(endDate.getTime())) return;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate.getTime() - now;
+
+      if (distance < 0) {
+        countdownElement.querySelector('.days').innerText = '00';
+        countdownElement.querySelector('.hours').innerText = '00';
+        countdownElement.querySelector('.minutes').innerText = '00';
+        countdownElement.querySelector('.seconds').innerText = '00';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.querySelector('.days').innerText = days.toString().padStart(2, '0');
+      countdownElement.querySelector('.hours').innerText = hours.toString().padStart(2, '0');
+      countdownElement.querySelector('.minutes').innerText = minutes.toString().padStart(2, '0');
+      countdownElement.querySelector('.seconds').innerText = seconds.toString().padStart(2, '0');
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Event Countdown",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The Winter Archive Event"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Season of Giving"
+    },
+    {
+      "type": "text",
+      "id": "event_text",
+      "label": "Event Text",
+      "default": "Private Access • Limited Time"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "End Date (YYYY-MM-DD or ISO string)",
+      "default": "2024-12-25"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Unlock Private Sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Event Countdown"
+    }
+  ]
+}
+{% endschema %}

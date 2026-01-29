@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "hero": {
+      "type": "editorial-hero"
+    },
+    "content": {
+      "type": "rich-text"
+    },
+    "contact": {
+      "type": "contact-form"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "hero",
+    "content",
+    "contact",
+    "newsletter"
+  ]
+}

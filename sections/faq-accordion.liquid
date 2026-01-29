@@ -1,0 +1,193 @@
+{% comment %}
+  Estelle Atelier - FAQ Accordion Section
+  Pure CSS accordion using native details/summary
+{% endcomment %}
+
+<div class="px-6 md:px-12 lg:px-20 xl:px-32 py-16 md:py-24 {% if section.settings.background_style == 'sage' %}bg-sage-pale{% endif %}">
+  <div class="max-w-3xl mx-auto">
+    <!-- Section Header -->
+    <div class="flex flex-col items-center text-center gap-4 mb-16">
+      {% if section.settings.show_label %}
+        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em]">{{ section.settings.label_text }}</span>
+      {% endif %}
+      <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold leading-tight tracking-tight uppercase serif">
+        {{ section.settings.heading }}
+      </h1>
+      <div class="h-1 w-12 bg-sage-dark rounded-full"></div>
+      {% if section.settings.description != blank %}
+        <p class="text-muted text-base md:text-lg font-normal leading-relaxed max-w-lg italic">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Accordion -->
+    <div class="flex flex-col border-b border-text-olive-deep/10">
+      {% for block in section.blocks %}
+        <details class="group border-t border-text-olive-deep/10 py-6" {{ block.shopify_attributes }}>
+          <summary class="flex cursor-pointer items-center justify-between gap-6 py-2 list-none outline-none">
+            <p class="text-text-olive-deep text-lg font-medium leading-normal group-hover:text-sage-dark transition-colors duration-200">
+              {{ block.settings.question }}
+            </p>
+            <div class="text-sage-dark flex items-center justify-center transition-transform duration-300 group-open:rotate-45">
+              <span class="material-symbols-outlined text-3xl font-light">add</span>
+            </div>
+          </summary>
+          <div class="mt-4 pr-12">
+            <div class="prose prose-sage max-w-none">
+              <p class="text-muted text-base font-normal leading-relaxed pb-4">
+                {{ block.settings.answer }}
+              </p>
+            </div>
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+
+    <!-- Contact CTA -->
+    {% if section.settings.show_contact_cta %}
+      <div class="mt-16 text-center">
+        <p class="text-muted text-sm font-medium tracking-widest uppercase">
+          {{ section.settings.contact_prefix }}
+          <a href="{{ section.settings.contact_link }}" class="text-text-olive-deep border-b border-sage-dark/30 hover:border-sage-dark transition-all ml-2">
+            {{ section.settings.contact_text }}
+          </a>
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section-faq",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_label",
+      "label": "Show label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label text",
+      "default": "Have Questions?"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Everything you need to know about our sustainable luxury collection and dedicated client care."
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sage",
+          "label": "Sage pale"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Contact CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact_cta",
+      "label": "Show contact CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_prefix",
+      "label": "Contact prefix",
+      "default": "Still have questions?"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "Contact link text",
+      "default": "Contact Our Concierge"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact link",
+      "default": "/pages/contact"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Do you offer international shipping?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "We offer complimentary express shipping to over 50 countries worldwide. Each order is packaged in our signature sustainable luxury boxing."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "category": "Content",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer international shipping?",
+            "answer": "We offer complimentary express shipping to over 50 countries worldwide. Each order is packaged in our signature sustainable luxury boxing."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Where is the organic silk sourced?",
+            "answer": "Our organic silk is ethically sourced from family-owned heritage farms in the Como region of Italy. We partner with artisans who have mastered the art of non-violent silk production."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How do I find my perfect fit?",
+            "answer": "To assist you in finding the ideal silhouette, we provide a detailed size guide for every garment. If you require further assistance, our concierge team is available for virtual fittings."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "We offer a 30-day complimentary return and exchange period. All items must be returned in their original, unworn condition with the security tag intact."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

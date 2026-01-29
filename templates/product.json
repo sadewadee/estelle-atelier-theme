@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-artisanal",
+      "settings": {
+        "show_recommendations": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

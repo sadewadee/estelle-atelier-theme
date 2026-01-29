@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "header": {
+      "type": "editorial-hero",
+      "settings": {
+        "heading": "All Collections",
+        "text": "Explore our curated collections."
+      }
+    },
+    "collection-list": {
+      "type": "collection-list"
+    }
+  },
+  "order": [
+    "header",
+    "collection-list"
+  ]
+}

@@ -1,0 +1,108 @@
+{% comment %}
+  Estelle Atelier - Button Snippet
+  Reusable button component
+
+  Usage:
+    {% render 'button',
+      url: '/collections/all',
+      text: 'Shop Now',
+      style: 'primary',
+      size: 'large'
+    %}
+
+  Parameters:
+    - url: Link URL (required if not button)
+    - text: Button text (required)
+    - style: 'primary', 'secondary', 'outline', 'ghost', or 'link' (default: 'primary')
+    - size: 'small', 'medium', or 'large' (default: 'medium')
+    - icon: Optional icon name from Material Symbols
+    - external: Open in new tab (default: false)
+    - full_width: Button takes full width (default: false)
+    - disabled: Button is disabled (default: false)
+{% endcomment %}
+
+{%- liquid
+  assign style = style | default: 'primary'
+  assign size = size | default: 'medium'
+  assign is_external = external | default: false
+  assign is_full_width = full_width | default: false
+  assign is_disabled = disabled | default: false
+
+  comment 'Base classes'
+  assign base_classes = 'inline-flex items-center justify-center font-medium transition-all duration-300'
+
+  comment 'Size classes'
+  if size == 'small'
+    assign size_classes = 'px-4 py-2 text-xs rounded-lg h-10'
+  elsif size == 'large'
+    assign size_classes = 'px-10 py-4 text-sm rounded-lg h-14'
+  else
+    assign size_classes = 'px-6 py-3 text-xs rounded-lg h-12'
+  endif
+
+  comment 'Style classes'
+  if style == 'primary'
+    assign style_classes = 'bg-sage-dark text-white hover:bg-sage-accent hover:text-text-olive-deep'
+  elsif style == 'secondary'
+    assign style_classes = 'bg-sage-pale text-text-olive-deep hover:bg-sage-accent'
+  elsif style == 'outline'
+    assign style_classes = 'border-2 border-text-olive-deep text-text-olive-deep hover:bg-text-olive-deep hover:text-white'
+  elsif style == 'ghost'
+    assign style_classes = 'bg-transparent text-text-olive-deep hover:bg-sage-pale'
+  elsif style == 'link'
+    assign style_classes = 'text-sage-dark font-medium border-b border-sage-dark/30 pb-0.5 hover:border-sage-dark px-0'
+  endif
+
+  if is_full_width
+    assign width_class = 'w-full'
+  else
+    assign width_class = ''
+  endif
+
+  if is_disabled
+    assign disabled_attr = 'disabled'
+    assign disabled_classes = 'opacity-50 cursor-not-allowed pointer-events-none'
+  else
+    assign disabled_attr = ''
+    assign disabled_classes = ''
+  endif
+
+  assign all_classes = base_classes | append: ' ' | append: size_classes | append: ' ' | append: style_classes | append: ' ' | append: width_class | append: ' ' | append: disabled_classes
+  assign tracking_class = 'tracking-[0.1em] uppercase'
+-%}
+
+{% if url != blank %}
+  <a
+    href="{{ url }}"
+    class="{{ all_classes }} {{ tracking_class }}"
+    {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {% if is_disabled %}aria-disabled="true"{% endif %}
+  >
+    {% if icon and style == 'link' %}
+      <span class="material-symbols-outlined text-lg">{{ icon }}</span>
+      <span>{{ text }}</span>
+    {% else %}
+      <span>{{ text }}</span>
+      {% if icon %}
+        <span class="material-symbols-outlined text-lg ml-2">{{ icon }}</span>
+      {% endif %}
+    {% endif %}
+  </a>
+{% else %}
+  <button
+    type="button"
+    class="{{ all_classes }} {{ tracking_class }}"
+    {{ disabled_attr }}
+    {% if is_disabled %}aria-disabled="true"{% endif %}
+  >
+    {% if icon and style == 'link' %}
+      <span class="material-symbols-outlined text-lg">{{ icon }}</span>
+      <span>{{ text }}</span>
+    {% else %}
+      <span>{{ text }}</span>
+      {% if icon %}
+        <span class="material-symbols-outlined text-lg ml-2">{{ icon }}</span>
+      {% endif %}
+    {% endif %}
+  </button>
+{% endif %}

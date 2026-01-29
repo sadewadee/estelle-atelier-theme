@@ -1,0 +1,182 @@
+{% comment %}
+  Estelle Atelier - Product Info Tabs Section
+  Minimalist tabbed content for product details
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 border-t border-sage-accent/30">
+  <div class="max-w-3xl mx-auto">
+    <!-- Tab Navigation -->
+    <div class="flex border-b border-sage-accent/30 overflow-x-auto" role="tablist" data-product-tabs>
+      {% for block in section.blocks %}
+        <button
+          class="product-tab-btn px-6 py-4 text-sm font-medium uppercase tracking-widest whitespace-nowrap border-b-2 {% if forloop.first %}border-sage-dark text-text-olive-deep{% else %}border-transparent text-muted hover:text-text-olive-deep{% endif %} transition-colors"
+          data-tab="{{ block.settings.id }}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.title }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <!-- Tab Content -->
+    <div class="py-8">
+      {% for block in section.blocks %}
+        <div
+          class="product-tab-content {% if forloop.first != true %}hidden{% endif %}"
+          data-tab-content="{{ block.settings.id }}"
+          role="tabpanel"
+        >
+          {% case block.type %}
+            {% when 'description' %}
+              {% if product.description != blank %}
+                <div class="prose prose-sage max-w-none">
+                  {{ product.description }}
+                </div>
+              {% endif %}
+
+            {% when 'custom_content' %}
+              <div class="prose prose-sage max-w-none">
+                {{ block.settings.content }}
+              </div>
+
+            {% when 'reviews' %}
+              <div class="text-center py-12">
+                <span class="material-symbols-outlined text-6xl text-sage-dark/20 mb-4">star</span>
+                <p class="text-muted mb-4">{{ 'reviews.no_reviews' | t | default: 'No reviews yet.' }}</p>
+                <a href="{{ product.url }}#review-form" class="text-sage-dark font-medium border-b border-sage-dark/30 pb-0.5">
+                  {{ 'reviews.write_review' | t | default: 'Write a review' }}
+                </a>
+              </div>
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% javascript %}
+  (function() {
+    'use strict';
+
+    const container = document.querySelector('[data-product-tabs]');
+    if (!container) return;
+
+    const tabs = container.querySelectorAll('[data-tab]');
+    const contents = document.querySelectorAll('[data-tab-content]');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.dataset.tab;
+
+        // Update tabs
+        tabs.forEach(t => {
+          t.classList.remove('border-sage-dark', 'text-text-olive-deep');
+          t.classList.add('border-transparent', 'text-muted');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.remove('border-transparent', 'text-muted');
+        tab.classList.add('border-sage-dark', 'text-text-olive-deep');
+        tab.setAttribute('aria-selected', 'true');
+
+        // Update content
+        contents.forEach(content => {
+          if (content.dataset.tabContent === targetId) {
+            content.classList.remove('hidden');
+          } else {
+            content.classList.add('hidden');
+          }
+        });
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product Tabs",
+  "tag": "section",
+  "class": "section-product-tabs",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "description",
+      "name": "Description",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Tab ID",
+          "default": "description"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Description"
+        }
+      ]
+    },
+    {
+      "type": "custom_content",
+      "name": "Custom Content",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Tab ID",
+          "default": "details"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Details"
+        },
+        {
+          "type": "html",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Product details and specifications go here.</p>"
+        }
+      ]
+    },
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Tab ID",
+          "default": "reviews"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Reviews"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Tabs",
+      "category": "Product",
+      "blocks": [
+        {
+          "type": "description"
+        },
+        {
+          "type": "custom_content"
+        },
+        {
+          "type": "reviews"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

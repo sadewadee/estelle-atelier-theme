@@ -1,0 +1,70 @@
+<section class="relative h-[85vh] w-full flex items-center justify-center overflow-hidden bg-background-off animate-entrance delay-200">
+  <div class="absolute inset-0 z-0">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2000 | image_tag: class: 'w-full h-full object-cover object-center opacity-95 grayscale-[10%]' }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover object-center opacity-95 grayscale-[10%] bg-sage-pale' }}
+    {%- endif -%}
+  </div>
+  <div class="relative z-10 text-center max-w-4xl px-6 flex flex-col items-center gap-8">
+    <div class="flex flex-col items-center gap-6 animate-entrance delay-300">
+      <span class="text-[10px] text-[var(--text-olive-deep)] font-medium tracking-[0.7em] uppercase">{{ section.settings.subheading }}</span>
+      <h2 class="text-[var(--text-charcoal)] text-6xl md:text-8xl font-normal serif italic leading-tight">{{ section.settings.heading }}</h2>
+      <p class="text-[var(--text-olive-deep)] text-sm md:text-base font-light tracking-wide max-w-lg mx-auto leading-relaxed">
+        {{ section.settings.text }}
+      </p>
+      {%- if section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="inline-flex items-center justify-center min-w-[220px] h-14 bg-sage-pale border border-sage-accent text-[10px] uppercase tracking-[0.3em] font-medium luxury-hover text-[var(--text-charcoal)] mt-4">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The Vernal Edit • 2024"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Quiet Botanicals"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "A curated selection of artisanal silhouettes, redefined in our signature pastel sage palette."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,104 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-slider",
+      "settings": {
+        "subheading": "The Vernal Edit • 2024",
+        "heading": "Quiet Botanicals",
+        "text": "A curated selection of artisanal silhouettes, redefined in our signature pastel sage palette.",
+        "button_label": "Explore Collection"
+      }
+    },
+    "popular_picks": {
+      "type": "featured-collection-grid",
+      "settings": {
+        "title": "Popular Picks"
+      }
+    },
+    "winter_event": {
+      "type": "event-countdown",
+      "settings": {
+        "subheading": "The Winter Archive Event",
+        "heading": "The Season of Giving",
+        "event_text": "Private Access • Limited Time",
+        "end_date": "2024-12-25",
+        "button_label": "Unlock Private Sale"
+      }
+    },
+    "editorial_split": {
+      "type": "editorial-split",
+      "blocks": {
+        "split_1": {
+          "type": "split_item",
+          "settings": {
+            "subheading": "Seasonal Curation",
+            "heading": "New Arrivals",
+            "button_label": "Explore Edit"
+          }
+        },
+        "split_2": {
+          "type": "split_item",
+          "settings": {
+            "subheading": "The Perfect Gift",
+            "heading": "Atelier Gift Cards",
+            "text": "Delivered in our signature embossed packaging or digital atelier invite",
+            "button_label": "Shop Gift Cards"
+          }
+        }
+      },
+      "block_order": ["split_1", "split_2"],
+      "settings": {}
+    },
+    "modern_business_casual": {
+      "type": "modern-business-casual",
+      "settings": {
+        "subheading": "Curated Series",
+        "heading": "The Modern <br/><span class='italic'>Business Casual</span>",
+        "text": "Redefining the workplace silhouette with relaxed structures and botanical-inspired tones. High-end silk meets architectural precision.",
+        "button_label": "Discover the Essentials"
+      }
+    },
+    "shop_the_look": {
+      "type": "shop-the-look",
+      "settings": {
+        "heading": "Shop the Look",
+        "subheading": "Interact with cinematic lifestyle shots",
+        "sidebar_heading": "Featured in this Edit",
+        "quote": "The collection is designed to be effortlessly layered, moving from the quiet dawn in the garden to the city dusk."
+      },
+      "blocks": {
+        "hotspot_1": {
+          "type": "hotspot",
+          "settings": {
+            "top": 30,
+            "left": 48
+          }
+        },
+        "hotspot_2": {
+          "type": "hotspot",
+          "settings": {
+            "top": 60,
+            "left": 52
+          }
+        }
+      },
+      "block_order": ["hotspot_1", "hotspot_2"]
+    },
+    "journal_posts": {
+      "type": "journal-posts",
+      "settings": {
+        "heading": "From the Journal",
+        "subheading": "Seasonal narratives and atelier insights"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "popular_picks",
+    "winter_event",
+    "editorial_split",
+    "modern_business_casual",
+    "shop_the_look",
+    "journal_posts"
+  ]
+}

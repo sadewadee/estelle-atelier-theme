@@ -1,0 +1,23 @@
+<div class="py-24 px-12 bg-white">
+  <h2 class="text-3xl serif font-light text-[var(--text-charcoal)] mb-8">{{ collection.title }}</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+    {%- for product in collection.products -%}
+      <div class="group cursor-pointer">
+        <a href="{{ product.url }}">
+          <div class="aspect-[3/4] overflow-hidden bg-sage-pale/40 mb-4 relative">
+            {{ product.featured_image | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105' }}
+          </div>
+          <h3 class="text-[10px] uppercase tracking-[0.2em] mb-1 font-medium">{{ product.title }}</h3>
+          <p class="text-[10px] text-[var(--text-muted)]">{{ product.price | money }}</p>
+        </a>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Collection",
+  "settings": []
+}
+{% endschema %}

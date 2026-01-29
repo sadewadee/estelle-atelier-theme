@@ -1,0 +1,193 @@
+{% comment %}
+  Estelle Atelier - Article Section
+  Single article page with rich content
+{% endcomment %}
+
+<article class="px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-3xl mx-auto">
+    <!-- Article Header -->
+    <header class="text-center mb-12">
+      {% if blog.title %}
+        <a href="{{ blog.url }}" class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em] mb-4 block">
+          &larr; {{ blog.title }}
+        </a>
+      {% endif %}
+
+      <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold tracking-tight mb-6 serif">
+        {{ article.title }}
+      </h1>
+
+      <div class="flex items-center justify-center gap-6 text-muted text-sm">
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+          {{ article.published_at | date: '%B %d, %Y' }}
+        </time>
+        {% if article.author %}
+          <span>&middot;</span>
+          <span>{{ article.author }}</span>
+        {% endif %}
+        {% if article.tags.size > 0 %}
+          <span>&middot;</span>
+          <span>{{ article.tags.first }}</span>
+        {% endif %}
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    {% if article.image %}
+      <div class="aspect-[16/10] rounded-2xl overflow-hidden mb-12">
+        {{
+          article.image
+          | image_url: width: 1200
+          | image_tag: class: 'w-full h-full object-cover', loading: 'lazy'
+        }}
+      </div>
+    {% endif %}
+
+    <!-- Article Content -->
+    <div class="prose prose-sage prose-lg max-w-none mx-auto">
+      {{ article.content }}
+    </div>
+
+    <!-- Article Tags -->
+    {% if article.tags.size > 0 %}
+      <div class="mt-12 pt-8 border-t border-sage-accent/30">
+        <div class="flex flex-wrap gap-2">
+          {% for tag in article.tags %}
+            <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="px-4 py-2 bg-sage-pale text-text-olive-deep text-xs font-medium uppercase tracking-widest rounded-full hover:bg-sage-accent transition-colors">
+              {{ tag }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Share Links -->
+    {% if section.settings.show_share %}
+      <div class="mt-12 pt-8 border-t border-sage-accent/30 text-center">
+        <p class="text-sm font-medium text-text-olive-deep mb-4">{{ 'blogs.article.share' | t | default: 'Share this article' }}</p>
+        <div class="flex justify-center gap-4">
+          <a href="https://twitter.com/intent/tweet?text={{ article.title | url_param_escape }}&url={{ shop.url | append: article.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-full hover:bg-sage-pale transition-colors" target="_blank" rel="noopener">
+            <span class="material-symbols-outlined text-sage-dark">share</span>
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-full hover:bg-sage-pale transition-colors" target="_blank" rel="noopener">
+            <span class="material-symbols-outlined text-sage-dark">public</span>
+          </a>
+          <a href="mailto:?subject={{ article.title | url_param_escape }}&body={{ shop.url | append: article.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-full hover:bg-sage-pale transition-colors">
+            <span class="material-symbols-outlined text-sage-dark">mail</span>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Comments (if enabled) -->
+    {% if blog.comments_enabled? %}
+      <div class="mt-16 pt-8 border-t border-sage-accent/30">
+        <!-- Comment form -->
+        {% form 'new_comment', article %}
+          {% if form.posted_successfully? %}
+            <div class="p-4 bg-sage-dark/10 rounded-lg text-center mb-6">
+              <p class="text-sm font-medium text-sage-dark">{{ 'blogs.comments.success' | t }}</p>
+            </div>
+          {% endif %}
+
+          <h3 class="text-2xl font-bold text-text-olive-deep mb-6">{{ 'blogs.article.title' | t | default: 'Leave a comment' }}</h3>
+
+          <div class="space-y-4 max-w-xl">
+            <div class="grid grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="comment[author]"
+                placeholder="{{ 'blogs.article.name' | t | default: 'Name' }}"
+                class="w-full border-b border-sage-accent bg-transparent py-3 px-0 focus:outline-0 focus:border-sage-dark"
+                required
+              >
+              <input
+                type="email"
+                name="comment[email]"
+                placeholder="{{ 'blogs.article.email' | t | default: 'Email' }}"
+                class="w-full border-b border-sage-accent bg-transparent py-3 px-0 focus:outline-0 focus:border-sage-dark"
+                required
+              >
+            </div>
+            <textarea
+              name="comment[body]"
+              rows="4"
+              placeholder="{{ 'blogs.article.message' | t | default: 'Your comment' }}"
+              class="w-full border border-sage-accent bg-transparent py-3 px-4 focus:outline-0 focus:border-sage-dark resize-none"
+              required
+            ></textarea>
+            <button
+              type="submit"
+              class="bg-sage-dark text-white px-8 py-3 text-sm font-bold uppercase tracking-widest hover:bg-sage-accent hover:text-text-olive-deep transition-all"
+            >
+              {{ 'blogs.article.submit' | t | default: 'Post Comment' }}
+            </button>
+          </div>
+        {% endform %}
+
+        <!-- Existing comments -->
+        {% if article.comments_count > 0 %}
+          <div class="mt-12">
+            <h3 class="text-xl font-bold text-text-olive-deep mb-6">{{ 'blogs.article.comments_with_count' | t: count: article.comments_count }}</h3>
+            {% for comment in article.comments %}
+              <div class="border-b border-sage-accent/30 pb-6 mb-6 last:border-0">
+                <div class="flex items-center gap-4 mb-2">
+                  <span class="text-sm font-medium text-text-olive-deep">{{ comment.author }}</span>
+                  <span class="text-muted text-sm">{{ comment.created_at | date: '%B %d, %Y' }}</span>
+                </div>
+                <p class="text-muted">{{ comment.content }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Article Navigation -->
+    {% if blog.next_article or blog.previous_article %}
+      <nav class="mt-16 pt-8 border-t border-sage-accent/30 flex justify-between" role="navigation">
+        {% if blog.previous_article %}
+          <a href="{{ blog.previous_article.url }}" class="flex items-center gap-2 text-text-olive-deep hover:text-sage-dark transition-colors">
+            <span class="material-symbols-outlined">chevron_left</span>
+            <div class="text-left">
+              <span class="block text-[10px] uppercase tracking-widest text-muted">{{ 'blogs.article.previous' | t | default: 'Previous' }}</span>
+              <span class="block font-medium">{{ blog.previous_article.title }}</span>
+            </div>
+          </a>
+        {% endif %}
+
+        {% if blog.next_article %}
+          <a href="{{ blog.next_article.url }}" class="flex items-center gap-2 text-text-olive-deep hover:text-sage-dark transition-colors">
+            <div class="text-right">
+              <span class="block text-[10px] uppercase tracking-widest text-muted">{{ 'blogs.article.next' | t | default: 'Next' }}</span>
+              <span class="block font-medium">{{ blog.next_article.title }}</span>
+            </div>
+            <span class="material-symbols-outlined">chevron_right</span>
+          </a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "section-article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share buttons",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Article",
+      "category": "Blog"
+    }
+  ]
+}
+{% endschema %}

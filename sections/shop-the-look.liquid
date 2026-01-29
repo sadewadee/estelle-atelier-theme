@@ -1,0 +1,160 @@
+<section class="py-32 px-12 bg-white" id="shop-the-look-{{ section.id }}">
+  <div class="max-w-7xl mx-auto flex flex-col gap-20">
+    <div class="text-center">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-4xl serif italic font-light text-[var(--text-charcoal)] mb-4">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="text-[10px] uppercase tracking-[0.5em] text-[var(--text-muted)]">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <div class="lg:col-span-8 relative group overflow-hidden bg-sage-pale/20 aspect-[4/5] md:aspect-video lg:aspect-auto lg:h-[800px]">
+        <div class="absolute inset-0 z-0">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 1600 | image_tag:
+              loading: 'lazy',
+              class: 'w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-[3000ms]'
+            }}
+          {%- else -%}
+             {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-[3000ms] bg-sage-pale' }}
+          {%- endif -%}
+          {%- if section.settings.video_url != blank -%}
+            <video autoplay class="absolute inset-0 w-full h-full object-cover opacity-90" loop muted playsinline>
+              <source src="{{ section.settings.video_url }}" type="video/mp4">
+            </video>
+          {%- endif -%}
+          <div class="absolute inset-0 video-overlay z-10"></div>
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'hotspot' -%}
+            <div class="hotspot group/item" style="top: {{ block.settings.top }}%; left: {{ block.settings.left }}%;" {{ block.shopify_attributes }}>
+              <span class="material-symbols-outlined text-sm font-light">add</span>
+              {%- if block.settings.product != blank -%}
+                {%- assign hotspot_product = block.settings.product -%}
+                <a href="{{ hotspot_product.url }}" class="absolute left-10 bg-white/95 backdrop-blur-md p-4 w-40 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 shadow-xl border border-sage-accent/20 z-30">
+                  <p class="text-[9px] uppercase tracking-widest font-bold">{{ hotspot_product.title }}</p>
+                  <p class="text-[10px] text-sage-dark">{{ hotspot_product.price | money }}</p>
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="lg:col-span-4 flex flex-col gap-12">
+        <div class="flex flex-col gap-6 p-10 bg-sage-pale/40 border border-sage-accent/30">
+          <h4 class="text-xs uppercase tracking-[0.3em] font-semibold">{{ section.settings.sidebar_heading }}</h4>
+          <div class="flex flex-col gap-10">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'hotspot' and block.settings.product != blank -%}
+                {%- assign product = block.settings.product -%}
+                <div class="flex gap-6 items-center group cursor-pointer">
+                  <a href="{{ product.url }}" class="flex gap-6 items-center">
+                    <div class="w-20 aspect-square bg-white overflow-hidden">
+                      {{ product.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700' }}
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <p class="text-[10px] uppercase tracking-[0.1em] font-medium">{{ product.title }}</p>
+                      <p class="text-[10px] text-[var(--text-muted)]">{{ product.price | money }}</p>
+                      <span class="text-[8px] uppercase tracking-[0.2em] border-b border-[var(--text-charcoal)] self-start mt-1">Shop Now</span>
+                    </div>
+                  </a>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- if section.settings.quote != blank -%}
+          <p class="text-xs text-[var(--text-muted)] italic font-light leading-relaxed">
+            "{{ section.settings.quote }}"
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop the Look",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the Look"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Interact with cinematic lifestyle shots"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Cover Image"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "MP4 Video URL"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_heading",
+      "label": "Sidebar Heading",
+      "default": "Featured in this Edit"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote",
+      "default": "The collection is designed to be effortlessly layered, moving from the quiet dawn in the garden to the city dusk."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Hotspot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "top",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Top Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Left Position",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop the Look",
+      "blocks": [
+        { "type": "hotspot", "settings": { "top": 30, "left": 48 } },
+        { "type": "hotspot", "settings": { "top": 60, "left": 52 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

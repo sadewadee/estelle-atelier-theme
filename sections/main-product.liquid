@@ -1,0 +1,21 @@
+<div class="py-24 px-12 bg-white">
+  <h2 class="text-3xl serif font-light text-[var(--text-charcoal)] mb-8">{{ product.title }}</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div class="aspect-square bg-sage-pale/40">
+      {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'w-full h-full object-cover' }}
+    </div>
+    <div class="flex flex-col gap-6">
+      <p class="text-xl font-light text-[var(--text-muted)]">{{ product.price | money }}</p>
+      <div class="prose prose-sm font-light text-[var(--text-charcoal)]">
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Product",
+  "settings": []
+}
+{% endschema %}

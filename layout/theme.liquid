@@ -1,0 +1,100 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- if page_title != shop.name %} &ndash; {{ shop.name }}{% endif -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {{ content_for_header }}
+
+    {%- assign header_font = settings.type_header_font -%}
+    {%- assign body_font = settings.type_body_font -%}
+
+    <link rel="preload" href="{{ header_font | font_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ body_font | font_url }}" as="font" type="font/woff2" crossorigin>
+
+    {{ 'fonts.css' | asset_url | stylesheet_tag }}
+
+    <style>
+      {{ header_font | font_face: font_display: 'swap' }}
+      {{ body_font | font_face: font_display: 'swap' }}
+
+      {%- assign body_font_bold = body_font | font_modify: 'weight', 'bold' -%}
+      {%- assign body_font_italic = body_font | font_modify: 'style', 'italic' -%}
+      {%- assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic' -%}
+
+      {% if body_font_bold %}
+        {{ body_font_bold | font_face: font_display: 'swap' }}
+      {% endif %}
+      {% if body_font_italic %}
+        {{ body_font_italic | font_face: font_display: 'swap' }}
+      {% endif %}
+      {% if body_font_bold_italic %}
+        {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {% endif %}
+
+      :root {
+        --font-heading-family: {{ header_font.family }}, {{ header_font.fallback_families }};
+        --font-heading-weight: {{ header_font.weight }};
+        --font-heading-style: {{ header_font.style }};
+
+        --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-body-weight: {{ body_font.weight }};
+        --font-body-style: {{ body_font.style }};
+
+        --font-base-size: {{ settings.type_base_size }}px;
+
+        --color-sage-pale: {{ settings.color_sage_pale | default: '#f1f4f0' }};
+        --color-sage-accent: {{ settings.color_sage_accent | default: '#e1e8df' }};
+        --color-sage-dark: {{ settings.color_sage_dark | default: '#8ba888' }};
+        --color-background: {{ settings.color_background | default: '#ffffff' }};
+        --color-text-charcoal: {{ settings.color_text | default: '#2d312d' }};
+        --color-text-olive-deep: {{ settings.color_olive_deep | default: '#3c443b' }};
+      }
+
+      html {
+        font-size: var(--font-base-size);
+      }
+    </style>
+
+    {{ 'custom.css' | asset_url | stylesheet_tag }}
+
+    <!-- Scripts for global functionality -->
+    <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+    <script src="{{ 'recently-viewed.js' | asset_url }}" defer></script>
+  </head>
+
+  <body class="bg-white antialiased">
+    <div class="loading-bar"></div>
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+      {% section 'announcement-bar' %}
+      {% section 'header' %}
+
+      <main class="grow flex flex-col" role="main">
+        {{ content_for_layout }}
+      </main>
+
+      {% section 'footer' %}
+    </div>
+
+    <!-- Cart Drawer Section -->
+    {% section 'cart-drawer' %}
+  </body>
+</html>

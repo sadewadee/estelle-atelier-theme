@@ -1,0 +1,73 @@
+{% comment %}
+  Estelle Atelier - Section Header Snippet
+  Reusable section header component
+
+  Usage:
+    {% render 'section-header',
+      overline: 'New Collection',
+      heading: 'Summer 2024',
+      description: 'Discover our latest pieces',
+      alignment: 'center'
+    %}
+
+  Parameters:
+    - overline: Small label text above heading
+    - heading: Main heading text (required)
+    - description: Optional description text
+    - alignment: 'left', 'center', or 'right' (default: 'left')
+    - size: 'small', 'medium', or 'large' (default: 'medium')
+    - show_decorative_line: Show decorative line under label (default: true)
+{% endcomment %}
+
+{%- liquid
+  assign alignment = alignment | default: 'left'
+  assign size = size | default: 'medium'
+  assign show_decorative_line = show_decorative_line | default: true
+
+  if alignment == 'center'
+    assign alignment_class = 'text-center'
+    assign items_alignment = 'items-center'
+  elsif alignment == 'right'
+    assign alignment_class = 'text-right'
+    assign items_alignment = 'items-end'
+  else
+    assign alignment_class = 'text-left'
+    assign items_alignment = 'items-start'
+  endif
+
+  case size
+    when 'small'
+      assign heading_size = 'text-2xl md:text-3xl'
+    when 'large'
+      assign heading_size = 'text-4xl md:text-5xl lg:text-6xl'
+    else
+      assign heading_size = 'text-3xl md:text-4xl'
+  endcase
+-%}
+
+<div class="section-header flex flex-col {{ items_alignment }} gap-4 mb-12 {{ alignment_class }}">
+  {% if overline != blank %}
+    <div class="flex flex-col {{ items_alignment }} gap-2">
+      <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em]">
+        {{ overline }}
+      </span>
+      {% if show_decorative_line %}
+        <div class="h-[1px] w-12 bg-sage-dark {% if alignment == 'center' %}mx-auto{% endif %}"></div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if heading != blank %}
+    <h2 class="{{ heading_size }} font-bold tracking-tight text-text-olive-deep serif">
+      {{ heading }}
+    </h2>
+  {% endif %}
+
+  {% if description != blank %}
+    <div class="max-w-2xl {% if alignment == 'center' %}mx-auto{% endif %}">
+      <p class="text-muted text-lg font-light leading-relaxed">
+        {{ description }}
+      </p>
+    </div>
+  {% endif %}
+</div>

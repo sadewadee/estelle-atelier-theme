@@ -1,0 +1,22 @@
+<div class="w-full bg-sage-pale py-2.5 text-center border-b border-sage-accent/40 animate-entrance">
+  <p class="text-[9px] uppercase tracking-[0.4em] font-medium text-[var(--text-olive-deep)]">{{ section.settings.text }}</p>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Complimentary Global Atelier Shipping on Orders Over $500"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}
