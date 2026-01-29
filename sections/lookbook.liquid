@@ -1,0 +1,260 @@
+{% comment %}
+  Estelle Atelier - Seasonal Lookbook Section
+  Immersive collection showcase with shoppable hotspots
+{% endcomment %}
+
+<div class="px-4 md:px-12 py-16 md:py-24">
+  <div class="max-w-[1800px] mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      {% if section.settings.label != blank %}
+        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-2 block">{{ section.settings.label }}</span>
+      {% endif %}
+      <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
+      {% if section.settings.description %}
+        <p class="text-muted max-w-2xl mx-auto">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Lookbook Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.settings.columns }} gap-4 md:gap-8">
+      {% for block in section.blocks %}
+        <div class="lookbook-item group relative {% if block.settings.span == 'large' %}md:col-span-2 lg:col-span-2{% endif %}" {{ block.shopify_attributes }}>
+          <!-- Image -->
+          <div class="relative aspect-[3/4] {% if block.settings.span == 'large' %}md:aspect-[16/10]{% endif %} rounded-2xl overflow-hidden bg-sage-accent/20">
+            {% if block.settings.image %}
+              {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-sage-dark/20">photo_library</span>
+              </div>
+            {% endif %}
+
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            <!-- Hotspots (if products) -->
+            {% if block.settings.show_hotspots and block.settings.products != blank %}
+              <div class="absolute inset-0">
+                {% assign product_handles = block.settings.products | split: ',' %}
+                {% for handle in product_handles limit: 3 %}
+                  {% assign product = all_products[handle] %}
+                  {% if product %}
+                    <div class="hotspot absolute w-8 h-8 -ml-4 -mt-4 cursor-pointer group/hotspot" style="top: {{ 20 | plus: forloop.index0 | times: 20 }}%; left: {{ 30 | plus: forloop.index0 | times: 15 }}%;">
+                      <span class="absolute inset-0 rounded-full bg-white/80 flex items-center justify-center animate-ping"></span>
+                      <span class="absolute inset-0 rounded-full bg-white flex items-center justify-center">
+                        <span class="w-2 h-2 rounded-full bg-sage-dark"></span>
+                      </span>
+                      <!-- Tooltip -->
+                      <div class="absolute left-10 top-0 bg-white rounded-lg shadow-xl p-3 w-48 opacity-0 group-hover/hotspot:opacity-100 transition-opacity pointer-events-none group-hover/hotspot:pointer-events-auto">
+                        {% if product.featured_image %}
+                          {{ product.featured_image | image_url: width: 200 | image_tag: class: 'w-full aspect-square object-cover rounded mb-2' }}
+                        {% endif %}
+                        <p class="text-xs font-bold text-text-olive-deep">{{ product.title }}</p>
+                        <p class="text-sm text-muted">{{ product.price | money }}</p>
+                        <a href="{{ product.url }}" class="block mt-2 text-xs text-center bg-sage-dark text-white py-2 rounded hover:bg-sage-accent transition-colors">
+                          Quick View
+                        </a>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <!-- Content Overlay -->
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+              {% if block.settings.collection %}
+                <a href="{{ block.settings.collection.url }}" class="block">
+                  {% if block.settings.overline %}
+                    <span class="text-white/80 text-[10px] font-bold uppercase tracking-[0.2em] mb-2 block">{{ block.settings.overline }}</span>
+                  {% endif %}
+                  <h3 class="text-white text-xl md:text-2xl font-bold serif mb-2">{{ block.settings.collection.title }}</h3>
+                  {% if block.settings.show_products_count %}
+                    <p class="text-white/80 text-sm">{{ block.settings.collection.all_products_count }} products</p>
+                  {% endif %}
+                </a>
+              {% elsif block.settings.title %}
+                {% if block.settings.overline %}
+                  <span class="text-white/80 text-[10px] font-bold uppercase tracking-[0.2em] mb-2 block">{{ block.settings.overline }}</span>
+                {% endif %}
+                <h3 class="text-white text-xl md:text-2xl font-bold serif mb-2">{{ block.settings.title }}</h3>
+                {% if block.settings.description %}
+                  <p class="text-white/80 text-sm">{{ block.settings.description }}</p>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- View All Link -->
+    {% if section.settings.show_view_all %}
+      <div class="text-center mt-16">
+        <a href="{{ section.settings.view_all_link }}" class="inline-flex items-center gap-2 border-2 border-text-olive-deep text-text-olive-deep px-10 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-text-olive-deep hover:text-white transition-all">
+          {{ section.settings.view_all_text }}
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Lookbook",
+  "tag": "section",
+  "class": "section-lookbook",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Seasonal Edit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Summer 2024 Lookbook"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 3,
+      "step": 1,
+      "default": 3,
+      "label": "Columns"
+    },
+    {
+      "type": "header",
+      "content": "View All Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all text",
+      "default": "View Full Collection"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Lookbook Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "span",
+          "label": "Size",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "large",
+              "label": "Large (2x)"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "text",
+          "id": "overline",
+          "label": "Overline",
+          "default": "New Arrival"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Link to collection"
+        },
+        {
+          "type": "header",
+          "content": "Or use custom text"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Product Hotspots"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_hotspots",
+          "label": "Enable hotspots",
+          "default": false,
+          "info": "Add product handles (comma-separated) below"
+        },
+        {
+          "type": "text",
+          "id": "products",
+          "label": "Product handles",
+          "info": "Comma-separated product handles (e.g., product-one, product-two)",
+          "default": ""
+        },
+        {
+          "type": "checkbox",
+          "id": "show_products_count",
+          "label": "Show products count",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "look",
+          "settings": {
+            "span": "large"
+          }
+        },
+        {
+          "type": "look"
+        },
+        {
+          "type": "look"
+        },
+        {
+          "type": "look"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

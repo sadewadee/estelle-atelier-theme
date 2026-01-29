@@ -1,0 +1,438 @@
+{% comment %}
+  Estelle Atelier - Size Guide Section
+  Comprehensive size chart with measurements
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-5xl mx-auto">
+    <!-- Page Heading -->
+    <div class="mb-12 text-center">
+      <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
+      <p class="text-muted text-lg max-w-2xl mx-auto">
+        {{ section.settings.description }}
+      </p>
+    </div>
+
+    <!-- Unit Toggle & Category Selection -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <!-- Category Tabs -->
+      <div class="flex-1 overflow-x-auto">
+        <div class="flex border-b border-sage-accent/30 gap-8 min-w-max" data-size-tabs>
+          {% for block in section.blocks %}
+            <button
+              class="size-tab {% if forloop.first %}active{% endif %} flex flex-col items-center justify-center border-b-[3px] {% if forloop.first %}border-sage-dark{% else %}border-transparent{% endif %} text-text-olive-deep pb-3 pt-4 transition-colors"
+              data-category="{{ block.settings.id }}"
+              {{ block.shopify_attributes }}
+            >
+              <p class="text-sm font-bold tracking-[0.015em]">{{ block.settings.title }}</p>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Unit Toggle -->
+      <div class="flex min-w-[160px]">
+        <div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-sage-accent/30 p-1">
+          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-text-olive-deep text-muted text-xs font-bold uppercase tracking-wider">
+            <span>CM</span>
+            <input checked class="hidden" name="unit-toggle" type="radio" value="CM">
+          </label>
+          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-text-olive-deep text-muted text-xs font-bold uppercase tracking-wider">
+            <span>INCHES</span>
+            <input class="hidden" name="unit-toggle" type="radio" value="INCHES">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Size Tables -->
+    {% for block in section.blocks %}
+      <div class="size-table-content {% unless forloop.first %}hidden{% endfor %}" data-table="{{ block.settings.id }}">
+        <div class="overflow-x-auto rounded-xl border border-sage-accent/30 bg-white shadow-sm mb-12">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-sage-dark/10">
+                <th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Size</th>
+                {% if block.settings.show_uk_au %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">UK/AU</th>{% endif %}
+                {% if block.settings.show_us %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">US</th>{% endif %}
+                {% if block.settings.show_eu %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">EU</th>{% endif %}
+                {% if block.settings.show_bust %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Bust</th>{% endif %}
+                {% if block.settings.show_waist %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Waist</th>{% endif %}
+                {% if block.settings.show_hips %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Hips</th>{% endif %}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-sage-accent/30">
+              {% for i in (1..5) %}
+                <tr class="hover:bg-sage-pale/30 transition-colors">
+                  <td class="p-4 md:p-6 text-sm font-bold">{{ block.settings.size_label | split: ',' | default: 'XS,S,M,L,XL' | split: ',' | limit: 5 | nth: i }}</td>
+                  {% if block.settings.show_uk_au %}<td class="p-4 md:p-6 text-sm text-muted">{{ block.settings.uk_sizes | split: ',' | default: '6,8,10,12,14' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                  {% if block.settings.show_us %}<td class="p-4 md:p-6 text-sm text-muted">{{ block.settings.us_sizes | split: ',' | default: '2,4,6,8,10' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                  {% if block.settings.show_eu %}<td class="p-4 md:p-6 text-sm text-muted">{{ block.settings.eu_sizes | split: ',' | default: '34,36,38,40,42' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                  {% if block.settings.show_bust %}<td class="p-4 md:p-6 text-sm">{{ block.settings.bust_sizes | split: ',' | default: '78-82,83-87,88-92,93-97,98-102' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                  {% if block.settings.show_waist %}<td class="p-4 md:p-6 text-sm">{{ block.settings.waist_sizes | split: ',' | default: '60-64,65-69,70-74,75-79,80-84' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                  {% if block.settings.show_hips %}<td class="p-4 md:p-6 text-sm">{{ block.settings.hip_sizes | split: ',' | default: '86-90,91-95,96-100,101-105,106-110' | split: ',' | limit: 5 | nth: i }}</td>{% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- How to Measure Section -->
+    <div class="grid md:grid-cols-2 gap-12 items-start mb-16">
+      <div>
+        <h2 class="text-2xl font-bold mb-6 tracking-tight">{{ section.settings.how_to_heading }}</h2>
+        <div class="space-y-8">
+          {% if section.settings.show_bust_guide %}
+            <div class="flex gap-4 md:gap-6">
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
+                <span class="material-symbols-outlined text-xl md:text-2xl">straighten</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.bust_heading | default: 'Bust' }}</h3>
+                <p class="text-muted leading-relaxed text-sm md:text-base">{{ section.settings.bust_description | default: 'Place a tape measure around the fullest part of your chest.' }}</p>
+              </div>
+            </div>
+          {% endif %}
+          {% if section.settings.show_waist_guide %}
+            <div class="flex gap-4 md:gap-6">
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
+                <span class="material-symbols-outlined text-xl md:text-2xl">accessibility_new</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.waist_heading | default: 'Waist' }}</h3>
+                <p class="text-muted leading-relaxed text-sm md:text-base">{{ section.settings.waist_description | default: 'Measure the narrowest part of your natural waistline.' }}</p>
+              </div>
+            </div>
+          {% endif %}
+          {% if section.settings.show_hips_guide %}
+            <div class="flex gap-4 md:gap-6">
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
+                <span class="material-symbols-outlined text-xl md:text-2xl">height</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.hips_heading | default: 'Hips' }}</h3>
+                <p class="text-muted leading-relaxed text-sm md:text-base">{{ section.settings.hips_description | default: 'Stand with your feet together and measure around the fullest part of your hips.' }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="bg-sage-accent/30 rounded-2xl p-8 flex items-center justify-center aspect-square">
+        <div class="relative w-full h-full border-2 border-dashed border-sage-dark/30 rounded-xl flex flex-col items-center justify-center gap-4">
+          <span class="material-symbols-outlined text-5xl md:text-6xl text-sage-dark">person_outline</span>
+          <p class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-sage-dark">{{ section.settings.diagram_label }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model Fit Reference -->
+    {% if section.settings.show_fit_reference %}
+      <div class="bg-white border border-sage-accent/30 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
+        {% if section.settings.fit_image %}
+          <div class="w-32 h-40 bg-sage-accent/30 rounded-lg overflow-hidden flex-shrink-0">
+            {{ section.settings.fit_image | image_url: width: 200 | image_tag: class: 'w-full h-full object-cover', alt: section.settings.fit_image.alt }}
+          </div>
+        {% else %}
+          <div class="w-32 h-40 bg-sage-accent/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-4xl text-sage-dark/40">person</span>
+          </div>
+        {% endif %}
+        <div class="flex-1 text-center md:text-left">
+          <h3 class="text-lg md:text-xl font-bold mb-2">{{ section.settings.fit_heading }}</h3>
+          <p class="text-muted mb-4 text-sm md:text-base">{{ section.settings.fit_description }}</p>
+          <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-4">
+            {% if section.settings.fit_badge_1 != blank %}
+              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-text-olive-deep">{{ section.settings.fit_badge_1 }}</span>
+            {% endif %}
+            {% if section.settings.fit_badge_2 != blank %}
+              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-text-olive-deep">{{ section.settings.fit_badge_2 }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% if section.settings.fit_button_text != blank %}
+          <div class="flex-shrink-0">
+            <a href="{{ section.settings.fit_button_link }}" class="bg-sage-dark text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors text-sm">
+              {{ section.settings.fit_button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "tag": "section",
+  "class": "section-size-guide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Size & Fit Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Our pieces are tailored to standard international sizing. Use this comprehensive guide to find your signature fit."
+    },
+    {
+      "type": "header",
+      "content": "How to Measure"
+    },
+    {
+      "type": "text",
+      "id": "how_to_heading",
+      "label": "How to measure heading",
+      "default": "How to Measure"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bust_guide",
+      "label": "Show bust guide",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "bust_heading",
+      "label": "Bust heading",
+      "default": "Bust"
+    },
+    {
+      "type": "textarea",
+      "id": "bust_description",
+      "label": "Bust description",
+      "default": "Place a tape measure around the fullest part of your chest, usually at the nipple line."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_waist_guide",
+      "label": "Show waist guide",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "waist_heading",
+      "label": "Waist heading",
+      "default": "Waist"
+    },
+    {
+      "type": "textarea",
+      "id": "waist_description",
+      "label": "Waist description",
+      "default": "Measure the narrowest part of your natural waistline, typically above your belly button."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hips_guide",
+      "label": "Show hips guide",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hips_heading",
+      "label": "Hips heading",
+      "default": "Hips"
+    },
+    {
+      "type": "textarea",
+      "id": "hips_description",
+      "label": "Hips description",
+      "default": "Stand with your feet together and measure around the fullest part of your hips."
+    },
+    {
+      "type": "text",
+      "id": "diagram_label",
+      "label": "Diagram label",
+      "default": "Measurement Guide"
+    },
+    {
+      "type": "header",
+      "content": "Fit Reference"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fit_reference",
+      "label": "Show fit reference",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "fit_image",
+      "label": "Fit reference image"
+    },
+    {
+      "type": "text",
+      "id": "fit_heading",
+      "label": "Fit heading",
+      "default": "Model Fit Reference"
+    },
+    {
+      "type": "textarea",
+      "id": "fit_description",
+      "label": "Fit description",
+      "default": "Our model is 178cm / 5'10\" and is wearing a size Medium. This piece is designed for a relaxed, flowy silhouette."
+    },
+    {
+      "type": "text",
+      "id": "fit_badge_1",
+      "label": "Fit badge 1",
+      "default": "True to Size"
+    },
+    {
+      "type": "text",
+      "id": "fit_badge_2",
+      "label": "Fit badge 2",
+      "default": "Standard Length"
+    },
+    {
+      "type": "text",
+      "id": "fit_button_text",
+      "label": "Button text",
+      "default": "Shop The Collection"
+    },
+    {
+      "type": "url",
+      "id": "fit_button_link",
+      "label": "Button link",
+      "default": "/collections/all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size_table",
+      "name": "Size Table",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Table ID",
+          "default": "tops"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "Tops & Shirts"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_uk_au",
+          "label": "Show UK/AU column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_us",
+          "label": "Show US column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_eu",
+          "label": "Show EU column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_bust",
+          "label": "Show Bust column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_waist",
+          "label": "Show Waist column",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_hips",
+          "label": "Show Hips column",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Size Values (comma-separated)"
+        },
+        {
+          "type": "text",
+          "id": "size_label",
+          "label": "Size labels",
+          "default": "XS,S,M,L,XL"
+        },
+        {
+          "type": "text",
+          "id": "uk_sizes",
+          "label": "UK/AU sizes",
+          "default": "6,8,10,12,14"
+        },
+        {
+          "type": "text",
+          "id": "us_sizes",
+          "label": "US sizes",
+          "default": "2,4,6,8,10"
+        },
+        {
+          "type": "text",
+          "id": "eu_sizes",
+          "label": "EU sizes",
+          "default": "34,36,38,40,42"
+        },
+        {
+          "type": "text",
+          "id": "bust_sizes",
+          "label": "Bust measurements",
+          "default": "78-82,83-87,88-92,93-97,98-102"
+        },
+        {
+          "type": "text",
+          "id": "waist_sizes",
+          "label": "Waist measurements",
+          "default": "60-64,65-69,70-74,75-79,80-84"
+        },
+        {
+          "type": "text",
+          "id": "hip_sizes",
+          "label": "Hip measurements",
+          "default": "86-90,91-95,96-100,101-105,106-110"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size Guide",
+      "category": "Product",
+      "blocks": [
+        {
+          "type": "size_table",
+          "settings": {
+            "id": "tops",
+            "title": "Tops & Shirts"
+          }
+        },
+        {
+          "type": "size_table",
+          "settings": {
+            "id": "dresses",
+            "title": "Dresses"
+          }
+        },
+        {
+          "type": "size_table",
+          "settings": {
+            "id": "bottoms",
+            "title": "Bottoms"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

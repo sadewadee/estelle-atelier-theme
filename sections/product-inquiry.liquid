@@ -1,0 +1,199 @@
+{% comment %}
+  Estelle Atelier - Product Inquiry Form Section
+  Contact form for product-specific questions
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-2xl mx-auto">
+    <!-- Tab-style header -->
+    <div class="flex border-b border-sage-accent/30 mb-8">
+      <button class="flex-1 py-4 text-center text-[10px] font-bold tracking-widest uppercase text-muted opacity-50 cursor-not-allowed">
+        Details
+      </button>
+      <button class="flex-1 py-4 text-center text-[10px] font-bold tracking-widest uppercase text-text-olive-deep border-b-2 border-sage-dark">
+        Inquiry
+      </button>
+      <button class="flex-1 py-4 text-center text-[10px] font-bold tracking-widest uppercase text-muted opacity-50 cursor-not-allowed">
+        Shipping
+      </button>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white dark:bg-sage-dark/10 rounded-xl shadow-sm border border-sage-accent/30 p-8 md:p-12">
+      <div class="mb-10">
+        {% if section.settings.show_label %}
+          <span class="text-sage-dark text-[11px] font-bold leading-normal tracking-[0.25em] text-center uppercase mb-3 block">
+            {{ section.settings.label }}
+          </span>
+        {% endif %}
+        <h3 class="text-text-olive-deep tracking-tight text-3xl font-light leading-tight text-center serif">
+          {{ section.settings.heading }}
+        </h3>
+        <p class="text-muted text-sm font-normal leading-relaxed text-center mt-4">
+          {{ section.settings.description }}
+        </p>
+      </div>
+
+      {% form 'contact', class: 'space-y-6' %}
+        <input type="hidden" name="contact[product]" value="{{ product.title | default: 'General Inquiry' }}">
+
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1">
+            <label class="block">
+              <p class="text-text-olive-deep text-xs font-semibold tracking-wide mb-2 uppercase">
+                {{ 'contact.form.name' | t | default: 'Full Name' }}
+              </p>
+              <input
+                type="text"
+                name="contact[{{ 'contact.form.name' | t | default: 'Name' }}]"
+                class="w-full rounded-lg border border-sage-accent bg-white text-text-olive-deep focus:border-sage-dark focus:outline-0 h-12 px-4 placeholder:text-muted/30 transition-all"
+                placeholder="{{ section.settings.name_placeholder }}"
+                required
+              >
+            </label>
+          </div>
+          <div class="flex-1">
+            <label class="block">
+              <p class="text-text-olive-deep text-xs font-semibold tracking-wide mb-2 uppercase">
+                {{ 'contact.form.email' | t | default: 'Email Address' }}
+              </p>
+              <input
+                type="email"
+                name="contact[email]"
+                class="w-full rounded-lg border border-sage-accent bg-white text-text-olive-deep focus:border-sage-dark focus:outline-0 h-12 px-4 placeholder:text-muted/30 transition-all"
+                placeholder="{{ section.settings.email_placeholder }}"
+                required
+              >
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block">
+            <p class="text-text-olive-deep text-xs font-semibold tracking-wide mb-2 uppercase">
+              {{ section.settings.message_label }}
+            </p>
+            <textarea
+              name="contact[{{ 'contact.form.message' | t | default: 'Message' }}]"
+              rows="5"
+              class="w-full rounded-lg border border-sage-accent bg-white text-text-olive-deep focus:border-sage-dark focus:outline-0 p-4 placeholder:text-muted/30 resize-none"
+              placeholder="{{ section.settings.message_placeholder }}"
+              required
+            ></textarea>
+          </label>
+        </div>
+
+        <div class="pt-4">
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center h-14 bg-sage-dark hover:bg-sage-accent text-white text-sm font-bold tracking-[0.2em] uppercase rounded-lg transition-all"
+          >
+            {{ section.settings.button_text }}
+          </button>
+          {% if section.settings.show_security_note %}
+            <div class="flex items-center justify-center gap-2 mt-8 opacity-40">
+              {% render 'icon', icon: 'lock', size: 'md' %}
+              <p class="text-muted text-[10px] uppercase tracking-widest">
+                {{ section.settings.security_note }}
+              </p>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if form.posted_successfully? %}
+          <div class="mt-6 p-4 bg-sage-dark/10 rounded-lg text-center">
+            <p class="text-sm font-medium text-sage-dark">
+              {{ 'contact.form.post_success' | t | default: 'Thank you for your inquiry. We will get back to you soon.' }}
+            </p>
+          </div>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Inquiry",
+  "tag": "section",
+  "class": "section-product-inquiry",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_label",
+      "label": "Show label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Personal Concierge"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ask a Specialist"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Our stylists are here to assist with sizing, styling, or material details. We typically respond within 24 hours."
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name placeholder",
+      "default": "Jane Doe"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "email@example.com"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Message label",
+      "default": "How can we help?"
+    },
+    {
+      "type": "text",
+      "id": "message_placeholder",
+      "label": "Message placeholder",
+      "default": "Enter your inquiry details here..."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Send Inquiry"
+    },
+    {
+      "type": "header",
+      "content": "Security Note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_security_note",
+      "label": "Show security note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "security_note",
+      "label": "Security note",
+      "default": "Secure & confidential communication"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Inquiry",
+      "category": "Forms"
+    }
+  ]
+}
+{% endschema %}
