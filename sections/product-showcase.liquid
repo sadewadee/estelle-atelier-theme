@@ -1,0 +1,499 @@
+{% comment %}
+  Estelle Atelier - Product Showcase Section
+  Immersive single product display with full details
+{% endcomment %}
+
+<div class="px-6 md:px-12 lg:px-20 py-12" data-section-id="{{ section.id }}">
+  <div class="max-w-[1800px] mx-auto">
+    <div class="flex flex-col md:flex-row gap-10 items-start">
+      <!-- Product Media -->
+      <div class="w-full md:w-3/5">
+        <div class="relative group aspect-[16/10] overflow-hidden rounded-2xl bg-sage-accent/20">
+          {% if section.settings.product %}
+            {% assign product = all_products[section.settings.product] %}
+            {% if product.featured_image %}
+              {{ product.featured_image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
+              </div>
+            {% endif %}
+          {% elsif section.settings.image %}
+            {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+              <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
+            </div>
+          {% endif %}
+
+          <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/20 to-transparent"></div>
+
+          <!-- Floating badge -->
+          {% if section.settings.show_badge and section.settings.badge_text %}
+            <div class="absolute bottom-6 left-6 bg-white/80 backdrop-blur px-4 py-2 rounded-lg">
+              <p class="text-xs font-bold tracking-widest uppercase text-text-olive-deep">{{ section.settings.badge_text }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="w-full md:w-2/5 md:pl-10 flex flex-col gap-6">
+        <!-- Category & Title -->
+        <div class="flex flex-col gap-3">
+          {% if section.settings.category %}
+            <p class="text-sage-dark text-sm font-bold tracking-[0.2em] uppercase">{{ section.settings.category }}</p>
+          {% endif %}
+          <h1 class="text-text-olive-deep text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight">
+            {{ section.settings.title_line_1 }}
+            {% if section.settings.title_line_2 %}
+              <span class="italic">{{ section.settings.title_line_2 }}</span>
+            {% endif %}
+          </h1>
+          {% if section.settings.price %}
+            <p class="text-2xl font-normal text-muted">{{ section.settings.price }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Description -->
+        {% if section.settings.description %}
+          <p class="text-text-olive-deep/80 text-base font-normal leading-relaxed max-w-md">
+            {{ section.settings.description }}
+          </p>
+        {% endif %}
+
+        <!-- Variant Selectors (visual only) -->
+        {% if section.settings.show_variants %}
+          <div class="flex flex-col gap-5">
+            <!-- Color -->
+            {% if section.settings.show_color_selector %}
+              <div class="space-y-3">
+                <p class="text-xs font-bold uppercase tracking-widest opacity-60">Color: {{ section.settings.color_name | default: 'Sage Mist' }}</p>
+                <div class="flex gap-3">
+                  <button class="size-8 rounded-full border-2 border-sage-dark bg-sage-pale ring-offset-2 focus:ring-2 ring-sage-dark" title="{{ section.settings.color_name | default: 'Sage Mist' }}"></button>
+                  <button class="size-8 rounded-full border border-sage-accent bg-[#f5f5dc] hover:scale-110 transition-transform" title="Sand Drift"></button>
+                  <button class="size-8 rounded-full border border-sage-accent bg-[#dcdcf5] hover:scale-110 transition-transform" title="Morning Sky"></button>
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- Size -->
+            {% if section.settings.show_size_selector %}
+              <div class="space-y-3">
+                <div class="flex justify-between items-center max-w-[320px]">
+                  <p class="text-xs font-bold uppercase tracking-widest opacity-60">Select Size</p>
+                  {% if section.settings.size_guide_link %}
+                    <a href="{{ section.settings.size_guide_link }}" class="text-[10px] underline tracking-tighter hover:text-sage-dark">Size Guide</a>
+                  {% endif %}
+                </div>
+                <div class="flex gap-2">
+                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">XS</button>
+                  <button class="flex-1 max-w-[60px] h-10 border-2 border-sage-dark flex items-center justify-center rounded-lg text-sm font-bold transition-all">S</button>
+                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">M</button>
+                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">L</button>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- CTA -->
+        <div class="flex flex-col gap-3 pt-4">
+          {% if section.settings.button_text %}
+            <a href="{{ section.settings.button_link }}" class="w-full max-w-[400px] h-14 bg-sage-dark text-white rounded-lg font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
+              <span>{{ section.settings.button_text }}</span>
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">shopping_bag</span>
+            </a>
+          {% endif %}
+          {% if section.settings.shipping_note %}
+            <p class="text-[11px] text-center max-w-[400px] opacity-60">{{ section.settings.shipping_note }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Features -->
+{% if section.settings.show_features %}
+  <div class="px-6 md:px-12 lg:px-20 py-16 bg-sage-pale/30">
+    <div class="max-w-[1800px] mx-auto">
+      <div class="flex items-center gap-4 mb-8">
+        <h2 class="text-text-olive-deep text-2xl font-bold tracking-tight">{{ section.settings.features_heading | default: 'Product DNA' }}</h2>
+        <div class="flex-1 h-px bg-sage-accent/30"></div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {% for i in (1..4) %}
+          {% capture icon %}feature_{{ i }}_icon{% endcapture %}
+          {% capture title %}feature_{{ i }}_title{% endcapture %}
+          {% capture text %}feature_{{ i }}_text{% endcapture %}
+
+          <div class="flex flex-col gap-4 rounded-xl border border-sage-accent/30 bg-white p-6 transition-all hover:border-sage-dark">
+            <div class="w-10 h-10 rounded-lg bg-sage-dark/10 flex items-center justify-center text-sage-dark">
+              {% render 'icon', icon: section.settings[icon] | default: 'eco', size: 'lg' %}
+            </div>
+            <div class="flex flex-col gap-1">
+              <h3 class="text-base font-bold">{{ section.settings[title] | default: 'Feature Title' }}</h3>
+              <p class="text-muted text-sm leading-normal">{{ section.settings[text] | default: 'Feature description goes here.' }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<!-- Details Section -->
+{% if section.settings.show_details %}
+  <div class="px-6 md:px-12 lg:px-20 py-16">
+    <div class="max-w-[1800px] mx-auto flex flex-col md:flex-row gap-12 items-center">
+      <div class="flex-1 space-y-6">
+        <h2 class="text-4xl font-bold leading-tight">{{ section.settings.details_heading | default: 'Artisanal Details' }}</h2>
+        <p class="text-lg text-muted max-w-2xl">
+          {{ section.settings.details_text | default: 'Every seam is finished with French stitching for durability and elegance.' }}
+        </p>
+        {% if section.settings.show_stats %}
+          <div class="pt-4 flex gap-8">
+            <div>
+              <p class="text-2xl font-bold">{{ section.settings.stat_1_value | default: '18' }}</p>
+              <p class="text-xs uppercase tracking-widest opacity-60">{{ section.settings.stat_1_label | default: 'Hours to Craft' }}</p>
+            </div>
+            <div class="w-px bg-sage-accent/30"></div>
+            <div>
+              <p class="text-2xl font-bold">{{ section.settings.stat_2_value | default: '100%' }}</p>
+              <p class="text-xs uppercase tracking-widest opacity-60">{{ section.settings.stat_2_label | default: 'Biodegradable' }}</p>
+            </div>
+            <div class="w-px bg-sage-accent/30"></div>
+            <div>
+              <p class="text-2xl font-bold">{{ section.settings.stat_3_value | default: 'Hand' }}</p>
+              <p class="text-xs uppercase tracking-widest opacity-60">{{ section.settings.stat_3_label | default: 'Finished' }}</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <div class="flex-1 w-full">
+        <div class="grid grid-cols-2 gap-4">
+          {% if section.settings.detail_image_1 %}
+            <div class="aspect-square bg-sage-accent/20 rounded-lg overflow-hidden">
+              {{ section.settings.detail_image_1 | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+            </div>
+          {% else %}
+            <div class="aspect-square bg-sage-accent/20 rounded-lg"></div>
+          {% endif %}
+          {% if section.settings.detail_image_2 %}
+            <div class="aspect-square bg-sage-accent/20 rounded-lg overflow-hidden mt-8">
+              {{ section.settings.detail_image_2 | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+            </div>
+          {% else %}
+            <div class="aspect-square bg-sage-accent/20 rounded-lg mt-8"></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product Showcase",
+  "tag": "section",
+  "class": "section-product-showcase",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Or use custom image"
+    },
+    {
+      "type": "header",
+      "content": "Header Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Signature Collection"
+    },
+    {
+      "type": "text",
+      "id": "category",
+      "label": "Category",
+      "default": "Sustainable Luxury"
+    },
+    {
+      "type": "text",
+      "id": "title_line_1",
+      "label": "Title line 1",
+      "default": "The Ethereal"
+    },
+    {
+      "type": "text",
+      "id": "title_line_2",
+      "label": "Title line 2",
+      "default": "Silk Wrap"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "Price",
+      "default": "$280.00"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Experience the whisper-light touch of our 100% organic Mulberry silk. Hand-dyed using traditional botanical extracts."
+    },
+    {
+      "type": "header",
+      "content": "Variants"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variants",
+      "label": "Show variant selectors",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_selector",
+      "label": "Show color selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "color_name",
+      "label": "Color name",
+      "default": "Sage Mist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_selector",
+      "label": "Show size selector",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "size_guide_link",
+      "label": "Size guide link"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "Shipping note",
+      "default": "Free express shipping on orders over $200. Secure checkout."
+    },
+    {
+      "type": "header",
+      "content": "Features Grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Show features",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "features_heading",
+      "label": "Features heading",
+      "default": "Product DNA"
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_icon",
+      "label": "Icon 1",
+      "default": "eco"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Title 1",
+      "default": "100% Organic Silk"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_text",
+      "label": "Text 1",
+      "default": "Grown without pesticides, preserving the integrity of the natural fibers."
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_icon",
+      "label": "Icon 2",
+      "default": "volunteer_activism"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Title 2",
+      "default": "Ethically Crafted"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_text",
+      "label": "Text 2",
+      "default": "Fair-trade certified studios supporting local artisans."
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_icon",
+      "label": "Icon 3",
+      "default": "thermostat"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Title 3",
+      "default": "Self-Regulating"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_text",
+      "label": "Text 3",
+      "default": "Naturally breathable material for all-season comfort."
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_icon",
+      "label": "Icon 4",
+      "default": "palette"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_title",
+      "label": "Title 4",
+      "default": "Botanical Dyes"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_text",
+      "label": "Text 4",
+      "default": "No synthetic toxins. Colored using natural ingredients."
+    },
+    {
+      "type": "header",
+      "content": "Details Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_details",
+      "label": "Show details section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "details_heading",
+      "label": "Details heading",
+      "default": "Artisanal Details"
+    },
+    {
+      "type": "textarea",
+      "id": "details_text",
+      "label": "Details text",
+      "default": "Every seam is finished with French stitching for durability and elegance."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show stats",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 value",
+      "default": "18"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Hours to Craft"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "Biodegradable"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 value",
+      "default": "Hand"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Finished"
+    },
+    {
+      "type": "image_picker",
+      "id": "detail_image_1",
+      "label": "Detail image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "detail_image_2",
+      "label": "Detail image 2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Showcase",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

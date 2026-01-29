@@ -1,0 +1,303 @@
+{% comment %}
+  Estelle Atelier - Immersive Hero Section
+  Full-screen cinematic hero with video or image background
+{% endcomment %}
+
+{% style %}
+  .immersive-hero {
+    min-height: 100vh;
+    aspect-ratio: 16 / 9;
+  }
+  @media (max-aspect-ratio: 16/9) {
+    .immersive-hero {
+      height: 100vh;
+      width: auto;
+    }
+  }
+{% endstyle %}
+
+<section class="relative w-full overflow-hidden group" data-section-id="{{ section.id }}">
+  <!-- Background Media Container -->
+  <div class="absolute inset-0 w-full h-full">
+    {% if section.settings.video_url %}
+      <!-- Video Background -->
+      <video
+        class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="{% if section.settings.image %}{{ section.settings.image | image_url: width: 2000 }}{% endif %}"
+      >
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    {% elsif section.settings.image %}
+      <!-- Image Background -->
+      {{
+        section.settings.image
+        | image_url: width: 2000
+        | image_tag: class: 'w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105'
+      }}
+    {% else %}
+      <div class="w-full h-full bg-sage-pale"></div>
+    {% endif %}
+
+    <!-- Overlays -->
+    <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/80 via-text-olive-deep/20 to-transparent"></div>
+    <div class="absolute inset-0 bg-black/10"></div>
+  </div>
+
+  <!-- Content Overlay -->
+  <div class="relative h-screen flex flex-col items-center justify-center px-6 text-center text-white">
+    <!-- Branding Accent -->
+    {% if section.settings.show_branding %}
+      <div class="mb-8 opacity-80">
+        <span class="uppercase tracking-[0.4em] text-[10px] sm:text-xs font-medium text-sage-dark">{{ section.settings.branding_text }}</span>
+      </div>
+    {% endif %}
+
+    <!-- Hero Content -->
+    <div class="max-w-4xl mx-auto space-y-6 md:space-y-8">
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-extralight tracking-tight leading-[1.1] serif">
+        {{ section.settings.heading_line_1 }}
+        {% if section.settings.heading_line_2 != blank %}
+          <br>
+          <span class="{% if section.settings.italic_subheading %}italic {% endif %}{% if section.settings.font_bold %}font-bold {% else %}font-light {% endif %}">{{ section.settings.heading_line_2 }}</span>
+        {% endif %}
+      </h1>
+
+      {% if section.settings.description %}
+        <p class="max-w-xl mx-auto text-base md:text-lg lg:text-xl font-light opacity-90 leading-relaxed tracking-wide">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+
+      <!-- CTA Actions -->
+      {% if section.settings.show_cta %}
+        <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {% if section.settings.primary_button_text %}
+            <a href="{{ section.settings.primary_button_link }}" class="min-w-[180px] bg-sage-dark text-white px-8 py-4 rounded-full font-semibold text-sm uppercase tracking-widest transition-all hover:bg-white hover:text-text-olive-deep hover:scale-105">
+              {{ section.settings.primary_button_text }}
+            </a>
+          {% endif %}
+          {% if section.settings.secondary_button_text %}
+            <a href="{{ section.settings.secondary_button_link }}" class="min-w-[180px] border border-white/40 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-sm uppercase tracking-widest transition-all hover:bg-white/10">
+              {{ section.settings.secondary_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Scroll Indicator -->
+    {% if section.settings.show_scroll_indicator %}
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 animate-bounce">
+        <span class="text-[10px] uppercase tracking-[0.3em]">{{ section.settings.scroll_text }}</span>
+        <span class="material-symbols-outlined text-sm">expand_more</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Minimalist Corner Branding -->
+  {% if section.settings.corner_branding %}
+    <div class="absolute top-10 left-10 hidden md:block">
+      <span class="text-white text-xl font-bold tracking-tighter">{{ section.settings.corner_branding_text }}</span>
+    </div>
+  {% endif %}
+
+  <!-- Social/Collection Links -->
+  {% if section.settings.show_corner_links %}
+    <div class="absolute bottom-10 right-10 hidden lg:flex flex-col gap-4 text-white/50 text-xs tracking-tighter items-end">
+      {% if section.settings.link_1_text %}
+        <a class="hover:text-sage-dark transition-colors" href="{{ section.settings.link_1_url }}">{{ section.settings.link_1_text }}</a>
+      {% endif %}
+      {% if section.settings.link_2_text %}
+        <a class="hover:text-sage-dark transition-colors" href="{{ section.settings.link_2_url }}">{{ section.settings.link_2_text }}</a>
+      {% endif %}
+      {% if section.settings.link_3_text %}
+        <a class="hover:text-sage-dark transition-colors" href="{{ section.settings.link_3_url }}">{{ section.settings.link_3_text }}</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Immersive Hero",
+  "tag": "section",
+  "class": "section-immersive-hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "MP4 video URL for background"
+    },
+    {
+      "type": "header",
+      "content": "Branding"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_branding",
+      "label": "Show top branding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "branding_text",
+      "label": "Branding text",
+      "default": "Est. 2024"
+    },
+    {
+      "type": "checkbox",
+      "id": "corner_branding",
+      "label": "Show corner branding",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "corner_branding_text",
+      "label": "Corner branding",
+      "default": "L'AVENIR"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "The Ethereal"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "italic_subheading",
+      "label": "Italic subheading",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "font_bold",
+      "label": "Bold subheading",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A tribute to nature's quiet strength. Crafted with sustainable silks and a soft touch of the earth."
+    },
+    {
+      "type": "header",
+      "content": "CTA Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary button text",
+      "default": "Explore Film"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary button text",
+      "default": "Shop the Look"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Scroll Indicator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "scroll_text",
+      "label": "Scroll text",
+      "default": "Scroll"
+    },
+    {
+      "type": "header",
+      "content": "Corner Links"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_corner_links",
+      "label": "Show corner links",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "link_1_text",
+      "label": "Link 1 text",
+      "default": "INSTAGRAM"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "link_2_text",
+      "label": "Link 2 text",
+      "default": "LOOKBOOK"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "link_3_text",
+      "label": "Link 3 text",
+      "default": "ARCHIVE"
+    },
+    {
+      "type": "url",
+      "id": "link_3_url",
+      "label": "Link 3 URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Immersive Hero",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}
