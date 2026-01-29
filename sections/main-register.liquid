@@ -1,0 +1,135 @@
+{% comment %}
+  Estelle Atelier - Customer Register Section
+  New customer registration form
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24 min-h-[70vh] flex items-center">
+  <div class="max-w-md mx-auto w-full">
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-2">{{ 'customer.register.title' | t | default: 'Create Account' }}</h1>
+      <p class="text-muted">{{ 'customer.register.description' | t | default: 'Join Estelle Atelier for an elevated shopping experience' }}</p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="bg-white rounded-2xl border border-sage-accent/30 p-8 md:p-12 mb-8">
+      {% form 'create_customer' %}
+        {% if form.errors %}
+          <div class="p-4 bg-red-50 rounded-lg text-center mb-6">
+            <p class="text-sm font-medium text-red-600">
+              {{ form.errors | default_errors }}
+            </p>
+          </div>
+        {% endif %}
+
+        <div class="space-y-5">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="FirstName" class="block text-sm font-medium text-text-olive-deep mb-2">
+                {{ 'customer.register.first_name' | t | default: 'First Name' }}
+              </label>
+              <input
+                type="text"
+                name="customer[first_name]"
+                id="FirstName"
+                class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+                placeholder="{{ 'customer.register.first_name_placeholder' | t | default: 'Jane' }}"
+                required
+              >
+            </div>
+            <div>
+              <label for="LastName" class="block text-sm font-medium text-text-olive-deep mb-2">
+                {{ 'customer.register.last_name' | t | default: 'Last Name' }}
+              </label>
+              <input
+                type="text"
+                name="customer[last_name]"
+                id="LastName"
+                class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+                placeholder="{{ 'customer.register.last_name_placeholder' | t | default: 'Doe' }}"
+                required
+              >
+            </div>
+          </div>
+
+          <div>
+            <label for="Email" class="block text-sm font-medium text-text-olive-deep mb-2">
+              {{ 'customer.register.email' | t | default: 'Email Address' }}
+            </label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="Email"
+              class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+              placeholder="your@email.com"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="Password" class="block text-sm font-medium text-text-olive-deep mb-2">
+              {{ 'customer.register.password' | t | default: 'Password' }}
+            </label>
+            <input
+              type="password"
+              name="customer[password]"
+              id="Password"
+              class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+              placeholder="•••••••••"
+              required
+            >
+          </div>
+
+          {% if section.settings.show_accepts_marketing %}
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                name="customer[accepts_marketing]"
+                id="AcceptsMarketing"
+                class="mt-1 w-4 h-4 text-sage-dark border-sage-accent rounded focus:ring-sage-dark"
+              >
+              <label for="AcceptsMarketing" class="text-sm text-muted leading-relaxed">
+                {{ 'customer.register.accepts_marketing' | t | default: 'Subscribe to our newsletter for exclusive offers and new arrivals.' }}
+              </label>
+            </div>
+          {% endif %}
+
+          <button
+            type="submit"
+            class="w-full bg-sage-dark text-white py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors"
+          >
+            {{ 'customer.register.submit' | t | default: 'Create Account' }}
+          </button>
+        </div>
+      {% endform %}
+    </div>
+
+    <!-- Sign In CTA -->
+    <div class="text-center">
+      <p class="text-muted mb-4">{{ 'customer.register.already_have_account' | t | default: 'Already have an account?' }}</p>
+      <a href="{{ routes.account_login_url }}" class="inline-flex items-center gap-2 text-sage-dark font-medium hover:underline">
+        {{ 'customer.register.sign_in' | t | default: 'Sign in' }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Register",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_accepts_marketing",
+      "label": "Show marketing opt-in",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Register"
+    }
+  ]
+}
+{% endschema %}

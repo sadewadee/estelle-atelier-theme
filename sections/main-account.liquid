@@ -1,0 +1,151 @@
+{% comment %}
+  Estelle Atelier - Customer Account Section
+  Account dashboard with order history and addresses
+{% endcomment %}
+
+<div class="px-6 md:px-12 lg:px-20 py-16 md:py-24">
+  <div class="max-w-6xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-12">
+      <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-2">{{ 'customer.account.title' | t | default: 'My Account' }}</h1>
+      <p class="text-muted">{{ customer.name }}</p>
+    </div>
+
+    <!-- Account Navigation & Content -->
+    <div class="grid lg:grid-cols-4 gap-12">
+      <!-- Sidebar Navigation -->
+      <div class="lg:col-span-1">
+        <nav class="space-y-2">
+          <a href="{{ routes.account_url }}" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-sage-dark/10 text-text-olive-deep font-medium">
+            <span class="material-symbols-outlined">person</span>
+            {{ 'customer.account.details' | t | default: 'Account Details' }}
+          </a>
+          <a href="{{ routes.orders_url }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sage-pale text-muted hover:text-text-olive-deep transition-colors">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            {{ 'customer.account.orders' | t | default: 'Order History' }}
+          </a>
+          <a href="{{ routes.addresses_url }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sage-pale text-muted hover:text-text-olive-deep transition-colors">
+            <span class="material-symbols-outlined">place</span>
+            {{ 'customer.account.addresses' | t | default: 'Addresses' }}
+          </a>
+          {% if section.settings.show_wishlist %}
+            <a href="/pages/wishlist" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sage-pale text-muted hover:text-text-olive-deep transition-colors">
+              <span class="material-symbols-outlined">favorite</span>
+              {{ 'customer.account.wishlist' | t | default: 'Wishlist' }}
+            </a>
+          {% endif %}
+          <a href="{{ routes.account_logout_url }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sage-pale text-muted hover:text-text-olive-deep transition-colors">
+            <span class="material-symbols-outlined">logout</span>
+            {{ 'customer.account.log_out' | t | default: 'Sign Out' }}
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-3">
+        <!-- Account Details Card -->
+        <div class="bg-white rounded-2xl border border-sage-accent/30 p-8 md:p-12 mb-8">
+          <h2 class="text-xl font-bold mb-6">{{ 'customer.account.details' | t | default: 'Account Details' }}</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-muted text-sm mb-1">{{ 'customer.account.name' | t | default: 'Name' }}</p>
+              <p class="text-text-olive-deep font-medium">{{ customer.first_name }} {{ customer.last_name }}</p>
+            </div>
+            <div>
+              <p class="text-muted text-sm mb-1">{{ 'customer.account.email' | t | default: 'Email' }}</p>
+              <p class="text-text-olive-deep font-medium">{{ customer.email }}</p>
+            </div>
+            <div>
+              <p class="text-muted text-sm mb-1">{{ 'customer.account.phone' | t | default: 'Phone' }}</p>
+              <p class="text-text-olive-deep font-medium">{{ customer.default_address.phone | default: '-' }}</p>
+            </div>
+            <div>
+              <p class="text-muted text-sm mb-1">{{ 'customer.account.default_address' | t | default: 'Default Address' }}</p>
+              <p class="text-text-olive-deep font-medium">
+                {% if customer.default_address %}
+                  {{ customer.default_address.address1 }}{% if customer.default_address.address2 %}, {{ customer.default_address.address2 }}{% endif %}<br>
+                  {{ customer.default_address.city }}, {{ customer.default_address.province_code }} {{ customer.default_address.zip }}
+                {% else %}
+                  -
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        {% if customer.orders.size > 0 %}
+          <div class="bg-white rounded-2xl border border-sage-accent/30 p-8 md:p-12">
+            <h2 class="text-xl font-bold mb-6">{{ 'customer.account.orders' | t | default: 'Order History' }}</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="border-b border-sage-accent/30">
+                    <th class="pb-4 text-sm font-bold text-muted uppercase tracking-wider">{{ 'customer.orders.order_number' | t | default: 'Order' }}</th>
+                    <th class="pb-4 text-sm font-bold text-muted uppercase tracking-wider">{{ 'customer.orders.date' | t | default: 'Date' }}</th>
+                    <th class="pb-4 text-sm font-bold text-muted uppercase tracking-wider">{{ 'customer.orders.payment_status' | t | default: 'Payment Status' }}</th>
+                    <th class="pb-4 text-sm font-bold text-muted uppercase tracking-wider">{{ 'customer.orders.fulfillment_status' | t | default: 'Fulfillment Status' }}</th>
+                    <th class="pb-4 text-sm font-bold text-muted uppercase tracking-wider text-right">{{ 'customer.orders.total' | t | default: 'Total' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in customer.orders limit: 5 %}
+                    <tr class="border-b border-sage-accent/20 last:border-0 hover:bg-sage-pale/30 transition-colors">
+                      <td class="py-4">
+                        <a href="{{ order.customer_url }}" class="text-sage-dark font-medium hover:underline">
+                          {{ order.name }}
+                        </a>
+                      </td>
+                      <td class="py-4 text-sm text-muted">{{ order.created_at | date: '%b %d, %Y' }}</td>
+                      <td class="py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                          {% if order.financial_status == 'paid' %}bg-sage-dark/20 text-sage-dark{% else %}bg-orange-100 text-orange-600{% endif %}">
+                          {{ order.financial_status_label }}
+                        </span>
+                      </td>
+                      <td class="py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                          {% if order.fulfillment_status == 'fulfilled' %}bg-sage-dark/20 text-sage-dark{% else %}bg-blue-100 text-blue-600{% endif %}">
+                          {{ order.fulfillment_status_label }}
+                        </span>
+                      </td>
+                      <td class="py-4 text-right font-medium">{{ order.total_price | money }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        {% else %}
+          <div class="bg-white rounded-2xl border border-sage-accent/30 p-8 md:p-12 text-center">
+            <span class="material-symbols-outlined text-6xl text-sage-dark/20 mb-4">shopping_bag</span>
+            <p class="text-muted mb-6">{{ 'customer.orders.none' | t | default: 'You haven\'t placed any orders yet.' }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="inline-flex items-center gap-2 bg-sage-dark text-white px-8 py-3 rounded-lg font-bold hover:bg-sage-accent transition-colors">
+              {{ 'customer.account.start_shopping' | t | default: 'Start Shopping' }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Account",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist link",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Account"
+    }
+  ]
+}
+{% endschema %}
