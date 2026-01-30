@@ -37,8 +37,11 @@
       <div class="aspect-[16/10] rounded-2xl overflow-hidden mb-12">
         {{
           article.image
-          | image_url: width: 1200
-          | image_tag: class: 'w-full h-full object-cover', loading: 'lazy'
+          | image_tag:
+            class: 'w-full h-full object-cover',
+            loading: 'eager',
+            widths: '600, 900, 1200, 1600, 2400',
+            sizes: '(max-width: 768px) 100vw, 75vw'
         }}
       </div>
     {% endif %}

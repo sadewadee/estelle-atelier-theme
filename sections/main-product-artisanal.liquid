@@ -26,9 +26,11 @@
         {%- for media in product.media limit: 4 -%}
           <div class="aspect-[3/4] overflow-hidden bg-[var(--sage-pale)]/40 group">
             {%- if media.media_type == 'image' -%}
-              {{ media | image_url: width: 800 | image_tag:
+              {{ media | image_tag:
                 loading: 'lazy',
                 class: 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 cursor-pointer',
+                widths: '400, 600, 800, 1200, 1600',
+                sizes: '(max-width: 768px) 50vw, 33vw',
                 onclick: "window.dispatchEvent(new CustomEvent('product:image-click', {detail: {index: {{ forloop.index0 }}, mediaId: '{{ media.id }}'}}))"
               }}
             {%- elsif media.media_type == 'external_video' or media.media_type == 'video' -%}
@@ -202,9 +204,11 @@
       <div class="group cursor-pointer">
         <a href="{{ recommendation.url }}">
           <div class="aspect-[3/4] overflow-hidden mb-6 bg-white">
-            {{ recommendation.featured_media | image_url: width: 600 | image_tag:
+            {{ recommendation.featured_media | image_tag:
               loading: 'lazy',
-              class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]'
+              class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]',
+              widths: '300, 450, 600, 900, 1200',
+              sizes: '(max-width: 1024px) 50vw, 25vw'
             }}
           </div>
           <h3 class="text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-800">{{ recommendation.title }}</h3>
@@ -220,9 +224,11 @@
           <div class="group cursor-pointer">
             <a href="{{ product.url }}">
               <div class="aspect-[3/4] overflow-hidden mb-6 bg-white">
-                {{ product.featured_media | image_url: width: 600 | image_tag:
+                {{ product.featured_media | image_tag:
                   loading: 'lazy',
-                  class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]'
+                  class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1500ms]',
+                  widths: '300, 450, 600, 900, 1200',
+                  sizes: '(max-width: 1024px) 50vw, 25vw'
                 }}
               </div>
               <h3 class="text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-800">{{ product.title }}</h3>

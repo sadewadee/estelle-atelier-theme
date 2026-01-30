@@ -1,0 +1,338 @@
+{% comment %}
+  Estelle Atelier - Variant Picker Snippet
+  Based on Shopify Dawn theme variant-picker component
+
+  Usage:
+    {% render 'variant-picker', product: product %}
+
+  Variables:
+    - product: Product object (required)
+    - update_url: Boolean to update URL on change (default: true)
+    - block: Block object for section settings
+{% endcomment %}
+
+{%- liquid
+  assign update_url = update_url | default: true
+  assign product_selected_variant = product.selected_or_first_available_variant
+
+  # Get all option names
+  assign option_names = product.options | sort
+-%}
+
+<variant-selector
+  class="no-js-hidden"
+  data-url="{{ product.url }}"
+  data-section="{{ section.id }}"
+  data-update-url="{{ update_url }}"
+  {{ block.shopify_attributes }}>
+  {%- for option in product.options -%}
+    {%- liquid
+      assign opt_name = option.name | downcase | handle
+      assign opt_index = forloop.index
+      assign selected_value = product_selected_variant.options[forloop.index0]
+    -%}
+
+    <fieldset class="js product-form__input product-form__input--{{ opt_name }}">
+      <legend class="product-form__input-label">
+        {{ option.name }}
+        <span class="product-form__input-label--value">{{ selected_value }}</span>
+      </legend>
+
+      {%- for value in option.values -%}
+        {%- liquid
+          assign option_disabled = false
+
+          for variant in product.variants
+            if variant.options[forloop.index0] == value
+              unless variant.available
+                assign option_disabled = true
+              endunless
+              break
+            endif
+          endfor
+
+          assign input_id = 'Section-{{ section.id }}-Product-{{ product.id }}-Option{{ opt_index }}-{{ forloop.index0 }}'
+          assign input_name = 'options[{{ option.name }}]'
+        -%}
+
+        <input
+          type="radio"
+          id="{{ input_id }}"
+          name="{{ input_name }}"
+          value="{{ value | escape }}"
+          form="{{ product_form_id }}"
+          {% if selected_value == value %}checked="checked"{% endif %}
+          class="product-form__input-radio visually-hidden"
+          {% if option_disabled %}disabled{% endif %}
+        >
+
+        <label for="{{ input_id }}" class="product-form__input-label-option {% if option_disabled %}disabled{% endif %}">
+          {{ value }}
+        </label>
+      {%- endfor -%}
+    </fieldset>
+  {%- endfor -%}
+
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-selector>
+
+<noscript>
+  <div class="product-form__noscript">
+    <label for="Variants-{{ section.id }}">{{ 'products.product.product_variants' | t }}</label>
+    <select name="id" id="Variants-{{ section.id }}" form="{{ product_form_id }}">
+      {%- for variant in product.variants -%}
+        <option
+          {% if variant == product_selected_variant %}selected="selected"{% endif %}
+          {% if variant.available == false %}disabled{% endif %}
+          value="{{ variant.id }}"
+        >
+          {{ variant.title }}
+          {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+          - {{ variant.price | money | strip }}
+        </option>
+      {%- endfor -%}
+    </select>
+  </div>
+</noscript>
+
+<style>
+  .product-form__input {
+    margin-bottom: 1.5rem;
+  }
+
+  .product-form__input:last-child {
+    margin-bottom: 0;
+  }
+
+  .product-form__input-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-charcoal, #2d312d);
+  }
+
+  .product-form__input-label--value {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  .product-form__input-label-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid var(--color-sage-accent, #e1e8df);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: white;
+    color: var(--color-text-charcoal, #2d312d);
+  }
+
+  .product-form__input-label-option:hover:not(.disabled) {
+    border-color: var(--color-sage-dark, #8ba888);
+    background-color: var(--color-sage-pale, #f1f4f0);
+  }
+
+  .product-form__input-radio:checked + .product-form__input-label-option {
+    background-color: var(--color-sage-dark, #8ba888);
+    border-color: var(--color-sage-dark, #8ba888);
+    color: white;
+  }
+
+  .product-form__input-label-option.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .product-form__noscript {
+    margin-bottom: 1.5rem;
+  }
+
+  .product-form__noscript label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .product-form__noscript select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--color-sage-accent, #e1e8df);
+    border-radius: 4px;
+    background-color: white;
+    color: var(--color-text-charcoal, #2d312d);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  // Variant Selector
+  (function() {
+    'use strict';
+
+    class VariantSelector extends HTMLElement {
+      constructor() {
+        super();
+
+        this.selectors = {
+          container: '[data-variant-selector]',
+          fieldsets: 'fieldset',
+          radioInputs: 'input[type="radio"]',
+          price: '[data-price]',
+          sku: '[data-sku]',
+          availability: '[data-availability]'
+        };
+
+        this.variants = JSON.parse(this.querySelector('script[type="application/json"]').textContent);
+        this.currentVariant = this.variants.find(variant => variant.available) || this.variants[0];
+
+        this.addEventListener('change', this.onVariantChange.bind(this));
+      }
+
+      onVariantChange(event) {
+        this.getSelectedOptions();
+        this.getSelectedVariant();
+
+        this.updateInputValues();
+        this.updateLabelValues();
+        this.updateURL();
+        this.updateVariantInput();
+        this.updateVariantStatuses();
+
+        // Dispatch variant change event
+        this.dispatchEvent(new CustomEvent('variant:change', {
+          bubbles: true,
+          detail: {
+            variant: this.currentVariant
+          }
+        }));
+
+        // Also publish to PubSub
+        if (window.pubsub) {
+          window.pubsub.publish('product:variant-change', {
+            variant: this.currentVariant
+          });
+        }
+      }
+
+      getSelectedOptions() {
+        this.selectedOptions = [];
+
+        this.querySelectorAll('fieldset').forEach((fieldset) => {
+          const selected = fieldset.querySelector(':checked');
+          if (selected) {
+            this.selectedOptions.push(selected.value);
+          }
+        });
+      }
+
+      getSelectedVariant() {
+        this.currentVariant = this.variants.find((variant) => {
+          return !variant.options.map((option, index) => {
+            return this.selectedOptions[index] === option;
+          }).includes(false);
+        });
+      }
+
+      updateInputValues() {
+        const inputs = this.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => {
+          input.checked = this.selectedOptions.includes(input.value);
+        });
+      }
+
+      updateLabelValues() {
+        this.querySelectorAll('.product-form__input-label--value').forEach((label, index) => {
+          if (this.selectedOptions[index]) {
+            label.textContent = this.selectedOptions[index];
+          }
+        });
+      }
+
+      updateURL() {
+        if (!this.dataset.updateUrl || !this.currentVariant) return;
+
+        window.history.replaceState(
+          {},
+          '',
+          `${this.dataset.url}?variant=${this.currentVariant.id}`
+        );
+      }
+
+      updateVariantInput() {
+        const productForms = document.querySelectorAll(`#product-form-${this.dataset.section}, #product-form-installment-${this.dataset.section}`);
+
+        productForms.forEach((productForm) => {
+          const input = productForm.querySelector('input[name="id"]');
+          input.value = this.currentVariant.id;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      }
+
+      updateVariantStatuses() {
+        const selectedOptionOneVariants = this.variants.filter(variant =>
+          this.querySelector(':checked').value === variant.option1
+        );
+
+        const inputWrappers = [...this.querySelectorAll('.product-form__input')];
+
+        inputWrappers.forEach((option, index) => {
+          if (index === 0) return;
+
+          const optionInputs = [...option.querySelectorAll('input[type="radio"]')];
+          const previousOptionSelected = this.querySelector('.product-form__input:nth-child(' + index + ') input:checked');
+
+          const availableOptions = selectedOptionOneVariants
+            .filter(variant => variant.available && variant.option1 === previousOptionSelected.value)
+            .map(variantOption => variantOption['option' + (index + 1)])
+            .filter(Boolean);
+
+          optionInputs.forEach(input => {
+            const label = input.nextElementSibling;
+            if (availableOptions.includes(input.value)) {
+              label.classList.remove('disabled');
+              input.disabled = false;
+            } else {
+              label.classList.add('disabled');
+              input.disabled = true;
+            }
+          });
+        });
+      }
+    }
+
+    if (!customElements.get('variant-selector')) {
+      customElements.define('variant-selector', VariantSelector);
+    }
+  })();
+</script>

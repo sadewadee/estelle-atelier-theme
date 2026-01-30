@@ -1,0 +1,329 @@
+{% comment %}
+  Estelle Atelier - Card Product Snippet
+  Based on Shopify Dawn theme card-product component
+
+  Usage:
+    {% render 'card-product', card_product: product %}
+    {% render 'card-product', card_product: product, show_vendor: true %}
+
+  Variables:
+    - card_product: Product object (required)
+    - media_aspect_ratio: 'square', 'portrait', 'adapt' (default: 'square')
+    - show_secondary_image: Boolean to show hover image (default: true)
+    - show_vendor: Boolean to show vendor (default: false)
+    - show_rating: Boolean to show rating (default: false)
+    - show_quick_add: Boolean to show quick add button (default: true)
+    - section_id: Section ID for unique IDs
+    - lazy_load: Boolean to enable lazy loading (default: true)
+{% endcomment %}
+
+{%- liquid
+  assign media_aspect_ratio = media_aspect_ratio | default: 'square'
+  assign show_secondary_image = show_secondary_image | default: true
+  assign show_vendor = show_vendor | default: false
+  assign show_rating = show_rating | default: false
+  assign show_quick_add = show_quick_add | default: true
+  assign section_id = section_id | default: 'card-product'
+  assign lazy_load = lazy_load | default: true
+
+  assign card_product_featured_media = card_product.featured_media
+  assign card_product_second_media = card_product.media[1]
+
+  assign on_sale = false
+  if card_product.compare_at_price > card_product.price
+    assign on_sale = true
+  endif
+-%}
+
+<div class="card-wrapper" data-animate>
+  <div class="card card--{{ media_aspect_ratio }} card--product"
+    {% if card_product_featured_media %} style="--ratio-percent: {{ 1 | divided_by: card_product_featured_media.aspect_ratio | times: 100 }}%;"{% endif %}>
+
+    {%- comment -%} Card Image {%- endcomment -%}
+    <div class="card__inner">
+      <a href="{{ card_product.url }}" class="full-unstyled-link" aria-label="{{ card_product.title | escape }}">
+        <div class="card__media">
+          {%- if card_product_featured_media -%}
+            {%- if lazy_load -%}
+              {{ card_product_featured_media | image_tag:
+                loading: 'lazy',
+                class: 'motion-reduce',
+                widths: '300, 400, 500, 600, 800, 1200',
+                sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
+              }}
+            {%- else -%}
+              {{ card_product_featured_media | image_tag:
+                loading: 'eager',
+                class: 'motion-reduce',
+                widths: '300, 400, 500, 600, 800, 1200',
+                sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
+              }}
+            {%- endif -%}
+          {%- else -%}
+            <div class="card__media--placeholder">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Secondary Image on Hover {%- endcomment -%}
+          {%- if show_secondary_image and card_product_second_media -%}
+            <div class="card__media--hover">
+              {{ card_product_second_media | image_tag:
+                loading: 'lazy',
+                class: 'motion-reduce',
+                widths: '300, 400, 500, 600, 800, 1200',
+                sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
+              }}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Quick Add Button {%- endcomment -%}
+          {%- if show_quick_add and card_product.available -%}
+            <div class="card__quick-add">
+              <button
+                type="button"
+                class="button button--secondary button--quick-add"
+                data-quick-add="{{ card_product.id }}"
+                aria-label="{{ 'products.product.add_to_cart' | t }}"
+              >
+                <span class="material-symbols-outlined">add_shopping_cart</span>
+              </button>
+            </div>
+          {%- endif -%}
+        </div>
+      </a>
+
+      {%- comment -%} Sale Badge {%- endcomment -%}
+      {%- if on_sale -%}
+        <span class="badge badge--sale">
+          {{ 'products.product.on_sale' | t }}
+        </span>
+      {%- elsif card_product.available == false -%}
+        <span class="badge badge--sold-out">
+          {{ 'products.product.sold_out' | t }}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Card Content {%- endcomment -%}
+    <div class="card__content">
+      <div class="card__information">
+        {%- if show_vendor -%}
+          <span class="card__vendor">{{ card_product.vendor }}</span>
+        {%- endif -%}
+
+        <h3 class="card__heading">
+          <a href="{{ card_product.url }}" class="full-unstyled-link">
+            {{ card_product.title | escape }}
+          </a>
+        </h3>
+
+        <div class="card__price">
+          {%- render 'price', product: card_product, price_class: 'price--card' -%}
+        </div>
+
+        {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
+          <div class="card__rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}">
+            <span class="material-symbols-outlined card__rating--filled">star</span>
+            <span class="card__rating-count">{{ card_product.metafields.reviews.rating.value }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card-wrapper {
+    position: relative;
+  }
+
+  .card {
+    position: relative;
+    background-color: var(--color-background, #fff);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .card__inner {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-sage-pale, #f1f4f0);
+  }
+
+  .card__media {
+    position: relative;
+    aspect-ratio: var(--ratio-percent, 100%);
+    overflow: hidden;
+  }
+
+  .card__media img,
+  .card__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .card--portrait {
+    --ratio-percent: 125%;
+  }
+
+  .card--square {
+    --ratio-percent: 100%;
+  }
+
+  .card--adapt {
+    --ratio-percent: auto;
+  }
+
+  .card--adapt .card__media {
+    aspect-ratio: auto;
+  }
+
+  .card__media--hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .card:hover .card__media--hover {
+    opacity: 1;
+  }
+
+  .card:hover .card__media img:first-child {
+    transform: scale(1.05);
+  }
+
+  .card__media--placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-sage-accent, #e1e8df);
+  }
+
+  .card__quick-add {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover .card__quick-add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .button--quick-add {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--color-sage-dark, #8ba888);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .button--quick-add:hover {
+    background-color: var(--color-text-olive-deep, #3c443b);
+    transform: scale(1.1);
+  }
+
+  .badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    z-index: 2;
+  }
+
+  .badge--sale {
+    background-color: #c33;
+    color: white;
+  }
+
+  .badge--sold-out {
+    background-color: var(--color-text-charcoal, #2d312d);
+    color: white;
+  }
+
+  .card__content {
+    padding: 1rem;
+  }
+
+  .card__information {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .card__vendor {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-sage-dark, #8ba888);
+  }
+
+  .card__heading {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .card__heading a {
+    color: var(--color-text-charcoal, #2d312d);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .card__heading a:hover {
+    border-color: var(--color-sage-dark, #8ba888);
+  }
+
+  .card__price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card__price .price-item--regular {
+    font-size: 0.9375rem;
+  }
+
+  .card__rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-sage-dark, #8ba888);
+  }
+
+  .card__rating--filled {
+    color: var(--color-sage-dark, #8ba888);
+  }
+
+  @media (max-width: 768px) {
+    .card__quick-add {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

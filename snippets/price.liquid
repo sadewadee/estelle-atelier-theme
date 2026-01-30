@@ -1,0 +1,187 @@
+{% comment %}
+  Estelle Atelier - Price Snippet
+  Based on Shopify Dawn theme price component
+
+  Usage:
+    {% render 'price', product: product %}
+    {% render 'price', product: product, use_variant: true %}
+    {% render 'price', variant: variant %}
+
+  Variables:
+    - product: Product object (required if variant not provided)
+    - variant: Variant object (optional, overrides use_variant)
+    - use_variant: Boolean to use selected/default variant (default: false)
+    - show_badges: Boolean to show sale/badges (default: true)
+    - price_class: Additional CSS class for price wrapper
+    - show_compare: Boolean to show compare at price (default: true)
+{% endcomment %}
+
+{%- liquid
+  assign variant = variant | default: nil
+  assign use_variant = use_variant | default: false
+  assign show_badges = show_badges | default: true
+  assign price_class = price_class | default: ''
+  assign show_compare = show_compare | default: true
+
+  if variant
+    assign target = variant
+  elsif use_variant and product.selected_or_first_available_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price
+  assign price_varies = target.price_varies
+  assign available = target.available
+
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign sold_out = false
+  unless available
+    assign sold_out = true
+  endunless
+-%}
+
+<div class="price {{ price_class }}" data-price>
+  {%- comment -%} Sold Out Badge {%- endcomment -%}
+  {%- if sold_out and show_badges -%}
+    <span class="price__badge price__badge--sold-out" aria-hidden="true">
+      {{ 'products.product.sold_out' | t }}
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} Sale Badge {%- endcomment -%}
+  {%- if on_sale and show_badges -%}
+    <span class="price__badge price__badge--sale" aria-hidden="true">
+      {{ 'products.product.on_sale' | t }}
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} Regular Price {%- endcomment -%}
+  <dl class="price__regular{% if on_sale %} price__regular--sale{% endif %}">
+    <dt class="visually-hidden">
+      {{ 'products.product.price.regular_price' | t }}
+    </dt>
+    <dd class="price__final">
+      {%- if price_varies -%}
+        {%- capture price_min -%}{{ target.price_min | money }}{%- endcapture -%}
+        {%- capture price_max -%}{{ target.price_max | money }}{%- endcapture -%}
+        {{ 'products.product.price.from_price_html' | t: price_min: price_min, price_max: price_max }}
+      {%- else -%}
+        <span class="price-item price-item--regular" data-regular-price>
+          {{ price | money }}
+        </span>
+      {%- endif -%}
+    </dd>
+  </dl>
+
+  {%- comment -%} Sale Price (compare at) {%- endcomment -%}
+  {%- if on_sale and show_compare -%}
+    <dl class="price__compare">
+      <dt class="visually-hidden">
+        {{ 'products.product.price.compare_at_price' | t }}
+      </dt>
+      <dd class="price__compare-at">
+        <s class="price-item price-item--compare" data-compare-price>
+          {{ compare_at_price | money }}
+        </s>
+      </dd>
+    </dl>
+  {%- endif -%}
+
+  {%- comment -%} Unit Price {%- endcomment -%}
+  {%- if target.unit_price_measurement -%}
+    <dl class="price__unit">
+      <dt class="visually-hidden">
+        {{ 'products.product.price.unit_price' | t }}
+      </dt>
+      <dd class="price__unit-price">
+        {%- capture unit_price_separator -%}
+          <span aria-hidden="true">/</span>
+          <span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}</span>
+        {%- endcapture -%}
+        {%- capture unit_price_base_unit -%}
+          {%- if target.unit_price_measurement.reference_value != 1 -%}
+            {{- target.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ target.unit_price_measurement.reference_unit }}
+        {%- endcapture -%}
+        <span data-unit-price>{{ target.unit_price | money }}</span>
+        {{- unit_price_separator -}}
+        <span data-unit-price-base-unit>{{ unit_price_base_unit }}</span>
+      </dd>
+    </dl>
+  {%- endif -%}
+</div>
+
+<style>
+  .price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .price__regular,
+  .price__compare,
+  .price__unit {
+    display: contents;
+  }
+
+  .price-item--regular {
+    font-weight: 500;
+    color: var(--color-text-charcoal, #2d312d);
+  }
+
+  .price__regular--sale .price-item--regular {
+    color: var(--color-sage-dark, #8ba888);
+  }
+
+  .price-item--compare {
+    color: var(--color-text-charcoal, #2d312d);
+    opacity: 0.6;
+  }
+
+  .price__unit-price {
+    font-size: 0.875em;
+    opacity: 0.8;
+  }
+
+  .price__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  .price__badge--sale {
+    background-color: var(--color-sage-dark, #8ba888);
+    color: white;
+  }
+
+  .price__badge--sold-out {
+    background-color: var(--color-text-charcoal, #2d312d);
+    color: white;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

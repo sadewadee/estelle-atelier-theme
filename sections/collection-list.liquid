@@ -34,14 +34,20 @@
               {% if collection.image %}
                 {{
                   collection.image
-                  | image_url: width: 800
-                  | image_tag: class: 'w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy'
+                  | image_tag:
+                    class: 'w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105',
+                    loading: 'lazy',
+                    widths: '375, 550, 750, 1100, 1600',
+                    sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
                 }}
               {% elsif collection.products.first.featured_image %}
                 {{
                   collection.products.first.featured_image
-                  | image_url: width: 800
-                  | image_tag: class: 'w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy'
+                  | image_tag:
+                    class: 'w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105',
+                    loading: 'lazy',
+                    widths: '375, 550, 750, 1100, 1600',
+                    sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
                 }}
               {% else %}
                 <div class="w-full aspect-[4/5] bg-sage-pale flex items-center justify-center">

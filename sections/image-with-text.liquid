@@ -12,8 +12,11 @@
           <div class="relative aspect-[16/10] overflow-hidden rounded-2xl">
             {{
               section.settings.image
-              | image_url: width: 1200
-              | image_tag: class: 'w-full h-full object-cover', loading: 'lazy'
+              | image_tag:
+                class: 'w-full h-full object-cover',
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1600, 2400',
+                sizes: '(max-width: 1024px) 100vw, 50vw'
             }}
           </div>
         {% else %}

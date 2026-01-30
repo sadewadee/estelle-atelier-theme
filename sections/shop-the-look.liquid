@@ -12,9 +12,11 @@
       <div class="lg:col-span-8 relative group overflow-hidden bg-sage-pale/20 aspect-[4/5] md:aspect-video lg:aspect-auto lg:h-[800px]">
         <div class="absolute inset-0 z-0">
           {%- if section.settings.image != blank -%}
-            {{ section.settings.image | image_url: width: 1600 | image_tag:
-              loading: 'lazy',
-              class: 'w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-[3000ms]'
+            {{ section.settings.image | image_tag:
+              loading: 'eager',
+              class: 'w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-[3000ms]',
+              widths: '800, 1200, 1600, 2400, 3200',
+              sizes: '(max-width: 1024px) 100vw, 66vw'
             }}
           {%- else -%}
              {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-[3000ms] bg-sage-pale' }}
@@ -52,7 +54,12 @@
                 <div class="flex gap-6 items-center group cursor-pointer">
                   <a href="{{ product.url }}" class="flex gap-6 items-center">
                     <div class="w-20 aspect-square bg-white overflow-hidden">
-                      {{ product.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700' }}
+                      {{ product.featured_media | image_tag:
+                        loading: 'lazy',
+                        class: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700',
+                        widths: '80, 160, 200, 400',
+                        sizes: '5rem'
+                      }}
                     </div>
                     <div class="flex flex-col gap-1">
                       <p class="text-[10px] uppercase tracking-[0.1em] font-medium">{{ product.title }}</p>

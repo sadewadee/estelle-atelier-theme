@@ -7,7 +7,12 @@
   <!-- Hero Image -->
   {% if section.settings.hero_image != blank %}
     <div class="relative h-[60vh] md:h-[80vh] overflow-hidden">
-      {{ section.settings.hero_image | image_url: width: 2000 | image_tag: class: 'absolute inset-0 w-full h-full object-cover', loading: 'lazy' }}
+      {{ section.settings.hero_image | image_tag:
+        class: 'absolute inset-0 w-full h-full object-cover',
+        loading: 'eager',
+        widths: '750, 1000, 1500, 2000, 2500, 3000, 3840',
+        sizes: '100vw'
+      }}
       <div class="absolute inset-0 bg-gradient-to-b from-text-olive-deep/30 via-transparent to-text-olive-deep/60"></div>
     </div>
   {% endif %}
@@ -38,7 +43,12 @@
               <div class="grid md:grid-cols-2 gap-12 items-center {% if forloop.index == 2 %}md:flex-row-reverse{% endif %}">
                 {% if block.settings.image %}
                   <div class="aspect-[4/5] rounded-2xl overflow-hidden">
-                    {{ block.settings.image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+                    {{ block.settings.image | image_tag:
+                      class: 'w-full h-full object-cover',
+                      loading: 'lazy',
+                      widths: '400, 600, 800, 1200, 1600',
+                      sizes: '(max-width: 768px) 100vw, 50vw'
+                    }}
                   </div>
                 {% else %}
                   <div class="aspect-[4/5] bg-sage-pale rounded-2xl"></div>
@@ -108,7 +118,12 @@
             {% when 'imageFull' %}
               <div class="relative aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden">
                 {% if block.settings.image %}
-                  {{ block.settings.image | image_url: width: 2000 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+                  {{ block.settings.image | image_tag:
+                    class: 'w-full h-full object-cover',
+                    loading: 'lazy',
+                    widths: '800, 1200, 1600, 2000, 2500, 3000, 3840',
+                    sizes: '100vw'
+                  }}
                 {% else %}
                   <div class="w-full h-full bg-sage-pale"></div>
                 {% endif %}

@@ -54,7 +54,7 @@
       muted
       loop
       playsinline
-      poster="{% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1920 }}{% endif %}"
+      poster="{% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 3840 }}{% endif %}"
     >
       <source src="{{ section.settings.video_url }}" type="video/mp4">
     </video>
@@ -63,8 +63,11 @@
   {% if section.settings.image != blank %}
     {{
       section.settings.image
-      | image_url: width: 1920
-      | image_tag: class: 'video-hero-fallback', alt: section.settings.image.alt
+      | image_tag:
+        class: 'video-hero-fallback',
+        loading: 'eager',
+        widths: '750, 1000, 1500, 1920, 2500, 3000, 3840',
+        sizes: '100vw'
     }}
   {% else %}
     {{ 'lifestyle-1' | placeholder_svg_tag: 'video-hero-fallback absolute inset-0 w-full h-full bg-sage-pale' }}

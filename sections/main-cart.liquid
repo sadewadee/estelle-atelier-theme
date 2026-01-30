@@ -38,8 +38,11 @@
                     {% if item.image %}
                       {{
                         item.image
-                        | image_url: width: 200
-                        | image_tag: class: 'w-20 h-24 object-cover rounded-lg', loading: 'lazy'
+                        | image_tag:
+                          class: 'w-20 h-24 object-cover rounded-lg',
+                          loading: 'lazy',
+                          widths: '80, 160, 200, 400',
+                          sizes: '5rem'
                       }}
                     {% else %}
                       <div class="w-20 h-24 bg-sage-pale/30 rounded-lg flex items-center justify-center">

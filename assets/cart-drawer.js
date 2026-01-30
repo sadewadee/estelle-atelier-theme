@@ -1,6 +1,7 @@
 /**
  * Estelle Atelier - Cart Drawer
  * Pure Vanilla JS - No third-party dependencies
+ * Uses PubSub event system for component communication
  */
 
 (function() {
@@ -9,6 +10,15 @@
   const CART_DRAWER_ID = 'cart-drawer';
   const CART_DRAWER_OPEN_CLASS = 'cart-drawer-open';
   const CART_DRAWER_BODY_CLASS = 'cart-drawer-open';
+
+  // PubSub events
+  const PUBSUB_EVENTS = {
+    CART_UPDATE: 'cart:update',
+    CART_ADD: 'cart:add',
+    CART_REMOVE: 'cart:remove',
+    CART_DRAWER_OPEN: 'cart-drawer:open',
+    CART_DRAWER_CLOSE: 'cart-drawer:close'
+  };
 
   /**
    * Get drawer element
@@ -33,6 +43,11 @@
     // Focus trap
     const firstFocusable = drawer.querySelector('button, input, [tabindex]:not([tabindex="-1"])');
     if (firstFocusable) firstFocusable.focus();
+
+    // Publish event
+    if (window.pubsub) {
+      window.pubsub.publish(PUBSUB_EVENTS.CART_DRAWER_OPEN);
+    }
   }
 
   /**
@@ -51,6 +66,11 @@
     // Return focus to trigger
     if (window.cartDrawerTrigger) {
       window.cartDrawerTrigger.focus();
+    }
+
+    // Publish event
+    if (window.pubsub) {
+      window.pubsub.publish(PUBSUB_EVENTS.CART_DRAWER_CLOSE);
     }
   }
 
@@ -200,6 +220,11 @@
       updateCartDrawer();
       // Update page cart count if exists
       fetchCartCount();
+
+      // Publish update event
+      if (window.pubsub) {
+        window.pubsub.publish(quantity === 0 ? PUBSUB_EVENTS.CART_REMOVE : PUBSUB_EVENTS.CART_UPDATE, { itemId, quantity });
+      }
     })
     .catch(error => console.error('Error updating cart:', error));
   }
@@ -265,6 +290,17 @@
   document.addEventListener('cart:refresh', updateCartDrawer);
   document.addEventListener('cart:open', openCartDrawer);
   document.addEventListener('cart:close', closeCartDrawer);
+
+  // Listen for PubSub events (if available)
+  if (window.pubsub) {
+    window.pubsub.subscribe(PUBSUB_EVENTS.CART_UPDATE, updateCartDrawer);
+    window.pubsub.subscribe(PUBSUB_EVENTS.CART_ADD, updateCartDrawer);
+    window.pubsub.subscribe(PUBSUB_EVENTS.CART_REMOVE, updateCartDrawer);
+
+    // Subscribe to drawer open/close requests
+    window.pubsub.subscribe(PUBSUB_EVENTS.CART_DRAWER_OPEN, openCartDrawer);
+    window.pubsub.subscribe(PUBSUB_EVENTS.CART_DRAWER_CLOSE, closeCartDrawer);
+  }
 
   // Make functions globally available
   window.EstelleCart = {

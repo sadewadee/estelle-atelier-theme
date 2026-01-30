@@ -1,0 +1,269 @@
+{% comment %}
+  Estelle Atelier - Buy Buttons Snippet
+  Based on Shopify Dawn theme buy-buttons component
+
+  Usage:
+    {% render 'buy-buttons', product: product %}
+
+  Variables:
+    - product: Product object (required)
+    - show_gift_card_recipient: Boolean to show gift card recipient form
+    - block: Block object for section settings
+{% endcomment %}
+
+<product-form class="product-form" data-hide-errors="{{ gift_card_recipient_feature }}">
+  <div class="product-form__error-message-wrapper" role="alert" hidden>
+    <span class="material-symbols-outlined product-form__error-message-icon" aria-hidden="true">error</span>
+    <span class="product-form__error-message"></span>
+  </div>
+
+  {%- form 'product',
+    product,
+    id: product_form_id,
+    class: 'form',
+    novalidate: 'novalidate',
+    data-type: 'add-to-cart-form'
+  -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ product.selected_or_first_available_variant.id }}"
+      disabled
+      class="product-variant-id"
+      data-product-variant-id
+    >
+
+    {%- if gift_card_recipient_feature and product.requires_selling_plan == false -%}
+      {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+    {%- endif -%}
+
+    <div class="product-form__buttons">
+      {%- liquid
+        assign check_against_inventory = true
+        if product.selected_or_first_available_variant.inventory_management != 'shopify' or  product.selected_or_first_available_variant.inventory_policy == 'continue'
+          assign check_against_inventory = false
+        endif
+        if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+          assign quantity_rule_soldout = true
+        endif
+      -%}
+
+      <button
+        id = "ProductSubmitButton-{{ section_id }}"
+        type="submit"
+        name="add"
+        class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+        {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+          disabled
+        {% endif %}
+      >
+        <span class="product-form__submit-text">
+          {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- else -%}
+            {{ 'products.product.add_to_cart' | t }}
+          {%- endif -%}
+        </span>
+        <span class="product-form__loading-icon" hidden>
+          <span class="material-symbols-outlined animate-spin">refresh</span>
+        </span>
+      </button>
+
+      {%- if block.settings.show_dynamic_checkout -%}
+        {{ form | payment_button }}
+      {%- endif -%}
+    </div>
+  {%- endform -%}
+</product-form>
+
+<style>
+  .product-form {
+    width: 100%;
+  }
+
+  .product-form__error-message-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #fee;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: #c33;
+  }
+
+  .product-form__error-message-icon {
+    font-size: 1.25rem;
+  }
+
+  .product-form__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .product-form__submit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white;
+    background-color: var(--color-sage-dark, #8ba888);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-form__submit:hover:not(:disabled) {
+    background-color: var(--color-text-olive-deep, #3c443b);
+  }
+
+  .product-form__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .product-form__loading-icon {
+    position: absolute;
+    right: 1rem;
+  }
+
+  .product-form__loading-icon .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Shopfy dynamic checkout button override */
+  .shopify-payment-button {
+    width: 100%;
+  }
+
+  .shopify-payment-button__button {
+    width: 100% !important;
+    border-radius: 4px !important;
+  }
+</style>
+
+<script>
+  // Product Form Handler
+  (function() {
+    'use strict';
+
+    class ProductForm extends HTMLElement {
+      constructor() {
+        super();
+
+        this.form = this.querySelector('form');
+        this.form.querySelector('[name=id]').disabled = false;
+        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        this.cartDrawer = document.querySelector('[data-cart-drawer-toggle]');
+      }
+
+      onSubmitHandler(evt) {
+        evt.preventDefault();
+
+        const submitButton = this.querySelector('[type="submit"]');
+        const loadingIcon = submitButton.querySelector('.product-form__loading-icon');
+
+        if (submitButton.getAttribute('aria-disabled') === 'true') return;
+
+        this.handleErrorMessage();
+
+        submitButton.setAttribute('aria-disabled', 'true');
+        submitButton.classList.add('loading');
+        if (loadingIcon) loadingIcon.hidden = false;
+
+        const formData = new FormData(this.form);
+
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          body: formData
+        })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.status) {
+            this.handleErrorMessage(response.description);
+            return;
+          }
+
+          // Publish add to cart event
+          if (window.pubsub) {
+            window.pubsub.publish('cart:add', response);
+          }
+
+          // Open cart drawer
+          if (window.EstelleCart) {
+            window.EstelleCart.open();
+          }
+
+          // Update cart
+          if (window.EstelleCart) {
+            window.EstelleCart.refresh();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.handleErrorMessage('An error occurred. Please try again.');
+        })
+        .finally(() => {
+          submitButton.classList.remove('loading');
+          submitButton.removeAttribute('aria-disabled');
+          if (loadingIcon) loadingIcon.hidden = true;
+        });
+      }
+
+      handleErrorMessage(errorMessage = false) {
+        this.errorMessageWrapper = this.errorMessageWrapper || this.querySelector('.product-form__error-message-wrapper');
+        this.errorMessage = this.errorMessage || this.errorMessageWrapper.querySelector('.product-form__error-message');
+
+        this.errorMessageWrapper.toggleAttribute('hidden', !errorMessage);
+        this.errorMessage.textContent = errorMessage;
+      }
+    }
+
+    customElements.define('product-form', ProductForm);
+
+    // Update variant ID on variant change
+    document.addEventListener('variant:change', (event) => {
+      const variantId = event.detail.variant.id;
+      const variantInputs = document.querySelectorAll('.product-variant-id');
+      variantInputs.forEach(input => {
+        input.value = variantId;
+      });
+
+      // Update add to cart button state
+      const addToCartButton = document.querySelector('.product-form__submit');
+      if (addToCartButton) {
+        const submitText = addToCartButton.querySelector('.product-form__submit-text');
+        if (event.detail.variant.available) {
+          addToCartButton.disabled = false;
+          submitText.textContent = {{ 'products.product.add_to_cart' | t | json }};
+        } else {
+          addToCartButton.disabled = true;
+          submitText.textContent = {{ 'products.product.sold_out' | t | json }};
+        }
+      }
+    });
+  })();
+</script>

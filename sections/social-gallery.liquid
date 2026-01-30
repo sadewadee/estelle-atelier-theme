@@ -51,14 +51,14 @@
       {% for block in section.blocks %}
         <div class="group relative rounded-xl overflow-hidden aspect-[4/5] shadow-sm bg-sage-pale/30" {{ block.shopify_attributes }}>
           {% if block.settings.image != blank %}
-            <img
-              src="{{ block.settings.image | image_url: width: 600 }}"
-              alt="{{ block.settings.image.alt | default: block.settings.username }}"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              loading="lazy"
-              width="{{ block.settings.image.width }}"
-              height="{{ block.settings.image.height }}"
-            />
+            {{
+              block.settings.image
+              | image_tag:
+                class: 'absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110',
+                loading: 'lazy',
+                widths: '300, 450, 600, 900, 1200',
+                sizes: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+            }}
           {% else %}
             {{ 'image' | placeholder_svg_tag: 'absolute inset-0 w-full h-full bg-sage-pale' }}
           {% endif %}
@@ -71,7 +71,12 @@
                 <div class="mt-3 bg-white/95 p-3 rounded-lg flex items-center gap-3">
                   {% if block.settings.product.featured_image %}
                     <div class="w-12 h-12 rounded bg-sage-pale bg-cover bg-center overflow-hidden">
-                      <img src="{{ block.settings.product.featured_image | image_url: width: 100 }}" alt="" class="w-full h-full object-cover">
+                      {{ block.settings.product.featured_image | image_tag:
+                        class: 'w-full h-full object-cover',
+                        loading: 'lazy',
+                        widths: '48, 96, 144',
+                        sizes: '3rem'
+                      }}
                     </div>
                   {% endif %}
                   <div class="flex-1">

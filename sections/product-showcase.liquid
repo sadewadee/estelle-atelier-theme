@@ -12,14 +12,24 @@
           {% if section.settings.product %}
             {% assign product = all_products[section.settings.product] %}
             {% if product.featured_image %}
-              {{ product.featured_image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+              {{ product.featured_image | image_tag:
+                class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105',
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1600, 2400',
+                sizes: '(max-width: 768px) 100vw, 60vw'
+              }}
             {% else %}
               <div class="w-full h-full flex items-center justify-center">
                 <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
               </div>
             {% endif %}
           {% elsif section.settings.image %}
-            {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+            {{ section.settings.image | image_tag:
+              class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105',
+              loading: 'lazy',
+              widths: '600, 900, 1200, 1600, 2400',
+              sizes: '(max-width: 768px) 100vw, 60vw'
+            }}
           {% else %}
             <div class="w-full h-full flex items-center justify-center">
               <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
@@ -176,14 +186,24 @@
         <div class="grid grid-cols-2 gap-4">
           {% if section.settings.detail_image_1 %}
             <div class="aspect-square bg-sage-accent/20 rounded-lg overflow-hidden">
-              {{ section.settings.detail_image_1 | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+              {{ section.settings.detail_image_1 | image_tag:
+                class: 'w-full h-full object-cover',
+                loading: 'lazy',
+                widths: '300, 450, 600, 900, 1200',
+                sizes: '(max-width: 768px) 50vw, 25vw'
+              }}
             </div>
           {% else %}
             <div class="aspect-square bg-sage-accent/20 rounded-lg"></div>
           {% endif %}
           {% if section.settings.detail_image_2 %}
             <div class="aspect-square bg-sage-accent/20 rounded-lg overflow-hidden mt-8">
-              {{ section.settings.detail_image_2 | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+              {{ section.settings.detail_image_2 | image_tag:
+                class: 'w-full h-full object-cover',
+                loading: 'lazy',
+                widths: '300, 450, 600, 900, 1200',
+                sizes: '(max-width: 768px) 50vw, 25vw'
+              }}
             </div>
           {% else %}
             <div class="aspect-square bg-sage-accent/20 rounded-lg mt-8"></div>

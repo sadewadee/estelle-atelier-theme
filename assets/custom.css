@@ -709,3 +709,65 @@ input:focus, button:focus {
     max-width: 100%;
   }
 }
+
+/* ============================================
+   SCROLL ANIMATIONS (Dawn-inspired)
+   ============================================ */
+
+/* Animation elements - hidden by default, revealed when scrolled into view */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-animate].is-animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animation types */
+.animate--fade-in {
+  /* Simple fade in */
+}
+
+.animate--slide-in {
+  /* Slide up and fade */
+}
+
+.animate--zoom-in {
+  /* Scale up and fade */
+  transform: translateY(30px) scale(0.95);
+}
+
+.animate--slide-in.is-animated,
+.animate--zoom-in.is-animated {
+  transform: translateY(0) scale(1);
+}
+
+/* Staggered animation delays */
+.animate--delay-100 {
+  transition-delay: 100ms;
+}
+
+.animate--delay-200 {
+  transition-delay: 200ms;
+}
+
+.animate--delay-300 {
+  transition-delay: 300ms;
+}
+
+.animate--delay-400 {
+  transition-delay: 400ms;
+}
+
+.animate--delay-500 {
+  transition-delay: 500ms;
+}
+
+/* Scroll trigger indicator */
+.scroll-trigger {
+  /* Elements that trigger animation when scrolled into view */
+}

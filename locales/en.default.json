@@ -2,6 +2,149 @@
   "general": {
     "password_page": {
       "login_form_heading": "Enter store using password"
+    },
+    "close": "Close",
+    "cart": "Cart",
+    "search": "Search",
+    "accessibility": {
+      "go_to_slide": "Go to slide {{ index }}"
     }
+  },
+  "newsletter": {
+    "success": "Thank you for subscribing!"
+  },
+  "customer": {
+    "account": {
+      "title": "My Account",
+      "details": "Account Details",
+      "orders": "Order History",
+      "addresses": "Addresses",
+      "wishlist": "Wishlist",
+      "log_out": "Sign Out",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "default_address": "Default Address",
+      "start_shopping": "Start Shopping"
+    },
+    "orders": {
+      "order_number": "Order",
+      "date": "Date",
+      "payment_status": "Payment Status",
+      "fulfillment_status": "Fulfillment Status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    },
+    "order": {
+      "title": "Track Your Order",
+      "description": "Enter your order details to see the status",
+      "order_number": "Order Number",
+      "order_number_placeholder": "#1234",
+      "email": "Email Address",
+      "submit": "Track Order",
+      "help_text": "Need help? Contact our customer service team.",
+      "contact_us": "Contact Support",
+      "back_to_shop": "\u003c Continue Shopping"
+    },
+    "register": {
+      "title": "Create Account",
+      "description": "Join Estelle Atelier for an elevated shopping experience",
+      "first_name": "First Name",
+      "first_name_placeholder": "Jane",
+      "last_name": "Last Name",
+      "last_name_placeholder": "Doe",
+      "email": "Email Address",
+      "password": "Password",
+      "accepts_marketing": "Subscribe to our newsletter for exclusive offers and new arrivals.",
+      "submit": "Create Account",
+      "already_have_account": "Already have an account?",
+      "sign_in": "Sign in"
+    },
+    "login": {
+      "title": "Sign In",
+      "description": "Welcome back to Estelle Atelier",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Forgot password?",
+      "sign_in": "Sign In",
+      "new_customer": "New to Estelle Atelier?",
+      "create_account": "Create an Account",
+      "guest_checkout": "Continue as guest"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "name_placeholder": "Your name",
+      "email_placeholder": "your@email.com",
+      "subject_placeholder": "How can we help?",
+      "message_placeholder": "Tell us more...",
+      "post_success": "Thank you for your message. We will get back to you soon.",
+      "error": "Please fill in all required fields."
+    }
+  },
+  "cart": {
+    "empty": {
+      "title": "Your cart is empty",
+      "button": "Continue Shopping"
+    },
+    "label": {
+      "product": "Product",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total"
+    },
+    "general": {
+      "remove": "Remove",
+      "update": "Update Cart",
+      "checkout": "Checkout",
+      "continue_shopping": "Continue Shopping",
+      "note": "Special instructions for seller",
+      "note_placeholder": "Add a note to your order..."
+    },
+    "trust": {
+      "secure": "Secure",
+      "shipping": "Free Shipping",
+      "returns": "Easy Returns"
+    }
+  },
+  "blogs": {
+    "article": {
+      "share": "Share this article",
+      "title": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Your comment",
+      "submit": "Post Comment",
+      "previous": "Previous",
+      "next": "Next",
+      "read_more": "Read More"
+    }
+  },
+  "reviews": {
+    "no_reviews": "No reviews yet.",
+    "write_review": "Write a review"
+  },
+  "collections": {
+    "general": {
+      "view_all": "View All",
+      "no_collections": "No collections found"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "view_full_details": "View full details",
+      "variant": "Variant"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%B %d, %Y"
   }
 }

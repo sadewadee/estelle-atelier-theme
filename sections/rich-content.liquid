@@ -1,0 +1,96 @@
+{% comment %}
+  Estelle Atelier - Rich Content Section
+  Section that accepts theme blocks using {% content_for "blocks" %}
+{% endcomment %}
+
+<div class="px-6 md:px-12 py-16 md:py-24 {{ section.settings.background_style }}">
+  <div class="max-w-{{ section.settings.max_width }} mx-auto">
+    <div class="grid md:grid-cols-{{ section.settings.columns }} gap-{{ section.settings.gap }} items-center">
+      {% content_for "blocks" %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich Content",
+  "tag": "section",
+  "class": "section-rich-content",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "1", "label": "1 Column" },
+        { "value": "2", "label": "2 Columns" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap",
+      "options": [
+        { "value": "4", "label": "Small" },
+        { "value": "8", "label": "Medium" },
+        { "value": "12", "label": "Large" },
+        { "value": "16", "label": "X Large" }
+      ],
+      "default": "12"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        { "value": "7xl", "label": "Medium" },
+        { "value": "7xl", "label": "Large" },
+        { "value": "[1800px]", "label": "X Large" }
+      ],
+      "default": "7xl"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "bg-white", "label": "White" },
+        { "value": "bg-sage-pale", "label": "Sage Pale" },
+        { "value": "bg-text-olive-deep", "label": "Olive" }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Content",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

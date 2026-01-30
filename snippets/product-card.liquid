@@ -46,8 +46,11 @@
       {% if product.featured_media %}
         {{
           product.featured_media
-          | image_url: width: 600
-          | image_tag: class: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105', loading: 'lazy'
+          | image_tag:
+            class: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105',
+            loading: 'lazy',
+            widths: '300, 400, 500, 600, 800, 1200',
+            sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
         }}
 
         <!-- Badges -->

@@ -29,8 +29,11 @@
           {% if block.settings.image != blank %}
             {{
               block.settings.image
-              | image_url: width: 800
-              | image_tag: class: 'absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110', loading: 'lazy'
+              | image_tag:
+                class: 'absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110',
+                loading: 'lazy',
+                widths: '375, 550, 750, 1100, 1600',
+                sizes: '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw'
             }}
           {% else %}
             <div class="absolute inset-0 bg-sage-pale"></div>

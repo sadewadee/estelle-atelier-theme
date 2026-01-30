@@ -1,21 +1,150 @@
+{% comment %}
+  Estelle Atelier - Main Product Section
+  Product detail page using modular snippets
+{% endcomment %}
+
 <div class="py-24 px-12 bg-white">
-  <h2 class="text-3xl serif font-light text-[var(--text-charcoal)] mb-8">{{ product.title }}</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-    <div class="aspect-square bg-sage-pale/40">
-      {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'w-full h-full object-cover' }}
-    </div>
-    <div class="flex flex-col gap-6">
-      <p class="text-xl font-light text-[var(--text-muted)]">{{ product.price | money }}</p>
-      <div class="prose prose-sm font-light text-[var(--text-charcoal)]">
-        {{ product.description }}
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+
+      {%- comment -%} Product Gallery {%- endcomment -%}
+      <div class="space-y-4">
+        {%- if product.featured_media -%}
+          <div class="aspect-square bg-sage-pale/40 rounded-lg overflow-hidden">
+            {{ product.featured_media | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'eager',
+              widths: '600, 800, 1000, 1200, 1400, 1600, 2000',
+              sizes: '(max-width: 768px) 100vw, 50vw'
+            }}
+          </div>
+          {%- if product.media.size > 1 -%}
+            <div class="grid grid-cols-4 gap-4">
+              {%- for media in product.media limit: 4 -%}
+                <button
+                  class="aspect-square bg-sage-pale/30 rounded overflow-hidden border-2 border-transparent hover:border-sage-dark transition-colors {% if forloop.first %}border-sage-dark{% endif %}"
+                  aria-label="View image {{ forloop.index }}"
+                >
+                  {{ media | image_tag:
+                    class: 'w-full h-full object-cover',
+                    loading: 'lazy',
+                    widths: '100, 200, 300, 400',
+                    sizes: '25vw'
+                  }}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="aspect-square bg-sage-accent/20 rounded flex items-center justify-center">
+            <span class="material-symbols-outlined text-6xl text-sage-accent">image</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Product Info {%- endcomment -%}
+      <div class="flex flex-col gap-6">
+        {%- if product.vendor -%}
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-sage-dark">{{ product.vendor }}</span>
+        {%- endif -%}
+
+        <h1 class="text-3xl md:text-4xl serif font-light text-text-charcoal">{{ product.title }}</h1>
+
+        {%- comment -%} Price Snippet {%- endcomment -%}
+        <div class="py-4 border-y border-sage-accent">
+          {%- render 'price', product: product -%}
+        </div>
+
+        {%- if product.description -%}
+          <div class="prose prose-sm text-text-muted">
+            {{ product.description }}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Variant Picker {%- endcomment -%}
+        {%- unless product.has_only_default_variant -%}
+          <div>
+            {%- render 'variant-picker', product: product -%}
+          </div>
+        {%- endunless -%}
+
+        {%- comment -%} Buy Buttons {%- endcomment -%}
+        <div>
+          {%- render 'buy-buttons', product: product -%}
+        </div>
+
+        {%- comment -%} Accordion Details {%- endcomment -%}
+        <div class="space-y-4 pt-4">
+          {%- if product.type -%}
+            <details class="border-b border-sage-accent">
+              <summary class="flex justify-between items-center py-4 cursor-pointer list-none">
+                <span class="font-medium">Material & Care</span>
+                <span class="material-symbols-outlined transition-transform">expand_more</span>
+              </summary>
+              <div class="pb-4 text-sm text-text-muted">
+                {{ product.type }}
+              </div>
+            </details>
+          {%- endif -%}
+
+          <details class="border-b border-sage-accent">
+            <summary class="flex justify-between items-center py-4 cursor-pointer list-none">
+              <span class="font-medium">Shipping & Returns</span>
+              <span class="material-symbols-outlined transition-transform">expand_more</span>
+            </summary>
+            <div class="pb-4 text-sm text-text-muted">
+              Free shipping on orders over $150. Returns accepted within 30 days of purchase.
+            </div>
+          </details>
+        </div>
+
+        {%- comment -%} Share {%- endcomment -%}
+        <div class="flex items-center gap-6 pt-4 border-t border-sage-accent">
+          <span class="text-xs uppercase tracking-[0.2em] text-text-muted">Share</span>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Facebook">
+              <span class="material-symbols-outlined text-lg">facebook</span>
+            </a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Pinterest">
+              <span class="material-symbols-outlined text-lg">pinterest</span>
+            </a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share via email">
+              <span class="material-symbols-outlined text-lg">mail</span>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
+<style>
+  details[open] .material-symbols-outlined {
+    transform: rotate(180deg);
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details summary::marker {
+    display: none;
+  }
+</style>
+
 {% schema %}
 {
   "name": "Main Product",
-  "settings": []
+  "tag": "section",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    }
+  ]
 }
 {% endschema %}

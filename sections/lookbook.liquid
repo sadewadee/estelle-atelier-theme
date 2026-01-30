@@ -23,7 +23,12 @@
           <!-- Image -->
           <div class="relative aspect-[3/4] {% if block.settings.span == 'large' %}md:aspect-[16/10]{% endif %} rounded-2xl overflow-hidden bg-sage-accent/20">
             {% if block.settings.image %}
-              {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+              {{ block.settings.image | image_tag:
+                class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105',
+                loading: 'lazy',
+                widths: '375, 550, 750, 1100, 1500, 2200',
+                sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+              }}
             {% else %}
               <div class="w-full h-full flex items-center justify-center">
                 <span class="material-symbols-outlined text-6xl text-sage-dark/20">photo_library</span>
@@ -48,7 +53,12 @@
                       <!-- Tooltip -->
                       <div class="absolute left-10 top-0 bg-white rounded-lg shadow-xl p-3 w-48 opacity-0 group-hover/hotspot:opacity-100 transition-opacity pointer-events-none group-hover/hotspot:pointer-events-auto">
                         {% if product.featured_image %}
-                          {{ product.featured_image | image_url: width: 200 | image_tag: class: 'w-full aspect-square object-cover rounded mb-2' }}
+                          {{ product.featured_image | image_tag:
+                            class: 'w-full aspect-square object-cover rounded mb-2',
+                            loading: 'lazy',
+                            widths: '100, 200, 300',
+                            sizes: '12rem'
+                          }}
                         {% endif %}
                         <p class="text-xs font-bold text-text-olive-deep">{{ product.title }}</p>
                         <p class="text-sm text-muted">{{ product.price | money }}</p>

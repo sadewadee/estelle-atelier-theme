@@ -1,11 +1,11 @@
 [
   {
-    "name": "theme_info",
+    "name": "eselle_atelier",
     "theme_name": "Estelle Atelier",
     "theme_version": "1.0.0",
-    "theme_author": "Claude",
-    "theme_documentation_url": "https://github.com/anthropics/claude-code",
-    "theme_support_url": "https://github.com/anthropics/claude-code"
+    "theme_author": "Sadewadee",
+    "theme_documentation_url": "https://github.com/sadewadee/estelle-atelier-theme",
+    "theme_support_url": "https://github.com/sadewadee/estelle-atelier-theme/issues"
   },
   {
     "name": "Colors",

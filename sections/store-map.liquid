@@ -13,7 +13,12 @@
   <!-- Map Background -->
   <div class="absolute inset-0 z-0">
     {% if section.settings.map_image %}
-      {{ section.settings.map_image | image_url: width: 2000 | image_tag: class: 'w-full h-full object-cover grayscale-[20%] sepia-[10%]', loading: 'lazy' }}
+      {{ section.settings.map_image | image_tag:
+        class: 'w-full h-full object-cover grayscale-[20%] sepia-[10%]',
+        loading: 'lazy',
+        widths: '750, 1000, 1500, 2000, 2500, 3000',
+        sizes: '100vw'
+      }}
     {% else %}
       <!-- Placeholder gradient background -->
       <div class="w-full h-full bg-gradient-to-br from-sage-pale via-sage-accent to-sage-dark/20"></div>

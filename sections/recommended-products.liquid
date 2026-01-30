@@ -24,14 +24,16 @@
       </div>
 
       <!-- Products Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-{{ section.settings.columns }} gap-6 md:gap-8">
+      <div class="grid grid-cols-2 md:grid-cols-{{ section.settings.columns }} gap-4 md:gap-6">
         {% for product in recommendation.products limit: section.settings.products_to_show %}
-          {% render 'product-card',
-            product: product,
-            show_quick_add: section.settings.show_quick_add,
-            show_vendor: section.settings.show_vendor,
-            show_secondary_image: section.settings.show_secondary_image
-          %}
+          <div data-animate>
+            {% render 'card-product',
+              card_product: product,
+              show_vendor: section.settings.show_vendor,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_quick_add: section.settings.show_quick_add
+            %}
+          </div>
         {% endfor %}
       </div>
 

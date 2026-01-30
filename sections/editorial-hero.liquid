@@ -8,8 +8,11 @@
   {% if section.settings.image != blank %}
     {{
       section.settings.image
-      | image_url: width: 1920
-      | image_tag: class: 'absolute inset-0 w-full h-full object-cover', loading: 'lazy'
+      | image_tag:
+        class: 'absolute inset-0 w-full h-full object-cover',
+        loading: 'eager',
+        widths: '750, 1000, 1500, 1920, 2500, 3000, 3840',
+        sizes: '100vw'
     }}
   {% else %}
     <div class="absolute inset-0 bg-sage-pale">

@@ -7,9 +7,11 @@
 <section class="hero-{{ section.id }} relative w-full flex items-center justify-center overflow-hidden bg-background-off animate-entrance delay-200">
   <div class="absolute inset-0 z-0">
     {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 2000 | image_tag:
+      {{ section.settings.image | image_tag:
         loading: 'eager',
-        class: 'w-full h-full object-cover object-center opacity-95 grayscale-[10%]'
+        class: 'w-full h-full object-cover object-center opacity-95 grayscale-[10%]',
+        widths: '750, 1000, 1500, 2000, 2500, 3000, 3840',
+        sizes: '100vw'
       }}
     {%- else -%}
       {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover object-center opacity-95 grayscale-[10%] bg-sage-pale' }}

@@ -1,23 +1,149 @@
+{% comment %}
+  Estelle Atelier - Main Collection Section
+  Collection page using modular snippets
+{% endcomment %}
+
 <div class="py-24 px-12 bg-white">
-  <h2 class="text-3xl serif font-light text-[var(--text-charcoal)] mb-8">{{ collection.title }}</h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-    {%- for product in collection.products -%}
-      <div class="group cursor-pointer">
-        <a href="{{ product.url }}">
-          <div class="aspect-[3/4] overflow-hidden bg-sage-pale/40 mb-4 relative">
-            {{ product.featured_image | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105' }}
+  <div class="max-w-7xl mx-auto">
+
+    {%- comment -%} Collection Header {%- endcomment -%}
+    <div class="text-center mb-16">
+      <h1 class="text-3xl md:text-5xl serif font-light text-text-charcoal mb-4">{{ collection.title }}</h1>
+      {%- if collection.description -%}
+        <div class="max-w-2xl mx-auto text-text-muted">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Collection Layout {%- endcomment -%}
+    <div class="flex flex-col lg:flex-row gap-12">
+
+      {%- comment -%} Sidebar Filters {%- endcomment -%}
+      <aside class="hidden lg:block w-64 flex-shrink-0">
+        <div class="sticky top-32">
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] mb-6">Filter</h3>
+
+          {%- comment -%} Filter by Type {%- endcomment -%}
+          {%- assign current_tags = current_tags -%}
+          <div class="mb-8 pb-8 border-b border-sage-accent">
+            {%- for type in collection.all_types -%}
+              {%- assign type_tag = type | handleize -%}
+              {%- if current_tags contains type_tag -%}
+                {%- assign active_class = 'text-sage-dark font-medium' -%}
+              {%- else -%}
+                {%- assign active_class = 'text-text-muted hover:text-sage-dark' -%}
+              {%- endif -%}
+              <a href="{{ type | link_to_type }}" class="block py-2 text-sm {{ active_class }} transition-colors">
+                {{ type }}
+              </a>
+            {%- endfor -%}
           </div>
-          <h3 class="text-[10px] uppercase tracking-[0.2em] mb-1 font-medium">{{ product.title }}</h3>
-          <p class="text-[10px] text-[var(--text-muted)]">{{ product.price | money }}</p>
-        </a>
+
+          {%- comment -%} Filter by Tag {%- endcomment -%}
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-[0.2em] mb-4">Tags</h4>
+            {%- for tag in collection.all_tags limit: 10 -%}
+              {%- if current_tags contains tag -%}
+                {%- assign active_class = 'text-sage-dark font-medium' -%}
+              {%- else -%}
+                {%- assign active_class = 'text-text-muted hover:text-sage-dark' -%}
+              {%- endif -%}
+              <a href="{{ tag | link_to_tag }}" class="block py-2 text-sm {{ active_class }} transition-colors">
+                {{ tag }}
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      </aside>
+
+      {%- comment -%} Product Grid {%- endcomment -%}
+      <div class="flex-1">
+        {%- comment -%} Toolbar {%- endcomment -%}
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-sage-accent">
+          <span class="text-sm text-text-muted">{{ collection.products_count }} products</span>
+          <select name="sort_by" id="sort-by" class="text-sm border-0 bg-transparent font-medium cursor-pointer">
+            <option value="manual">Featured</option>
+            <option value="price-ascending">Price: Low to High</option>
+            <option value="price-descending">Price: High to Low</option>
+            <option value="title-ascending">A-Z</option>
+            <option value="title-descending">Z-A</option>
+            <option value="created-descending">Newest</option>
+          </select>
+        </div>
+
+        {%- if collection.products.size > 0 -%}
+          {%- comment -%} Product Grid using card-product snippet {%- endcomment -%}
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {%- for product in collection.products -%}
+              <div data-animate>
+                {%- render 'card-product', card_product: product -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Pagination Snippet {%- endcomment -%}
+          {%- if paginate.pages > 1 -%}
+            <div class="mt-16">
+              {%- render 'pagination', paginate: paginate -%}
+            </div>
+          {%- endif -%}
+
+        {%- else -%}
+          <div class="text-center py-20">
+            <span class="material-symbols-outlined text-6xl text-sage-accent block mb-4">search_off</span>
+            <h3 class="text-xl serif mb-2">No products found</h3>
+            <p class="text-text-muted mb-6">Try adjusting your filters</p>
+            <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 border border-sage-accent rounded hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all">
+              Clear all filters
+            </a>
+          </div>
+        {%- endif -%}
+
       </div>
-    {%- endfor -%}
+    </div>
+
   </div>
 </div>
+
+<script>
+  (function() {
+    const sortSelect = document.querySelector('#sort-by');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort_by', this.value);
+        window.location.href = url.toString();
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const sortBy = urlParams.get('sort_by');
+      if (sortBy) sortSelect.value = sortBy;
+    }
+  })();
+</script>
 
 {% schema %}
 {
   "name": "Main Collection",
-  "settings": []
+  "tag": "section",
+  "class": "section-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 6,
+      "max": 24,
+      "step": 6,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    }
+  ]
 }
 {% endschema %}

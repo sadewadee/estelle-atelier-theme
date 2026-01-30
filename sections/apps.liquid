@@ -1,0 +1,39 @@
+{% comment %}
+  Estelle Atelier - App Blocks Section
+  Container section for embedding app blocks anywhere in the theme
+  Allows apps to be added via Shopify Theme Editor
+
+  Based on Shopify Dawn theme architecture
+{% endcomment %}
+
+{%- if section.blocks != blank -%}
+  <div class="page-width">
+    {%- for block in section.blocks -%}
+      {%- render block -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "tag": "section",
+  "class": "section-apps",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.apps.paragraph"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.apps.presets.apps"
+    }
+  ]
+}
+{% endschema %}

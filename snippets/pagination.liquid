@@ -1,0 +1,111 @@
+{% comment %}
+  Estelle Atelier - Pagination Snippet
+  Based on Shopify Dawn theme pagination component
+
+  Usage:
+    {% render 'pagination', paginate: paginate %}
+{% endcomment %}
+
+{%- if paginate.parts.size > 1 -%}
+  <div class="pagination-wrapper" data-pagination>
+    <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+
+      {%- if paginate.previous -%}
+        <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.previous' | t }}">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+        </a>
+      {%- else -%}
+        <span class="pagination__item pagination__item--prev pagination__item-arrow pagination__item--disabled">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+        </span>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}
+          <a href="{{ part.url }}" class="pagination__item link motion-reduce" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+            {{- part.title -}}
+          </a>
+        {%- else -%}
+          {%- if part.title == paginate.current_page -%}
+            <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+              {{- part.title -}}
+            </span>
+          {%- else -%}
+            <span class="pagination__item">{{ part.title }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.next' | t }}">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+        </a>
+      {%- else -%}
+        <span class="pagination__item pagination__item--next pagination__item-arrow pagination__item--disabled">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+        </span>
+      {%- endif -%}
+
+    </nav>
+  </div>
+
+  <style>
+    .pagination-wrapper {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pagination__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.5rem;
+      height: 2.5rem;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--color-sage-accent, #e1e8df);
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .pagination__item:hover:not(.pagination__item--disabled):not(.pagination__item--current) {
+      background-color: var(--color-sage-pale, #f1f4f0);
+      border-color: var(--color-sage-dark, #8ba888);
+    }
+
+    .pagination__item--current {
+      background-color: var(--color-sage-dark, #8ba888);
+      color: white;
+      border-color: var(--color-sage-dark, #8ba888);
+    }
+
+    .pagination__item--disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .pagination__item-arrow {
+      padding: 0;
+    }
+
+    @media (max-width: 768px) {
+      .pagination {
+        gap: 0.25rem;
+      }
+
+      .pagination__item {
+        min-width: 2rem;
+        height: 2rem;
+        font-size: 0.75rem;
+        padding: 0 0.5rem;
+      }
+    }
+  </style>
+{%- endif -%}

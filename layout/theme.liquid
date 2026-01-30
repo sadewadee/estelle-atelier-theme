@@ -77,6 +77,8 @@
     {{ 'custom.css' | asset_url | stylesheet_tag }}
 
     <!-- Scripts for global functionality -->
+    <script src="{{ 'animations.js' | asset_url }}" defer></script>
+    <script src="{{ 'pubsub.js' | asset_url }}" defer></script>
     <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
     <script src="{{ 'recently-viewed.js' | asset_url }}" defer></script>
   </head>

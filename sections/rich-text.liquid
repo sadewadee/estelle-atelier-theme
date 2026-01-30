@@ -1,13 +1,11 @@
 {% comment %}
   Estelle Atelier - Rich Text Section
-  Simple content section for pages
+  Content section that accepts theme blocks using {% content_for "blocks" %}
 {% endcomment %}
 
-<div class="px-6 md:px-12 py-16 md:py-24">
-  <div class="max-w-3xl mx-auto">
-    <div class="prose prose-sage prose-lg max-w-none mx-auto">
-      {{ section.settings.text }}
-    </div>
+<div class="px-6 md:px-12 py-16 md:py-24 {{ section.settings.background_style }}">
+  <div class="max-w-{{ section.settings.max_width }} mx-auto {{ section.settings.alignment }}">
+    {% content_for "blocks" %}
   </div>
 </div>
 
@@ -18,16 +16,77 @@
   "class": "section-rich-text",
   "settings": [
     {
-      "type": "html",
-      "id": "text",
-      "label": "Content",
-      "default": "<h2>Page Title</h2><p>Add your page content here.</p>"
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        { "value": "2xl", "label": "Narrow" },
+        { "value": "3xl", "label": "Medium" },
+        { "value": "4xl", "label": "Wide" },
+        { "value": "5xl", "label": "Full" },
+        { "value": "7xl", "label": "X Wide" }
+      ],
+      "default": "3xl"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "prose_size",
+      "label": "Text size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "base", "label": "Medium" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "X Large" }
+      ],
+      "default": "lg"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "bg-white", "label": "White" },
+        { "value": "bg-sage-pale", "label": "Sage Pale" }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
     }
   ],
   "presets": [
     {
       "name": "Rich Text",
-      "category": "Content"
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        }
+      ]
     }
   ]
 }

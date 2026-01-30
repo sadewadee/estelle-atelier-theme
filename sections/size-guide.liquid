@@ -132,7 +132,12 @@
       <div class="bg-white border border-sage-accent/30 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
         {% if section.settings.fit_image %}
           <div class="w-32 h-40 bg-sage-accent/30 rounded-lg overflow-hidden flex-shrink-0">
-            {{ section.settings.fit_image | image_url: width: 200 | image_tag: class: 'w-full h-full object-cover', alt: section.settings.fit_image.alt }}
+            {{ section.settings.fit_image | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'lazy',
+              widths: '128, 256, 400',
+              sizes: '8rem'
+            }}
           </div>
         {% else %}
           <div class="w-32 h-40 bg-sage-accent/30 rounded-lg flex items-center justify-center flex-shrink-0">
