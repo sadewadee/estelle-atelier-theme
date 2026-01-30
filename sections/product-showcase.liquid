@@ -20,7 +20,7 @@
               }}
             {% else %}
               <div class="w-full h-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
+                {% render 'icon-svg', icon: 'image' %}
               </div>
             {% endif %}
           {% elsif section.settings.image %}
@@ -32,7 +32,7 @@
             }}
           {% else %}
             <div class="w-full h-full flex items-center justify-center">
-              <span class="material-symbols-outlined text-6xl text-sage-dark/20">image</span>
+              {% render 'icon-svg', icon: 'image' %}
             </div>
           {% endif %}
 
@@ -41,7 +41,7 @@
           <!-- Floating badge -->
           {% if section.settings.show_badge and section.settings.badge_text %}
             <div class="absolute bottom-6 left-6 bg-white/80 backdrop-blur px-4 py-2 rounded-lg">
-              <p class="text-xs font-bold tracking-widest uppercase text-text-olive-deep">{{ section.settings.badge_text }}</p>
+              <p class="text-xs font-bold tracking-widest uppercase text-[var(--text-olive-deep)]">{{ section.settings.badge_text }}</p>
             </div>
           {% endif %}
         </div>
@@ -52,9 +52,9 @@
         <!-- Category & Title -->
         <div class="flex flex-col gap-3">
           {% if section.settings.category %}
-            <p class="text-sage-dark text-sm font-bold tracking-[0.2em] uppercase">{{ section.settings.category }}</p>
+            <p class="text-[var(--sage-dark)] text-sm font-bold tracking-[0.2em] uppercase">{{ section.settings.category }}</p>
           {% endif %}
-          <h1 class="text-text-olive-deep text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight">
+          <h1 class="text-[var(--text-olive-deep)] text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight">
             {{ section.settings.title_line_1 }}
             {% if section.settings.title_line_2 %}
               <span class="italic">{{ section.settings.title_line_2 }}</span>
@@ -67,7 +67,7 @@
 
         <!-- Description -->
         {% if section.settings.description %}
-          <p class="text-text-olive-deep/80 text-base font-normal leading-relaxed max-w-md">
+          <p class="text-[var(--text-olive-deep)]/80 text-base font-normal leading-relaxed max-w-md">
             {{ section.settings.description }}
           </p>
         {% endif %}
@@ -81,8 +81,8 @@
                 <p class="text-xs font-bold uppercase tracking-widest opacity-60">Color: {{ section.settings.color_name | default: 'Sage Mist' }}</p>
                 <div class="flex gap-3">
                   <button class="size-8 rounded-full border-2 border-sage-dark bg-sage-pale ring-offset-2 focus:ring-2 ring-sage-dark" title="{{ section.settings.color_name | default: 'Sage Mist' }}"></button>
-                  <button class="size-8 rounded-full border border-sage-accent bg-[#f5f5dc] hover:scale-110 transition-transform" title="Sand Drift"></button>
-                  <button class="size-8 rounded-full border border-sage-accent bg-[#dcdcf5] hover:scale-110 transition-transform" title="Morning Sky"></button>
+                  <button class="size-8 rounded-full border border-[var(--sage-accent)] bg-[#f5f5dc] hover:scale-110 transition-transform" title="Sand Drift"></button>
+                  <button class="size-8 rounded-full border border-[var(--sage-accent)] bg-[#dcdcf5] hover:scale-110 transition-transform" title="Morning Sky"></button>
                 </div>
               </div>
             {% endif %}
@@ -93,14 +93,14 @@
                 <div class="flex justify-between items-center max-w-[320px]">
                   <p class="text-xs font-bold uppercase tracking-widest opacity-60">Select Size</p>
                   {% if section.settings.size_guide_link %}
-                    <a href="{{ section.settings.size_guide_link }}" class="text-[10px] underline tracking-tighter hover:text-sage-dark">Size Guide</a>
+                    <a href="{{ section.settings.size_guide_link }}" class="text-[10px] underline tracking-tighter hover:text-[var(--sage-dark)]">Size Guide</a>
                   {% endif %}
                 </div>
                 <div class="flex gap-2">
-                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">XS</button>
+                  <button class="flex-1 max-w-[60px] h-10 border border-[var(--sage-accent)] flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">XS</button>
                   <button class="flex-1 max-w-[60px] h-10 border-2 border-sage-dark flex items-center justify-center rounded-lg text-sm font-bold transition-all">S</button>
-                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">M</button>
-                  <button class="flex-1 max-w-[60px] h-10 border border-sage-accent flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">L</button>
+                  <button class="flex-1 max-w-[60px] h-10 border border-[var(--sage-accent)] flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">M</button>
+                  <button class="flex-1 max-w-[60px] h-10 border border-[var(--sage-accent)] flex items-center justify-center rounded-lg text-sm hover:border-sage-dark transition-all">L</button>
                 </div>
               </div>
             {% endif %}
@@ -110,9 +110,9 @@
         <!-- CTA -->
         <div class="flex flex-col gap-3 pt-4">
           {% if section.settings.button_text %}
-            <a href="{{ section.settings.button_link }}" class="w-full max-w-[400px] h-14 bg-sage-dark text-white rounded-lg font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
+            <a href="{{ section.settings.button_link }}" class="w-full max-w-[400px] h-14 bg-[var(--sage-dark)] text-white rounded-lg font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
               <span>{{ section.settings.button_text }}</span>
-              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">shopping_bag</span>
+              {% render 'icon-svg', icon: 'shopping_bag' %}
             </a>
           {% endif %}
           {% if section.settings.shipping_note %}
@@ -129,7 +129,7 @@
   <div class="px-6 md:px-12 lg:px-20 py-16 bg-sage-pale/30">
     <div class="max-w-[1800px] mx-auto">
       <div class="flex items-center gap-4 mb-8">
-        <h2 class="text-text-olive-deep text-2xl font-bold tracking-tight">{{ section.settings.features_heading | default: 'Product DNA' }}</h2>
+        <h2 class="text-[var(--text-olive-deep)] text-2xl font-bold tracking-tight">{{ section.settings.features_heading | default: 'Product DNA' }}</h2>
         <div class="flex-1 h-px bg-sage-accent/30"></div>
       </div>
 
@@ -139,8 +139,8 @@
           {% capture title %}feature_{{ i }}_title{% endcapture %}
           {% capture text %}feature_{{ i }}_text{% endcapture %}
 
-          <div class="flex flex-col gap-4 rounded-xl border border-sage-accent/30 bg-white p-6 transition-all hover:border-sage-dark">
-            <div class="w-10 h-10 rounded-lg bg-sage-dark/10 flex items-center justify-center text-sage-dark">
+          <div class="flex flex-col gap-4 rounded-xl border border-[var(--sage-accent)]/30 bg-white p-6 transition-all hover:border-sage-dark">
+            <div class="w-10 h-10 rounded-lg bg-[var(--sage-dark)]/10 flex items-center justify-center text-[var(--sage-dark)]">
               {% render 'icon', icon: section.settings[icon] | default: 'eco', size: 'lg' %}
             </div>
             <div class="flex flex-col gap-1">

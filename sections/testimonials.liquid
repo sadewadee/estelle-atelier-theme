@@ -16,8 +16,8 @@
     <div class="relative w-full flex items-center justify-between" data-testimonial-carousel>
       <!-- Left Navigation Arrow -->
       {% if section.settings.show_arrows %}
-        <button data-testimonial-prev class="hidden md:flex items-center justify-center p-2 text-text-olive-deep/40 hover:text-sage-dark transition-colors duration-300" aria-label="Previous testimonial">
-          <span class="material-symbols-outlined text-3xl">chevron_left</span>
+        <button data-testimonial-prev class="hidden md:flex items-center justify-center p-2 text-[var(--text-olive-deep)]/40 hover:text-[var(--sage-dark)] transition-colors duration-300" aria-label="Previous testimonial">
+          {% render 'icon-svg', icon: 'chevron_left' %}
         </button>
       {% endif %}
 
@@ -27,19 +27,19 @@
           {% for block in section.blocks %}
             <div class="testimonial-slide {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
               <div class="mb-8">
-                <span class="material-symbols-outlined text-sage-dark/30 text-4xl mb-6">format_quote</span>
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed text-text-olive-deep serif">
+                {% render 'icon-svg', icon: 'format_quote' %}
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed text-[var(--text-olive-deep)] serif">
                   {{ block.settings.quote }}
                 </h2>
               </div>
               <div class="flex flex-col items-center gap-3">
                 <div class="w-12 h-[1px] bg-sage-dark/30"></div>
                 <div class="flex flex-col gap-1">
-                  <p class="text-sm font-medium tracking-widest text-text-olive-deep uppercase">
+                  <p class="text-sm font-medium tracking-widest text-[var(--text-olive-deep)] uppercase">
                     {{ block.settings.author }}
                   </p>
                   {% if block.settings.verified %}
-                    <p class="text-[10px] uppercase tracking-[0.2em] text-sage-dark font-bold">Verified Buyer</p>
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-[var(--sage-dark)] font-bold">Verified Buyer</p>
                   {% endif %}
                 </div>
               </div>
@@ -50,8 +50,8 @@
 
       <!-- Right Navigation Arrow -->
       {% if section.settings.show_arrows %}
-        <button data-testimonial-next class="hidden md:flex items-center justify-center p-2 text-text-olive-deep/40 hover:text-sage-dark transition-colors duration-300" aria-label="Next testimonial">
-          <span class="material-symbols-outlined text-3xl">chevron_right</span>
+        <button data-testimonial-next class="hidden md:flex items-center justify-center p-2 text-[var(--text-olive-deep)]/40 hover:text-[var(--sage-dark)] transition-colors duration-300" aria-label="Next testimonial">
+          {% render 'icon-svg', icon: 'chevron_right' %}
         </button>
       {% endif %}
     </div>
@@ -62,7 +62,7 @@
         <button
           data-dot-index="{{ forloop.index0 }}"
           aria-label="Go to slide {{ forloop.index }}"
-          class="testimonial-dot w-2 h-2 rounded-full {% if forloop.first %}bg-sage-dark{% else %}bg-text-olive-deep/20{% endif %} transition-all duration-300"
+          class="testimonial-dot w-2 h-2 rounded-full {% if forloop.first %}bg-[var(--sage-dark)]{% else %}bg-[var(--text-olive-deep)]/20{% endif %} transition-all duration-300"
         ></button>
       {% endfor %}
     </div>

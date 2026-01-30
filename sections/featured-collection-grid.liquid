@@ -32,7 +32,7 @@
       <div class="text-center mt-12">
         <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-8 py-4 border border-sage-accent text-text-charcoal hover:bg-sage-dark hover:text-white hover:border-sage-dark transition-all text-xs font-bold uppercase tracking-widest">
           View All Products
-          <span class="material-symbols-outlined">arrow_forward</span>
+          {% render 'icon-svg', icon: 'arrow_forward' %}
         </a>
       </div>
     {%- endif -%}

@@ -155,7 +155,7 @@
           <details class="group" {% if forloop.first %}open{% endif %}>
             <summary class="flex justify-between items-center py-5 cursor-pointer list-none">
               <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">The Design</span>
-              <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+              {% render 'icon-svg', icon: 'expand_more' %}
             </summary>
             <div class="pb-8 text-[13px] font-light leading-relaxed text-gray-500 italic">
               {{ product.description }}
@@ -167,7 +167,7 @@
             <details class="group">
               <summary class="flex justify-between items-center py-5 border-t border-[var(--border-light)] cursor-pointer list-none">
                 <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">Materials & Origin</span>
-                <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+                {% render 'icon-svg', icon: 'expand_more' %}
               </summary>
               <div class="pb-8 text-[11px] font-medium leading-loose uppercase tracking-widest space-y-2 text-[var(--sage-dark)]">
                 {{ product.metafields.global.materials | newline_to_br }}
@@ -180,7 +180,7 @@
             <details class="group">
               <summary class="flex justify-between items-center py-5 border-t border-[var(--border-light)] cursor-pointer list-none">
                 <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">Care Ritual</span>
-                <span class="material-symbols-outlined text-sm text-[var(--sage-accent)] group-open:rotate-180 transition-transform">expand_more</span>
+                {% render 'icon-svg', icon: 'expand_more' %}
               </summary>
               <div class="pb-8 text-[13px] font-light leading-relaxed text-gray-500">
                 {{ product.metafields.global.care }}

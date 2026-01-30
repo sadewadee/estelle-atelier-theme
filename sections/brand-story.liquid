@@ -13,7 +13,7 @@
         widths: '750, 1000, 1500, 2000, 2500, 3000, 3840',
         sizes: '100vw'
       }}
-      <div class="absolute inset-0 bg-gradient-to-b from-text-olive-deep/30 via-transparent to-text-olive-deep/60"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[var(--text-olive-deep)]/30 via-transparent to-[var(--text-olive-deep)]/60"></div>
     </div>
   {% endif %}
 
@@ -24,9 +24,9 @@
       <div class="-mt-32 relative z-10 mb-16">
         <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-xl">
           {% if section.settings.label != blank %}
-            <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-4 block">{{ section.settings.label }}</span>
+            <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-4 block">{{ section.settings.label }}</span>
           {% endif %}
-          <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold tracking-tight mb-6 serif">
+          <h1 class="text-[var(--text-olive-deep)] text-3xl md:text-5xl font-bold tracking-tight mb-6 serif">
             {{ section.settings.heading }}
           </h1>
           <p class="text-muted text-lg leading-relaxed">
@@ -55,9 +55,9 @@
                 {% endif %}
                 <div>
                   {% if block.settings.chapter_label %}
-                    <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-2 block">{{ block.settings.chapter_label }}</span>
+                    <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-2 block">{{ block.settings.chapter_label }}</span>
                   {% endif %}
-                  <h2 class="text-text-olive-deep text-2xl md:text-3xl font-bold mb-6 serif">{{ block.settings.chapter_title }}</h2>
+                  <h2 class="text-[var(--text-olive-deep)] text-2xl md:text-3xl font-bold mb-6 serif">{{ block.settings.chapter_title }}</h2>
                   <div class="prose prose-sage max-w-none">
                     {{ block.settings.chapter_content }}
                   </div>
@@ -77,10 +77,10 @@
 
                   {% if block.settings[value_title] != blank %}
                     <div class="text-center">
-                      <div class="w-16 h-16 rounded-full bg-sage-dark/10 flex items-center justify-center mx-auto mb-4">
+                      <div class="w-16 h-16 rounded-full bg-[var(--sage-dark)]/10 flex items-center justify-center mx-auto mb-4">
                         {% render 'icon', icon: block.settings[value_icon] | default: 'diamond', size: 'xl' %}
                       </div>
-                      <h3 class="text-text-olive-deep font-bold mb-2">{{ block.settings[value_title] }}</h3>
+                      <h3 class="text-[var(--text-olive-deep)] font-bold mb-2">{{ block.settings[value_title] }}</h3>
                       <p class="text-muted text-sm">{{ block.settings[value_text] }}</p>
                     </div>
                   {% endif %}
@@ -89,7 +89,7 @@
 
             {% when 'timeline' %}
               <div class="max-w-3xl mx-auto">
-                <h2 class="text-text-olive-deep text-2xl md:text-3xl font-bold text-center mb-12">{{ block.settings.timeline_heading }}</h2>
+                <h2 class="text-[var(--text-olive-deep)] text-2xl md:text-3xl font-bold text-center mb-12">{{ block.settings.timeline_heading }}</h2>
                 <div class="relative">
                   <!-- Timeline Line -->
                   <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-sage-accent"></div>
@@ -103,10 +103,10 @@
                     {% if block.settings[year] != blank %}
                       <div class="relative flex items-center gap-8 mb-12 {% if forindex == 2 or forindex == 4 %}md:flex-row-reverse{% endif %}">
                         <div class="hidden md:block flex-1 {% if forindex == 1 or forindex == 3 %}text-right{% endif %}"></div>
-                        <div class="absolute left-8 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-sage-dark border-4 border-sage-accent/30 z-10"></div>
+                        <div class="absolute left-8 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-[var(--sage-dark)] border-4 border-[var(--sage-accent)]/30 z-10"></div>
                         <div class="ml-16 md:ml-0 md:w-1/2">
-                          <span class="text-sage-dark text-sm font-bold">{{ block.settings[year] }}</span>
-                          <h3 class="text-text-olive-deep font-bold">{{ block.settings[title] }}</h3>
+                          <span class="text-[var(--sage-dark)] text-sm font-bold">{{ block.settings[year] }}</span>
+                          <h3 class="text-[var(--text-olive-deep)] font-bold">{{ block.settings[title] }}</h3>
                           <p class="text-muted text-sm">{{ block.settings[text] }}</p>
                         </div>
                       </div>
@@ -128,7 +128,7 @@
                   <div class="w-full h-full bg-sage-pale"></div>
                 {% endif %}
                 {% if block.settings.overlay_text %}
-                  <div class="absolute inset-0 flex items-center justify-center bg-text-olive-deep/40">
+                  <div class="absolute inset-0 flex items-center justify-center bg-[var(--text-olive-deep)]/40">
                     <div class="text-center text-white max-w-2xl px-8">
                       <h3 class="text-3xl md:text-5xl font-bold mb-4">{{ block.settings.overlay_title }}</h3>
                       <p class="text-lg opacity-90">{{ block.settings.overlay_text }}</p>
@@ -139,11 +139,11 @@
 
             {% when 'cta' %}
               <div class="bg-sage-pale rounded-2xl p-12 text-center">
-                <h2 class="text-text-olive-deep text-2xl md:text-3xl font-bold mb-4">{{ block.settings.cta_heading }}</h2>
+                <h2 class="text-[var(--text-olive-deep)] text-2xl md:text-3xl font-bold mb-4">{{ block.settings.cta_heading }}</h2>
                 <p class="text-muted mb-8 max-w-xl mx-auto">{{ block.settings.cta_text }}</p>
-                <a href="{{ block.settings.cta_link }}" class="inline-flex items-center gap-2 bg-sage-dark text-white px-8 py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors">
+                <a href="{{ block.settings.cta_link }}" class="inline-flex items-center gap-2 bg-[var(--sage-dark)] text-white px-8 py-4 rounded-lg font-bold hover:bg-[var(--sage-accent)] transition-colors">
                   {{ block.settings.cta_button }}
-                  <span class="material-symbols-outlined">arrow_forward</span>
+                  {% render 'icon-svg', icon: 'arrow_forward' %}
                 </a>
               </div>
           {% endcase %}

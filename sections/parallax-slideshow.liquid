@@ -59,7 +59,7 @@
       <div class="absolute inset-0 flex items-center justify-center p-6">
         <div class="text-center max-w-4xl">
           {% if block.settings.overline != blank %}
-            <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-4 block animate-entrance">
+            <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-4 block animate-entrance">
               {{ block.settings.overline }}
             </span>
           {% endif %}
@@ -79,10 +79,10 @@
           {% if block.settings.button_label != blank and block.settings.button_link != blank %}
             <a
               href="{{ block.settings.button_link }}"
-              class="inline-flex items-center gap-2 bg-white text-text-olive-deep px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-sage-pale transition-all animate-entrance delay-300"
+              class="inline-flex items-center gap-2 bg-white text-[var(--text-olive-deep)] px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--color-sage-pale)] transition-all animate-entrance delay-300"
             >
               {{ block.settings.button_label }}
-              <span class="material-symbols-outlined text-lg">arrow_forward</span>
+              {% render 'icon-svg', icon: 'arrow_forward' %}
             </a>
           {% endif %}
         </div>
@@ -106,10 +106,10 @@
   <!-- Navigation Arrows -->
   {% if section.settings.show_arrows and section.blocks.size > 1 %}
     <button data-parallax-prev class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full text-white transition-all z-20">
-      <span class="material-symbols-outlined">chevron_left</span>
+      {% render 'icon-svg', icon: 'chevron_left' %}
     </button>
     <button data-parallax-next class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full text-white transition-all z-20">
-      <span class="material-symbols-outlined">chevron_right</span>
+      {% render 'icon-svg', icon: 'chevron_right' %}
     </button>
   {% endif %}
 </div>

@@ -1,6 +1,6 @@
-<section class="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-sage-accent/20">
+<section class="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-[var(--sage-accent)]/20">
   {%- for block in section.blocks -%}
-    <div class="relative h-[700px] group overflow-hidden {% unless forloop.last %}border-r border-sage-accent/20{% endunless %}" {{ block.shopify_attributes }}>
+    <div class="relative h-[700px] group overflow-hidden {% unless forloop.last %}border-r border-[var(--sage-accent)]/20{% endunless %}" {{ block.shopify_attributes }}>
       {%- if block.settings.image != blank -%}
         {{ block.settings.image | image_tag:
           loading: 'lazy',

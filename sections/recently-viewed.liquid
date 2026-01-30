@@ -19,17 +19,17 @@
     <div class="flex items-end justify-between mb-8">
       <div>
         {% if section.settings.show_label %}
-          <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em] mb-2 block">{{ section.settings.label_text }}</span>
+          <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.2em] mb-2 block">{{ section.settings.label_text }}</span>
         {% endif %}
-        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-text-charcoal">{{ section.settings.heading }}</h2>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-charcoal)]">{{ section.settings.heading }}</h2>
       </div>
       {% if section.settings.show_navigation %}
         <div class="flex gap-2">
-          <button data-carousel-prev class="size-10 rounded-lg flex items-center justify-center bg-sage-dark/10 hover:bg-sage-dark transition-all group" aria-label="{{ 'accessibility.previous' | t }}">
-            <span class="material-symbols-outlined text-xl group-hover:text-white">chevron_left</span>
+          <button data-carousel-prev class="size-10 rounded-lg flex items-center justify-center bg-[var(--sage-dark)]/10 hover:bg-[var(--sage-dark)] transition-all group" aria-label="{{ 'accessibility.previous' | t }}">
+            {% render 'icon-svg', icon: 'chevron_left' %}
           </button>
-          <button data-carousel-next class="size-10 rounded-lg flex items-center justify-center bg-sage-dark/10 hover:bg-sage-dark transition-all group" aria-label="{{ 'accessibility.next' | t }}">
-            <span class="material-symbols-outlined text-xl group-hover:text-white">chevron_right</span>
+          <button data-carousel-next class="size-10 rounded-lg flex items-center justify-center bg-[var(--sage-dark)]/10 hover:bg-[var(--sage-dark)] transition-all group" aria-label="{{ 'accessibility.next' | t }}">
+            {% render 'icon-svg', icon: 'chevron_right' %}
           </button>
         </div>
       {% endif %}

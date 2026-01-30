@@ -7,7 +7,7 @@
   <div class="max-w-5xl mx-auto">
     <!-- Page Heading -->
     <div class="mb-12 text-center">
-      <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
+      <h1 class="text-[var(--text-olive-deep)] text-3xl md:text-4xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
       <p class="text-muted text-lg max-w-2xl mx-auto">
         {{ section.settings.description }}
       </p>
@@ -17,10 +17,10 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
       <!-- Category Tabs -->
       <div class="flex-1 overflow-x-auto">
-        <div class="flex border-b border-sage-accent/30 gap-8 min-w-max" data-size-tabs>
+        <div class="flex border-b border-[var(--sage-accent)]/30 gap-8 min-w-max" data-size-tabs>
           {% for block in section.blocks %}
             <button
-              class="size-tab {% if forloop.first %}active{% endif %} flex flex-col items-center justify-center border-b-[3px] {% if forloop.first %}border-sage-dark{% else %}border-transparent{% endif %} text-text-olive-deep pb-3 pt-4 transition-colors"
+              class="size-tab {% if forloop.first %}active{% endif %} flex flex-col items-center justify-center border-b-[3px] {% if forloop.first %}border-sage-dark{% else %}border-transparent{% endif %} text-[var(--text-olive-deep)] pb-3 pt-4 transition-colors"
               data-category="{{ block.settings.id }}"
               {{ block.shopify_attributes }}
             >
@@ -33,11 +33,11 @@
       <!-- Unit Toggle -->
       <div class="flex min-w-[160px]">
         <div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-sage-accent/30 p-1">
-          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-text-olive-deep text-muted text-xs font-bold uppercase tracking-wider">
+          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-[var(--text-olive-deep)] text-muted text-xs font-bold uppercase tracking-wider">
             <span>CM</span>
             <input checked class="hidden" name="unit-toggle" type="radio" value="CM">
           </label>
-          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-text-olive-deep text-muted text-xs font-bold uppercase tracking-wider">
+          <label class="flex cursor-pointer h-full grow items-center justify-center rounded-md px-4 has-[:checked]:bg-white has-[:checked]:shadow-sm has-[:checked]:text-[var(--text-olive-deep)] text-muted text-xs font-bold uppercase tracking-wider">
             <span>INCHES</span>
             <input class="hidden" name="unit-toggle" type="radio" value="INCHES">
           </label>
@@ -48,17 +48,17 @@
     <!-- Size Tables -->
     {% for block in section.blocks %}
       <div class="size-table-content {% unless forloop.first %}hidden{% endfor %}" data-table="{{ block.settings.id }}">
-        <div class="overflow-x-auto rounded-xl border border-sage-accent/30 bg-white shadow-sm mb-12">
+        <div class="overflow-x-auto rounded-xl border border-[var(--sage-accent)]/30 bg-white shadow-sm mb-12">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-sage-dark/10">
-                <th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Size</th>
-                {% if block.settings.show_uk_au %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">UK/AU</th>{% endif %}
-                {% if block.settings.show_us %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">US</th>{% endif %}
-                {% if block.settings.show_eu %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">EU</th>{% endif %}
-                {% if block.settings.show_bust %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Bust</th>{% endif %}
-                {% if block.settings.show_waist %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Waist</th>{% endif %}
-                {% if block.settings.show_hips %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-text-olive-deep uppercase tracking-wider border-b border-sage-accent/30">Hips</th>{% endif %}
+              <tr class="bg-[var(--sage-dark)]/10">
+                <th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">Size</th>
+                {% if block.settings.show_uk_au %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">UK/AU</th>{% endif %}
+                {% if block.settings.show_us %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">US</th>{% endif %}
+                {% if block.settings.show_eu %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">EU</th>{% endif %}
+                {% if block.settings.show_bust %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">Bust</th>{% endif %}
+                {% if block.settings.show_waist %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">Waist</th>{% endif %}
+                {% if block.settings.show_hips %}<th class="p-4 md:p-6 text-xs md:text-sm font-bold text-[var(--text-olive-deep)] uppercase tracking-wider border-b border-[var(--sage-accent)]/30">Hips</th>{% endif %}
               </tr>
             </thead>
             <tbody class="divide-y divide-sage-accent/30">
@@ -86,8 +86,8 @@
         <div class="space-y-8">
           {% if section.settings.show_bust_guide %}
             <div class="flex gap-4 md:gap-6">
-              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
-                <span class="material-symbols-outlined text-xl md:text-2xl">straighten</span>
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[var(--sage-dark)]/20 flex items-center justify-center text-[var(--sage-dark)]">
+                {% render 'icon-svg', icon: 'straighten' %}
               </div>
               <div>
                 <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.bust_heading | default: 'Bust' }}</h3>
@@ -97,8 +97,8 @@
           {% endif %}
           {% if section.settings.show_waist_guide %}
             <div class="flex gap-4 md:gap-6">
-              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
-                <span class="material-symbols-outlined text-xl md:text-2xl">accessibility_new</span>
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[var(--sage-dark)]/20 flex items-center justify-center text-[var(--sage-dark)]">
+                {% render 'icon-svg', icon: 'accessibility_new' %}
               </div>
               <div>
                 <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.waist_heading | default: 'Waist' }}</h3>
@@ -108,8 +108,8 @@
           {% endif %}
           {% if section.settings.show_hips_guide %}
             <div class="flex gap-4 md:gap-6">
-              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-sage-dark/20 flex items-center justify-center text-sage-dark">
-                <span class="material-symbols-outlined text-xl md:text-2xl">height</span>
+              <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[var(--sage-dark)]/20 flex items-center justify-center text-[var(--sage-dark)]">
+                {% render 'icon-svg', icon: 'height' %}
               </div>
               <div>
                 <h3 class="font-bold text-base md:text-lg mb-2">{{ section.settings.hips_heading | default: 'Hips' }}</h3>
@@ -121,15 +121,15 @@
       </div>
       <div class="bg-sage-accent/30 rounded-2xl p-8 flex items-center justify-center aspect-square">
         <div class="relative w-full h-full border-2 border-dashed border-sage-dark/30 rounded-xl flex flex-col items-center justify-center gap-4">
-          <span class="material-symbols-outlined text-5xl md:text-6xl text-sage-dark">person_outline</span>
-          <p class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-sage-dark">{{ section.settings.diagram_label }}</p>
+          {% render 'icon-svg', icon: 'person_outline' %}
+          <p class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[var(--sage-dark)]">{{ section.settings.diagram_label }}</p>
         </div>
       </div>
     </div>
 
     <!-- Model Fit Reference -->
     {% if section.settings.show_fit_reference %}
-      <div class="bg-white border border-sage-accent/30 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
+      <div class="bg-white border border-[var(--sage-accent)]/30 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
         {% if section.settings.fit_image %}
           <div class="w-32 h-40 bg-sage-accent/30 rounded-lg overflow-hidden flex-shrink-0">
             {{ section.settings.fit_image | image_tag:
@@ -141,7 +141,7 @@
           </div>
         {% else %}
           <div class="w-32 h-40 bg-sage-accent/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined text-4xl text-sage-dark/40">person</span>
+            {% render 'icon-svg', icon: 'person' %}
           </div>
         {% endif %}
         <div class="flex-1 text-center md:text-left">
@@ -149,16 +149,16 @@
           <p class="text-muted mb-4 text-sm md:text-base">{{ section.settings.fit_description }}</p>
           <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-4">
             {% if section.settings.fit_badge_1 != blank %}
-              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-text-olive-deep">{{ section.settings.fit_badge_1 }}</span>
+              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-[var(--text-olive-deep)]">{{ section.settings.fit_badge_1 }}</span>
             {% endif %}
             {% if section.settings.fit_badge_2 != blank %}
-              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-text-olive-deep">{{ section.settings.fit_badge_2 }}</span>
+              <span class="px-3 md:px-4 py-1.5 rounded-full bg-sage-accent/30 text-[10px] md:text-xs font-bold text-[var(--text-olive-deep)]">{{ section.settings.fit_badge_2 }}</span>
             {% endif %}
           </div>
         </div>
         {% if section.settings.fit_button_text != blank %}
           <div class="flex-shrink-0">
-            <a href="{{ section.settings.fit_button_link }}" class="bg-sage-dark text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors text-sm">
+            <a href="{{ section.settings.fit_button_link }}" class="bg-[var(--sage-dark)] text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors text-sm">
               {{ section.settings.fit_button_text }}
             </a>
           </div>

@@ -1,33 +1,14 @@
 {% comment %}
   Estelle Atelier - Icon Snippet
-  Material Symbols Outlined icon wrapper
+  SVG Icon wrapper - delegates to icon-svg.liquid
 
   Usage:
-    {% render 'icon', icon: 'shopping_bag', size: 'md' %}
+    {% render 'icon', icon: 'shopping_bag', size: '24', class: 'icon-class' %}
 
   Parameters:
-    - icon: Material Symbol name (required)
-    - size: 'sm' (16px), 'md' (20px), 'lg' (24px), 'xl' (32px), or custom value (default: 'lg')
+    - icon: Icon name (required) - passed to icon-svg.liquid
+    - size: '16', '20', '24', '32', '40', or custom value in pixels (default: '24')
     - class: Additional CSS classes
 {% endcomment %}
 
-{%- liquid
-  assign icon_size = size | default: 'lg'
-
-  case icon_size
-    when 'sm'
-      assign size_class = 'text-base'
-    when 'md'
-      assign size_class = 'text-xl'
-    when 'xl'
-      assign size_class = 'text-3xl'
-    when 'xxl'
-      assign size_class = 'text-4xl'
-    else
-      assign size_class = 'text-2xl'
-  endcase
--%}
-
-<span class="material-symbols-outlined {{ size_class }} {{ class | default: '' }}">
-  {{ icon }}
-</span>
+{% render 'icon-svg', icon: icon, size: size, class: class %}

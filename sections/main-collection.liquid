@@ -26,13 +26,13 @@
 
           {%- comment -%} Filter by Type {%- endcomment -%}
           {%- assign current_tags = current_tags -%}
-          <div class="mb-8 pb-8 border-b border-sage-accent">
+          <div class="mb-8 pb-8 border-b border-[var(--sage-accent)]">
             {%- for type in collection.all_types -%}
               {%- assign type_tag = type | handleize -%}
               {%- if current_tags contains type_tag -%}
-                {%- assign active_class = 'text-sage-dark font-medium' -%}
+                {%- assign active_class = 'text-[var(--sage-dark)] font-medium' -%}
               {%- else -%}
-                {%- assign active_class = 'text-text-muted hover:text-sage-dark' -%}
+                {%- assign active_class = 'text-text-muted hover:text-[var(--sage-dark)]' -%}
               {%- endif -%}
               <a href="{{ type | link_to_type }}" class="block py-2 text-sm {{ active_class }} transition-colors">
                 {{ type }}
@@ -45,9 +45,9 @@
             <h4 class="text-xs font-bold uppercase tracking-[0.2em] mb-4">Tags</h4>
             {%- for tag in collection.all_tags limit: 10 -%}
               {%- if current_tags contains tag -%}
-                {%- assign active_class = 'text-sage-dark font-medium' -%}
+                {%- assign active_class = 'text-[var(--sage-dark)] font-medium' -%}
               {%- else -%}
-                {%- assign active_class = 'text-text-muted hover:text-sage-dark' -%}
+                {%- assign active_class = 'text-text-muted hover:text-[var(--sage-dark)]' -%}
               {%- endif -%}
               <a href="{{ tag | link_to_tag }}" class="block py-2 text-sm {{ active_class }} transition-colors">
                 {{ tag }}
@@ -60,7 +60,7 @@
       {%- comment -%} Product Grid {%- endcomment -%}
       <div class="flex-1">
         {%- comment -%} Toolbar {%- endcomment -%}
-        <div class="flex justify-between items-center mb-8 pb-4 border-b border-sage-accent">
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-[var(--sage-accent)]">
           <span class="text-sm text-text-muted">{{ collection.products_count }} products</span>
           <select name="sort_by" id="sort-by" class="text-sm border-0 bg-transparent font-medium cursor-pointer">
             <option value="manual">Featured</option>
@@ -91,10 +91,10 @@
 
         {%- else -%}
           <div class="text-center py-20">
-            <span class="material-symbols-outlined text-6xl text-sage-accent block mb-4">search_off</span>
+            {% render 'icon-svg', icon: 'search_off' %}
             <h3 class="text-xl serif mb-2">No products found</h3>
             <p class="text-text-muted mb-6">Try adjusting your filters</p>
-            <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 border border-sage-accent rounded hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all">
+            <a href="{{ collection.url }}" class="inline-flex items-center gap-2 px-6 py-3 border border-[var(--sage-accent)] rounded hover:bg-[var(--sage-dark)] hover:border-[var(--sage-dark)] hover:text-white transition-all">
               Clear all filters
             </a>
           </div>

@@ -8,9 +8,9 @@
     <!-- Section Header -->
     <div class="flex flex-col items-center text-center gap-4 mb-16">
       {% if section.settings.show_label %}
-        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.2em]">{{ section.settings.label_text }}</span>
+        <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.2em]">{{ section.settings.label_text }}</span>
       {% endif %}
-      <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold leading-tight tracking-tight uppercase serif">
+      <h1 class="text-[var(--text-olive-deep)] text-3xl md:text-5xl font-bold leading-tight tracking-tight uppercase serif">
         {{ section.settings.heading }}
       </h1>
       <div class="h-1 w-12 bg-sage-dark rounded-full"></div>
@@ -22,15 +22,15 @@
     </div>
 
     <!-- Accordion -->
-    <div class="flex flex-col border-b border-text-olive-deep/10">
+    <div class="flex flex-col border-b border-[var(--text-olive-deep)]/10">
       {% for block in section.blocks %}
-        <details class="group border-t border-text-olive-deep/10 py-6" {{ block.shopify_attributes }}>
+        <details class="group border-t border-[var(--text-olive-deep)]/10 py-6" {{ block.shopify_attributes }}>
           <summary class="flex cursor-pointer items-center justify-between gap-6 py-2 list-none outline-none">
-            <p class="text-text-olive-deep text-lg font-medium leading-normal group-hover:text-sage-dark transition-colors duration-200">
+            <p class="text-[var(--text-olive-deep)] text-lg font-medium leading-normal group-hover:text-[var(--sage-dark)] transition-colors duration-200">
               {{ block.settings.question }}
             </p>
-            <div class="text-sage-dark flex items-center justify-center transition-transform duration-300">
-              <span class="material-symbols-outlined text-3xl font-light">add</span>
+            <div class="text-[var(--sage-dark)] flex items-center justify-center transition-transform duration-300">
+              {% render 'icon-svg', icon: 'add' %}
             </div>
           </summary>
           <div class="mt-4">

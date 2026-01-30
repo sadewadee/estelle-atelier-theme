@@ -3,11 +3,11 @@
   Main site navigation with logo, menu, and icons
 {% endcomment %}
 
-<header class="flex items-center justify-between px-6 md:px-12 py-6 md:py-10 sticky top-0 bg-white/90 backdrop-blur-lg z-50 border-b border-gray-50" id="MainHeader">
+<header class="flex items-center justify-between px-6 md:px-12 py-6 md:py-10 sticky top-0 bg-white/90 backdrop-blur-lg z-50 border-b border-sage-accent/30" id="MainHeader">
   {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
   <div class="flex lg:hidden flex-1">
-    <button type="button" id="MobileMenuTrigger" class="text-text-charcoal">
-      <span class="material-symbols-outlined">menu</span>
+    <button type="button" id="MobileMenuTrigger" class="text-[var(--text-charcoal)]">
+      {% render 'icon-svg', icon: 'menu' %}
     </button>
   </div>
 
@@ -16,18 +16,18 @@
     <nav>
       {%- for link in section.settings.menu.links -%}
         <div class="relative group">
-          <a class="nav-link text-[10px] font-medium uppercase tracking-[0.3em] text-text-charcoal flex items-center gap-1" href="{{ link.url }}">
+          <a class="nav-link text-[10px] font-medium uppercase tracking-[0.3em] text-[var(--text-charcoal)] flex items-center gap-1 hover:text-[var(--sage-dark)] transition-colors" href="{{ link.url }}">
             {{ link.title }}
             {%- if link.links != blank -%}
-              <span class="material-symbols-outlined text-[12px]">expand_more</span>
+              {% render 'icon-svg', icon: 'expand_more' %}
             {%- endif -%}
           </a>
 
           {%- if link.links != blank -%}
             <div class="absolute left-0 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-              <div class="bg-white border border-sage-accent/20 shadow-xl min-w-[200px] py-4 rounded">
+              <div class="bg-white border border-sage-accent/30 shadow-xl min-w-[200px] py-4 rounded">
                 {%- for childlink in link.links -%}
-                  <a href="{{ childlink.url }}" class="block px-6 py-2 text-[10px] uppercase tracking-[0.2em] text-text-muted hover:text-text-charcoal hover:bg-sage-pale/30 transition-colors">
+                  <a href="{{ childlink.url }}" class="block px-6 py-2 text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] hover:text-[var(--text-charcoal)] hover:bg-sage-pale/50 transition-colors">
                     {{ childlink.title }}
                   </a>
                 {%- endfor -%}
@@ -42,21 +42,21 @@
   {%- comment -%} Logo {%- endcomment -%}
   <div class="flex flex-col items-center">
     <a href="{{ routes.root_url }}">
-      <h1 class="text-text-charcoal text-2xl md:text-4xl tracking-[0.2em] serif font-light">{{ shop.name }}</h1>
-      <p class="text-[8px] tracking-[0.8em] uppercase -mt-1 text-text-muted">Atelier</p>
+      <h1 class="text-[var(--text-charcoal)] text-2xl md:text-4xl tracking-[0.2em] serif font-light hover:text-[var(--sage-dark)] transition-colors">{{ shop.name }}</h1>
+      <p class="text-[8px] tracking-[0.8em] uppercase -mt-1 text-[var(--text-muted)]">Atelier</p>
     </a>
   </div>
 
   {%- comment -%} Header Icons {%- endcomment -%}
   <div class="flex-1 flex justify-end gap-4 md:gap-8 items-center">
-    <button class="flex items-center justify-center text-text-charcoal hover:text-sage-dark transition-colors">
-      <span class="material-symbols-outlined font-extralight text-xl">search</span>
+    <button class="flex items-center justify-center text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors" aria-label="Search">
+      {% render 'icon-svg', icon: 'search' %}
     </button>
-    <a href="{{ routes.account_url }}" class="hidden md:flex items-center justify-center text-text-charcoal hover:text-sage-dark transition-colors">
-      <span class="material-symbols-outlined font-extralight text-xl">person</span>
+    <a href="{{ routes.account_url }}" class="hidden md:flex items-center justify-center text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors" aria-label="Account">
+      {% render 'icon-svg', icon: 'person' %}
     </a>
-    <button class="flex items-center justify-center text-text-charcoal relative hover:text-sage-dark transition-colors" data-cart-drawer-toggle>
-      <span class="material-symbols-outlined font-extralight text-xl">shopping_bag</span>
+    <button class="flex items-center justify-center text-[var(--text-charcoal)] relative hover:text-[var(--sage-dark)] transition-colors" data-cart-drawer-toggle aria-label="Cart">
+      {% render 'icon-svg', icon: 'shopping_bag' %}
       <span class="absolute -top-1 -right-1 text-[8px] font-medium" data-cart-count>{{ cart.item_count }}</span>
     </button>
   </div>
@@ -65,20 +65,20 @@
 {%- comment -%} Mobile Menu {%- endcomment -%}
 <div id="MobileMenu" class="fixed inset-0 z-[60] bg-white transform translate-x-full transition-transform duration-500 lg:hidden">
   <div class="flex flex-col h-full">
-    <div class="flex justify-between items-center px-6 py-8 border-b border-gray-50">
-      <span class="text-[10px] uppercase tracking-[0.3em] font-medium">Menu</span>
-      <button type="button" id="MobileMenuClose">
-        <span class="material-symbols-outlined">close</span>
+    <div class="flex justify-between items-center px-6 py-8 border-b border-sage-accent/30">
+      <span class="text-[10px] uppercase tracking-[0.3em] font-medium text-[var(--text-charcoal)]">Menu</span>
+      <button type="button" id="MobileMenuClose" class="text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors">
+        {% render 'icon-svg', icon: 'close' %}
       </button>
     </div>
     <nav class="flex-1 overflow-y-auto py-8 px-6">
       <ul class="flex flex-col gap-8">
         {%- for link in section.settings.menu.links -%}
           <li>
-            <a href="{{ link.url }}" class="text-lg serif italic text-text-charcoal flex justify-between items-center">
+            <a href="{{ link.url }}" class="text-lg serif italic text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors flex justify-between items-center">
               {{ link.title }}
               {%- if link.links != blank -%}
-                <span class="material-symbols-outlined">chevron_right</span>
+                {% render 'icon-svg', icon: 'chevron_right' %}
               {%- endif -%}
             </a>
           </li>
@@ -87,7 +87,7 @@
     </nav>
     <div class="p-6 border-t border-gray-50 flex flex-col gap-6">
       <a href="{{ routes.account_url }}" class="text-[10px] uppercase tracking-[0.3em] flex items-center gap-3">
-        <span class="material-symbols-outlined text-lg">person</span>
+        {% render 'icon-svg', icon: 'person' %}
         Account
       </a>
     </div>

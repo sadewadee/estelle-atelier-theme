@@ -5,14 +5,14 @@
 
 <div class="px-6 md:px-12 py-16 md:py-24">
   <div class="max-w-[1800px] mx-auto">
-    <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-12 serif">{{ 'cart.general.title' | t }}</h1>
+    <h1 class="text-[var(--text-olive-deep)] text-3xl md:text-4xl font-bold tracking-tight mb-12 serif">{{ 'cart.general.title' | t }}</h1>
 
     {% if cart.item_count == 0 %}
       <!-- Empty Cart -->
       <div class="text-center py-20">
-        <span class="material-symbols-outlined text-6xl text-sage-dark/20 mb-4">shopping_bag</span>
-        <h2 class="text-text-olive-deep text-2xl font-light mb-4">{{ 'cart.empty.title' | t | default: 'Your cart is empty' }}</h2>
-        <a href="{{ routes.all_products_collection_url }}" class="inline-flex items-center gap-2 bg-sage-dark text-white px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-sage-accent hover:text-text-olive-deep transition-all">
+        {% render 'icon-svg', icon: 'shopping_bag' %}
+        <h2 class="text-[var(--text-olive-deep)] text-2xl font-light mb-4">{{ 'cart.empty.title' | t | default: 'Your cart is empty' }}</h2>
+        <a href="{{ routes.all_products_collection_url }}" class="inline-flex items-center gap-2 bg-[var(--sage-dark)] text-white px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--sage-accent)] hover:text-[var(--text-olive-deep)] transition-all">
           {{ 'cart.empty.button' | t | default: 'Continue Shopping' }}
         </a>
       </div>
@@ -21,7 +21,7 @@
       <form action="{{ routes.cart_url }}" method="post" novalidate class="lg:grid lg:grid-cols-12 lg:gap-12">
         <div class="lg:col-span-8">
           <!-- Cart Table Header -->
-          <div class="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-sage-accent/30 text-xs font-bold uppercase tracking-widest text-muted">
+          <div class="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-[var(--sage-accent)]/30 text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">
             <div class="col-span-6">{{ 'cart.label.product' | t | default: 'Product' }}</div>
             <div class="col-span-2 text-center">{{ 'cart.label.price' | t | default: 'Price' }}</div>
             <div class="col-span-2 text-center">{{ 'cart.label.quantity' | t | default: 'Quantity' }}</div>
@@ -45,19 +45,19 @@
                           sizes: '5rem'
                       }}
                     {% else %}
-                      <div class="w-20 h-24 bg-sage-pale/30 rounded-lg flex items-center justify-center">
-                        <span class="material-symbols-outlined text-sage-dark/20">image</span>
+                      <div class="w-20 h-24 bg-[var(--color-sage-pale)]/30 rounded-lg flex items-center justify-center">
+                        {% render 'icon-svg', icon: 'image' %}
                       </div>
                     {% endif %}
                   </a>
                   <div class="flex-1">
-                    <h3 class="text-text-olive-deep font-medium mb-1">
+                    <h3 class="text-[var(--text-olive-deep)] font-medium mb-1">
                       <a href="{{ item.url }}">{{ item.product.title }}</a>
                     </h3>
                     {% unless item.variant.title contains 'Default' %}
-                      <p class="text-muted text-sm mb-2">{{ item.variant.title }}</p>
+                      <p class="text-[var(--text-muted)] text-sm mb-2">{{ item.variant.title }}</p>
                     {% endunless %}
-                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-[10px] uppercase tracking-widest text-muted hover:text-red-500 transition-colors">
+                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-[10px] uppercase tracking-widest text-[var(--text-muted)] hover:text-red-500 transition-colors">
                       {{ 'cart.general.remove' | t | default: 'Remove' }}
                     </a>
                   </div>
@@ -65,14 +65,14 @@
 
                 <!-- Price -->
                 <div class="col-span-2 text-center hidden md:block">
-                  <span class="text-muted">{{ item.price | money }}</span>
+                  <span class="text-[var(--text-muted)]">{{ item.price | money }}</span>
                 </div>
 
                 <!-- Quantity -->
                 <div class="col-span-2 flex items-center gap-4 md:justify-center">
-                  <div class="flex items-center border border-sage-accent/30 h-10">
-                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" class="w-10 h-10 flex items-center justify-center hover:bg-sage-pale transition-colors" aria-label="{{ 'cart.general.decrease_quantity' | t }}">
-                      <span class="material-symbols-outlined text-lg">remove</span>
+                  <div class="flex items-center border border-[var(--sage-accent)]/30 h-10">
+                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" class="w-10 h-10 flex items-center justify-center hover:bg-[var(--color-sage-pale)] transition-colors" aria-label="{{ 'cart.general.decrease_quantity' | t }}">
+                      {% render 'icon-svg', icon: 'remove' %}
                     </a>
                     <input
                       type="number"
@@ -82,15 +82,15 @@
                       class="w-12 h-10 text-center border-0 focus:ring-0"
                       aria-label="{{ 'cart.general.quantity' | t }}"
                     >
-                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" class="w-10 h-10 flex items-center justify-center hover:bg-sage-pale transition-colors" aria-label="{{ 'cart.general.increase_quantity' | t }}">
-                      <span class="material-symbols-outlined text-lg">add</span>
+                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" class="w-10 h-10 flex items-center justify-center hover:bg-[var(--color-sage-pale)] transition-colors" aria-label="{{ 'cart.general.increase_quantity' | t }}">
+                      {% render 'icon-svg', icon: 'add' %}
                     </a>
                   </div>
                 </div>
 
                 <!-- Line Total -->
                 <div class="col-span-2 text-right">
-                  <span class="text-text-olive-deep font-medium">{{ item.line_price | money }}</span>
+                  <span class="text-[var(--text-olive-deep)] font-medium">{{ item.line_price | money }}</span>
                 </div>
               </div>
             {% endfor %}
@@ -101,7 +101,7 @@
             <button
               type="submit"
               name="update"
-              class="text-sm font-medium text-text-olive-deep border-b border-sage-dark/30 pb-0.5 hover:border-sage-dark transition-colors"
+              class="text-sm font-medium text-[var(--text-olive-deep)] border-b border-[var(--sage-dark)]/30 pb-0.5 hover:border-[var(--sage-dark)] transition-colors"
             >
               {{ 'cart.general.update' | t | default: 'Update Cart' }}
             </button>
@@ -110,44 +110,44 @@
 
         <!-- Cart Summary -->
         <div class="lg:col-span-4 mt-12 lg:mt-0">
-          <div class="bg-sage-pale/30 rounded-2xl p-8">
-            <h2 class="text-text-olive-deep text-lg font-bold mb-6">{{ 'cart.general.subtotal' | t }}</h2>
+          <div class="bg-[var(--color-sage-pale)]/30 rounded-2xl p-8">
+            <h2 class="text-[var(--text-olive-deep)] text-lg font-bold mb-6">{{ 'cart.general.subtotal' | t }}</h2>
 
             <div class="space-y-4 mb-8">
               <div class="flex justify-between items-center">
-                <span class="text-muted">{{ 'cart.general.subtotal' | t }}</span>
-                <span class="text-text-olive-deep font-medium">{{ cart.total_price | money }}</span>
+                <span class="text-[var(--text-muted)]">{{ 'cart.general.subtotal' | t }}</span>
+                <span class="text-[var(--text-olive-deep)] font-medium">{{ cart.total_price | money }}</span>
               </div>
-              <p class="text-muted text-sm">{{ 'cart.general.shipping_at_checkout' | t }}</p>
+              <p class="text-[var(--text-muted)] text-sm">{{ 'cart.general.shipping_at_checkout' | t }}</p>
             </div>
 
             <!-- Checkout Button -->
             <button
               type="submit"
               name="checkout"
-              class="w-full bg-sage-dark text-white h-14 font-medium text-sm uppercase tracking-widest hover:bg-sage-accent transition-all mb-4"
+              class="w-full bg-[var(--sage-dark)] text-white h-14 font-medium text-sm uppercase tracking-widest hover:bg-[var(--sage-accent)] transition-all mb-4"
             >
               {{ 'cart.general.checkout' | t | default: 'Checkout' }}
             </button>
 
-            <a href="{{ routes.all_products_collection_url }}" class="block text-center text-sm text-muted hover:text-text-olive-deep transition-colors">
+            <a href="{{ routes.all_products_collection_url }}" class="block text-center text-sm text-[var(--text-muted)] hover:text-[var(--text-olive-deep)] transition-colors">
               {{ 'cart.general.continue_shopping' | t | default: 'Continue Shopping' }}
             </a>
 
             <!-- Trust Badges -->
             {% if section.settings.show_trust_badges %}
-              <div class="mt-8 pt-8 border-t border-sage-accent/30 flex justify-center gap-6">
+              <div class="mt-8 pt-8 border-t border-[var(--sage-accent)]/30 flex justify-center gap-6">
                 <div class="flex flex-col items-center gap-1">
-                  <span class="material-symbols-outlined text-sage-dark">verified_user</span>
-                  <span class="text-[8px] uppercase tracking-widest text-muted">{{ 'cart.trust.secure' | t | default: 'Secure' }}</span>
+                  {% render 'icon-svg', icon: 'verified_user' %}
+                  <span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">{{ 'cart.trust.secure' | t | default: 'Secure' }}</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
-                  <span class="material-symbols-outlined text-sage-dark">local_shipping</span>
-                  <span class="text-[8px] uppercase tracking-widest text-muted">{{ 'cart.trust.shipping' | t | default: 'Free Shipping' }}</span>
+                  {% render 'icon-svg', icon: 'local_shipping' %}
+                  <span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">{{ 'cart.trust.shipping' | t | default: 'Free Shipping' }}</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
-                  <span class="material-symbols-outlined text-sage-dark">undo</span>
-                  <span class="text-[8px] uppercase tracking-widest text-muted">{{ 'cart.trust.returns' | t | default: 'Easy Returns' }}</span>
+                  {% render 'icon-svg', icon: 'undo' %}
+                  <span class="text-[8px] uppercase tracking-widest text-[var(--text-muted)]">{{ 'cart.trust.returns' | t | default: 'Easy Returns' }}</span>
                 </div>
               </div>
             {% endif %}
@@ -156,12 +156,12 @@
           <!-- Cart Note -->
           {% if section.settings.show_cart_note %}
             <div class="mt-8">
-              <label for="CartNote" class="block text-sm font-medium text-text-olive-deep mb-2">{{ 'cart.general.note' | t | default: 'Special instructions for seller' }}</label>
+              <label for="CartNote" class="block text-sm font-medium text-[var(--text-olive-deep)] mb-2">{{ 'cart.general.note' | t | default: 'Special instructions for seller' }}</label>
               <textarea
                 name="note"
                 id="CartNote"
                 rows="3"
-                class="w-full border border-sage-accent/30 bg-transparent p-4 text-text-olive-deep focus:outline-0 focus:border-sage-dark resize-none rounded-lg"
+                class="w-full border border-[var(--sage-accent)]/30 bg-transparent p-4 text-[var(--text-olive-deep)] focus:outline-0 focus:border-[var(--sage-dark)] resize-none rounded-lg"
                 placeholder="{{ 'cart.general.note_placeholder' | t | default: 'Add a note to your order...' }}"
               >{{ cart.note }}</textarea>
             </div>

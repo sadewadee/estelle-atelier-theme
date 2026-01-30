@@ -29,13 +29,13 @@
       <!-- Content Column -->
       <div class="flex flex-col {% if section.settings.image_position == 'right' %}lg:order-1{% endif %} {% if section.settings.text_alignment == 'center' %}items-center text-center{% elsif section.settings.text_alignment == 'right' %}items-end text-right{% else %}items-start text-left{% endif %}">
         {% if section.settings.overline != blank %}
-          <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-4">
+          <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-4">
             {{ section.settings.overline }}
           </span>
         {% endif %}
 
         {% if section.settings.heading != blank %}
-          <h2 class="text-text-olive-deep text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 serif">
+          <h2 class="text-[var(--text-olive-deep)] text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 serif">
             {{ section.settings.heading }}
           </h2>
         {% endif %}
@@ -52,24 +52,24 @@
           {% if section.settings.button_style == 'primary' %}
             <a
               href="{{ section.settings.button_link }}"
-              class="inline-flex items-center gap-2 bg-sage-dark text-white px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-sage-accent hover:text-text-olive-deep transition-all"
+              class="inline-flex items-center gap-2 bg-[var(--sage-dark)] text-white px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--sage-accent)] hover:text-[var(--text-olive-deep)] transition-all"
             >
               {{ section.settings.button_label }}
             </a>
           {% elsif section.settings.button_style == 'outline' %}
             <a
               href="{{ section.settings.button_link }}"
-              class="inline-flex items-center gap-2 border-2 border-text-olive-deep text-text-olive-deep px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-text-olive-deep hover:text-white transition-all"
+              class="inline-flex items-center gap-2 border-2 border-[var(--text-olive-deep)] text-[var(--text-olive-deep)] px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--text-olive-deep)] hover:text-white transition-all"
             >
               {{ section.settings.button_label }}
             </a>
           {% else %}
             <a
               href="{{ section.settings.button_link }}"
-              class="inline-flex items-center gap-2 text-sage-dark font-medium border-b border-sage-dark/30 pb-0.5 hover:border-sage-dark transition-all"
+              class="inline-flex items-center gap-2 text-[var(--sage-dark)] font-medium border-b border-[var(--sage-dark)]/30 pb-0.5 hover:border-[var(--sage-dark)] transition-all"
             >
               {{ section.settings.button_label }}
-              <span class="material-symbols-outlined text-lg">arrow_forward</span>
+              {% render 'icon-svg', icon: 'arrow_forward' %}
             </a>
           {% endif %}
         {% endif %}

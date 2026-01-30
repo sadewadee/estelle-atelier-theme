@@ -32,7 +32,7 @@
       <div class="relative flex items-center justify-center">
         <div class="absolute w-12 h-12 bg-sage-dark/30 rounded-full animate-ping"></div>
         <div class="relative bg-sage-dark text-white w-10 h-10 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
-          <span class="material-symbols-outlined text-xl font-bold">location_on</span>
+          {% render 'icon-svg', icon: 'location_on' %}
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@
         <!-- Get Directions CTA -->
         <a href="{{ section.settings.directions_link }}" class="group flex items-center justify-center w-full bg-sage-dark text-white font-semibold py-4 rounded-lg transition-all hover:shadow-lg hover:shadow-sage-dark/20 active:scale-[0.98]">
           <span class="mr-2">{{ section.settings.button_text }}</span>
-          <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+          {% render 'icon-svg', icon: 'arrow_forward' %}
         </a>
       </div>
     </div>
@@ -108,10 +108,10 @@
   {% if section.settings.show_zoom_controls %}
     <div class="absolute bottom-8 right-8 z-10 flex flex-col gap-2 pointer-events-none opacity-50">
       <div class="bg-white p-2 rounded shadow-sm">
-        <span class="material-symbols-outlined text-xl">add</span>
+        {% render 'icon-svg', icon: 'add' %}
       </div>
       <div class="bg-white p-2 rounded shadow-sm border-t border-gray-100">
-        <span class="material-symbols-outlined text-xl">remove</span>
+        {% render 'icon-svg', icon: 'remove' %}
       </div>
     </div>
   {% endif %}

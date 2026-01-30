@@ -7,13 +7,13 @@
   <div class="max-w-md mx-auto w-full">
     <!-- Page Header -->
     <div class="text-center mb-12">
-      <span class="material-symbols-outlined text-5xl text-sage-dark mb-4">local_shipping</span>
-      <h1 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight mb-2">{{ 'customer.order.title' | t | default: 'Track Your Order' }}</h1>
+      {% render 'icon-svg', icon: 'local_shipping' %}
+      <h1 class="text-[var(--text-olive-deep)]] text-3xl md:text-4xl font-bold tracking-tight mb-2">{{ 'customer.order.title' | t | default: 'Track Your Order' }}</h1>
       <p class="text-muted">{{ 'customer.order.description' | t | default: 'Enter your order details to see the status' }}</p>
     </div>
 
     <!-- Order Status Form -->
-    <div class="bg-white rounded-2xl border border-sage-accent/30 p-8 md:p-12">
+    <div class="bg-white rounded-2xl border border-[var(--sage-accent)]/30 p-8 md:p-12">
       {% form 'guest_login' %}
         {% if form.posted_successfully? %}
           <!-- Redirect to order status if successful -->
@@ -32,28 +32,28 @@
 
         <div class="space-y-6">
           <div>
-            <label for="OrderNumber" class="block text-sm font-medium text-text-olive-deep mb-2">
+            <label for="OrderNumber" class="block text-sm font-medium text-[var(--text-olive-deep)]] mb-2">
               {{ 'customer.order.order_number' | t | default: 'Order Number' }}
             </label>
             <input
               type="text"
               name="order[number]"
               id="OrderNumber"
-              class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+              class="w-full border border-[var(--sage-accent)] rounded-lg px-4 py-3 text-[var(--text-olive-deep)]] focus:border-sage-dark focus:outline-0"
               placeholder="{{ 'customer.order.order_number_placeholder' | t | default: '#1234' }}"
               required
             >
           </div>
 
           <div>
-            <label for="OrderEmail" class="block text-sm font-medium text-text-olive-deep mb-2">
+            <label for="OrderEmail" class="block text-sm font-medium text-[var(--text-olive-deep)]] mb-2">
               {{ 'customer.order.email' | t | default: 'Email Address' }}
             </label>
             <input
               type="email"
               name="order[email]"
               id="OrderEmail"
-              class="w-full border border-sage-accent rounded-lg px-4 py-3 text-text-olive-deep focus:border-sage-dark focus:outline-0"
+              class="w-full border border-[var(--sage-accent)] rounded-lg px-4 py-3 text-[var(--text-olive-deep)]] focus:border-sage-dark focus:outline-0"
               placeholder="your@email.com"
               required
             >
@@ -61,18 +61,18 @@
 
           <button
             type="submit"
-            class="w-full bg-sage-dark text-white py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors flex items-center justify-center gap-2"
+            class="w-full bg-[var(--sage-dark)] text-white py-4 rounded-lg font-bold hover:bg-sage-accent transition-colors flex items-center justify-center gap-2"
           >
             <span>{{ 'customer.order.submit' | t | default: 'Track Order' }}</span>
-            <span class="material-symbols-outlined">search</span>
+            {% render 'icon-svg', icon: 'search' %}
           </button>
         </div>
 
         <!-- Help Text -->
-        <div class="mt-8 pt-8 border-t border-sage-accent/30 text-center">
+        <div class="mt-8 pt-8 border-t border-[var(--sage-accent)]/30 text-center">
           <p class="text-sm text-muted mb-4">{{ 'customer.order.help_text' | t | default: 'Need help? Contact our customer service team.' }}</p>
-          <a href="/pages/contact" class="inline-flex items-center gap-2 text-sage-dark font-medium hover:underline">
-            <span class="material-symbols-outlined text-lg">support_agent</span>
+          <a href="/pages/contact" class="inline-flex items-center gap-2 text-[var(--sage-dark)] font-medium hover:underline">
+            {% render 'icon-svg', icon: 'support_agent' %}
             {{ 'customer.order.contact_us' | t | default: 'Contact Support' }}
           </a>
         </div>
@@ -81,7 +81,7 @@
 
     <!-- Back to Shop -->
     <div class="text-center mt-8">
-      <a href="{{ routes.all_products_collection_url }}" class="text-sm text-muted hover:text-sage-dark transition-colors">
+      <a href="{{ routes.all_products_collection_url }}" class="text-sm text-muted hover:text-[var(--sage-dark)] transition-colors">
         {{ 'customer.order.back_to_shop' | t | default: '&larr; Continue Shopping' }}
       </a>
     </div>

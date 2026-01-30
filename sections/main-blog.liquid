@@ -37,7 +37,7 @@
                 }}
               {% else %}
                 <div class="w-full h-full flex items-center justify-center">
-                  <span class="material-symbols-outlined text-4xl text-sage-dark/20">article</span>
+                  {% render 'icon-svg', icon: 'article' %}
                 </div>
               {% endif %}
 
@@ -57,12 +57,12 @@
             <!-- Article Content -->
             <div class="space-y-3">
               {% if article.tags.size > 0 and section.settings.show_tags %}
-                <span class="text-sage-dark text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span class="text-[var(--sage-dark)] text-[10px] font-bold uppercase tracking-[0.2em]">
                   {{ article.tags.first }}
                 </span>
               {% endif %}
 
-              <h2 class="text-text-olive-deep text-xl font-bold serif line-clamp-2 group-hover:text-sage-dark transition-colors">
+              <h2 class="text-text-olive-deep text-xl font-bold serif line-clamp-2 group-hover:text-[var(--sage-dark)] transition-colors">
                 {{ article.title }}
               </h2>
 
@@ -72,9 +72,9 @@
                 </p>
               {% endif %}
 
-              <span class="text-sage-dark text-sm font-medium flex items-center gap-2 group-hover:gap-4 transition-all">
+              <span class="text-[var(--sage-dark)] text-sm font-medium flex items-center gap-2 group-hover:gap-4 transition-all">
                 {{ 'blogs.article.read_more' | t | default: 'Read More' }}
-                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                {% render 'icon-svg', icon: 'arrow_forward' %}
               </span>
             </div>
           </a>
@@ -88,8 +88,8 @@
         <ol class="flex gap-2">
           {% if paginate.previous %}
             <li>
-              <a href="{{ paginate.previous.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-lg hover:bg-sage-pale transition-colors" aria-label="{{ 'general.pagination.previous' | t }}">
-                <span class="material-symbols-outlined">chevron_left</span>
+              <a href="{{ paginate.previous.url }}" class="w-12 h-12 flex items-center justify-center border border-[var(--sage-accent)]/30 rounded-lg hover:bg-sage-pale transition-colors" aria-label="{{ 'general.pagination.previous' | t }}">
+                {% render 'icon-svg', icon: 'chevron_left' %}
               </a>
             </li>
           {% endif %}
@@ -97,7 +97,7 @@
           {% for part in paginate.parts %}
             <li>
               {% if part.is_link %}
-                <a href="{{ part.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-lg hover:bg-sage-pale transition-colors">
+                <a href="{{ part.url }}" class="w-12 h-12 flex items-center justify-center border border-[var(--sage-accent)]/30 rounded-lg hover:bg-sage-pale transition-colors">
                   {{ part.title }}
                 </a>
               {% elsif part.title == paginate.current_page %}
@@ -114,8 +114,8 @@
 
           {% if paginate.next %}
             <li>
-              <a href="{{ paginate.next.url }}" class="w-12 h-12 flex items-center justify-center border border-sage-accent/30 rounded-lg hover:bg-sage-pale transition-colors" aria-label="{{ 'general.pagination.next' | t }}">
-                <span class="material-symbols-outlined">chevron_right</span>
+              <a href="{{ paginate.next.url }}" class="w-12 h-12 flex items-center justify-center border border-[var(--sage-accent)]/30 rounded-lg hover:bg-sage-pale transition-colors" aria-label="{{ 'general.pagination.next' | t }}">
+                {% render 'icon-svg', icon: 'chevron_right' %}
               </a>
             </li>
           {% endif %}

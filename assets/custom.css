@@ -624,18 +624,22 @@ button {
    COMPONENT SPECIFIC STYLES
    ============================================ */
 
-/* Material Symbols Outlined */
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
+/* ============================================
+   SVG ICON SYSTEM - Shopify Compliant
+   Using inline SVGs instead of external fonts
+   See: snippets/icon-svg.liquid
+   ============================================ */
+
+.icon-svg {
   display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+  stroke-width: 2;
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Details/Summary accordion */

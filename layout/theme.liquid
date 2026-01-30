@@ -30,7 +30,6 @@
     <link rel="preload" href="{{ header_font | font_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ body_font | font_url }}" as="font" type="font/woff2" crossorigin>
 
-    {{ 'fonts.css' | asset_url | stylesheet_tag }}
 
     <style>
       {{ header_font | font_face: font_display: 'swap' }}

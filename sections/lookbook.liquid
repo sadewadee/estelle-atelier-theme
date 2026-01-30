@@ -8,9 +8,9 @@
     <!-- Section Header -->
     <div class="text-center mb-12">
       {% if section.settings.label != blank %}
-        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-2 block">{{ section.settings.label }}</span>
+        <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-2 block">{{ section.settings.label }}</span>
       {% endif %}
-      <h1 class="text-text-olive-deep text-3xl md:text-5xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
+      <h1 class="text-[var(--text-olive-deep)] text-3xl md:text-5xl font-bold tracking-tight mb-4">{{ section.settings.heading }}</h1>
       {% if section.settings.description %}
         <p class="text-muted max-w-2xl mx-auto">{{ section.settings.description }}</p>
       {% endif %}
@@ -31,12 +31,12 @@
               }}
             {% else %}
               <div class="w-full h-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-6xl text-sage-dark/20">photo_library</span>
+                {% render 'icon-svg', icon: 'photo_library' %}
               </div>
             {% endif %}
 
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--text-olive-deep)]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
             <!-- Hotspots (if products) -->
             {% if block.settings.show_hotspots and block.settings.products != blank %}
@@ -48,7 +48,7 @@
                     <div class="hotspot absolute w-8 h-8 -ml-4 -mt-4 cursor-pointer group/hotspot" style="top: {{ 20 | plus: forloop.index0 | times: 20 }}%; left: {{ 30 | plus: forloop.index0 | times: 15 }}%;">
                       <span class="absolute inset-0 rounded-full bg-white/80 flex items-center justify-center animate-ping"></span>
                       <span class="absolute inset-0 rounded-full bg-white flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-sage-dark"></span>
+                        <span class="w-2 h-2 rounded-full bg-[var(--sage-dark)]"></span>
                       </span>
                       <!-- Tooltip -->
                       <div class="absolute left-10 top-0 bg-white rounded-lg shadow-xl p-3 w-48 opacity-0 group-hover/hotspot:opacity-100 transition-opacity pointer-events-none group-hover/hotspot:pointer-events-auto">
@@ -60,9 +60,9 @@
                             sizes: '12rem'
                           }}
                         {% endif %}
-                        <p class="text-xs font-bold text-text-olive-deep">{{ product.title }}</p>
+                        <p class="text-xs font-bold text-[var(--text-olive-deep)]">{{ product.title }}</p>
                         <p class="text-sm text-muted">{{ product.price | money }}</p>
-                        <a href="{{ product.url }}" class="block mt-2 text-xs text-center bg-sage-dark text-white py-2 rounded hover:bg-sage-accent transition-colors">
+                        <a href="{{ product.url }}" class="block mt-2 text-xs text-center bg-[var(--sage-dark)] text-white py-2 rounded hover:bg-[var(--sage-accent)] transition-colors">
                           Quick View
                         </a>
                       </div>
@@ -102,9 +102,9 @@
     <!-- View All Link -->
     {% if section.settings.show_view_all %}
       <div class="text-center mt-16">
-        <a href="{{ section.settings.view_all_link }}" class="inline-flex items-center gap-2 border-2 border-text-olive-deep text-text-olive-deep px-10 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-text-olive-deep hover:text-white transition-all">
+        <a href="{{ section.settings.view_all_link }}" class="inline-flex items-center gap-2 border-2 border-[var(--text-olive-deep)] text-[var(--text-olive-deep)] px-10 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--text-olive-deep)] hover:text-white transition-all">
           {{ section.settings.view_all_text }}
-          <span class="material-symbols-outlined">arrow_forward</span>
+          {% render 'icon-svg', icon: 'arrow_forward' %}
         </a>
       </div>
     {% endif %}

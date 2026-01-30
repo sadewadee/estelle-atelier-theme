@@ -8,12 +8,12 @@
     <!-- Section Header -->
     <div class="text-center mb-12">
       {% if section.settings.overline != blank %}
-        <span class="text-sage-dark text-xs font-bold uppercase tracking-[0.3em] mb-2 block">
+        <span class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.3em] mb-2 block">
           {{ section.settings.overline }}
         </span>
       {% endif %}
       {% if section.settings.heading != blank %}
-        <h2 class="text-text-olive-deep text-3xl md:text-4xl font-bold tracking-tight serif">
+        <h2 class="text-[var(--text-olive-deep)] text-3xl md:text-4xl font-bold tracking-tight serif">
           {{ section.settings.heading }}
         </h2>
       {% endif %}
@@ -51,12 +51,12 @@
                 }}
               {% else %}
                 <div class="w-full aspect-[4/5] bg-sage-pale flex items-center justify-center">
-                  <span class="material-symbols-outlined text-6xl text-sage-dark/20">collections</span>
+                  {% render 'icon-svg', icon: 'collections' %}
                 </div>
               {% endif %}
 
               <!-- Overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-text-olive-deep/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[var(--text-olive-deep)]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <!-- Content -->
               <div class="absolute inset-0 flex flex-col justify-end p-6">
@@ -70,14 +70,14 @@
                 </h3>
                 <span class="text-white/90 text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
                   {{ 'collections.general.view_all' | t }}
-                  <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                  {% render 'icon-svg', icon: 'arrow_forward' %}
                 </span>
               </div>
             </a>
           {% else %}
             <div class="w-full aspect-[4/5] bg-sage-pale flex items-center justify-center">
               <div class="text-center p-6">
-                <span class="material-symbols-outlined text-4xl text-sage-dark/20 mb-2">collections</span>
+                {% render 'icon-svg', icon: 'collections' %}
                 <p class="text-sm text-muted">{{ 'collections.general.no_collections' | t }}</p>
               </div>
             </div>
@@ -91,10 +91,10 @@
       <div class="text-center mt-12">
         <a
           href="{{ section.settings.view_all_link }}"
-          class="inline-flex items-center gap-2 border-2 border-text-olive-deep text-text-olive-deep px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-text-olive-deep hover:text-white transition-all"
+          class="inline-flex items-center gap-2 border-2 border-[var(--text-olive-deep)] text-[var(--text-olive-deep)] px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-[var(--text-olive-deep)] hover:text-white transition-all"
         >
           {{ section.settings.view_all_text }}
-          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          {% render 'icon-svg', icon: 'arrow_forward' %}
         </a>
       </div>
     {% endif %}

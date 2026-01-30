@@ -100,7 +100,7 @@
         class="inline-flex items-center gap-2 bg-white text-text-olive-deep px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-sage-pale transition-all animate-entrance delay-300"
       >
         {{ section.settings.button_label }}
-        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        {% render 'icon-svg', icon: 'arrow_forward' %}
       </a>
     {% endif %}
   </div>

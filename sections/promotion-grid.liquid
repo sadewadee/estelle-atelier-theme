@@ -62,7 +62,7 @@
                 class="inline-flex items-center gap-2 text-white text-sm font-medium mt-2 group-hover:gap-4 transition-all"
               >
                 {{ block.settings.link_text }}
-                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                {% render 'icon-svg', icon: 'arrow_forward' %}
               </a>
             {% endif %}
           </div>

@@ -36,8 +36,8 @@
             </div>
           {%- endif -%}
         {%- else -%}
-          <div class="aspect-square bg-sage-accent/20 rounded flex items-center justify-center">
-            <span class="material-symbols-outlined text-6xl text-sage-accent">image</span>
+          <div class="aspect-square bg-[var(--sage-accent)]/20 rounded flex items-center justify-center">
+            {% render 'icon-svg', icon: 'image' %}
           </div>
         {%- endif -%}
       </div>
@@ -45,13 +45,13 @@
       {%- comment -%} Product Info {%- endcomment -%}
       <div class="flex flex-col gap-6">
         {%- if product.vendor -%}
-          <span class="text-xs font-bold uppercase tracking-[0.2em] text-sage-dark">{{ product.vendor }}</span>
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--sage-dark)]">{{ product.vendor }}</span>
         {%- endif -%}
 
         <h1 class="text-3xl md:text-4xl serif font-light text-text-charcoal">{{ product.title }}</h1>
 
         {%- comment -%} Price Snippet {%- endcomment -%}
-        <div class="py-4 border-y border-sage-accent">
+        <div class="py-4 border-y border-[var(--sage-accent)]">
           {%- render 'price', product: product -%}
         </div>
 
@@ -76,10 +76,10 @@
         {%- comment -%} Accordion Details {%- endcomment -%}
         <div class="space-y-4 pt-4">
           {%- if product.type -%}
-            <details class="border-b border-sage-accent">
+            <details class="border-b border-[var(--sage-accent)]">
               <summary class="flex justify-between items-center py-4 cursor-pointer list-none">
                 <span class="font-medium">Material & Care</span>
-                <span class="material-symbols-outlined transition-transform">expand_more</span>
+                {% render 'icon-svg', icon: 'expand_more' %}
               </summary>
               <div class="pb-4 text-sm text-text-muted">
                 {{ product.type }}
@@ -87,10 +87,10 @@
             </details>
           {%- endif -%}
 
-          <details class="border-b border-sage-accent">
+          <details class="border-b border-[var(--sage-accent)]">
             <summary class="flex justify-between items-center py-4 cursor-pointer list-none">
               <span class="font-medium">Shipping & Returns</span>
-              <span class="material-symbols-outlined transition-transform">expand_more</span>
+              {% render 'icon-svg', icon: 'expand_more' %}
             </summary>
             <div class="pb-4 text-sm text-text-muted">
               Free shipping on orders over $150. Returns accepted within 30 days of purchase.
@@ -99,17 +99,17 @@
         </div>
 
         {%- comment -%} Share {%- endcomment -%}
-        <div class="flex items-center gap-6 pt-4 border-t border-sage-accent">
+        <div class="flex items-center gap-6 pt-4 border-t border-[var(--sage-accent)]">
           <span class="text-xs uppercase tracking-[0.2em] text-text-muted">Share</span>
           <div class="flex gap-4">
-            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Facebook">
-              <span class="material-symbols-outlined text-lg">facebook</span>
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-[var(--sage-accent)] rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Facebook">
+              {% render 'icon-svg', icon: 'facebook' %}
             </a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Pinterest">
-              <span class="material-symbols-outlined text-lg">pinterest</span>
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-[var(--sage-accent)] rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share on Pinterest">
+              {% render 'icon-svg', icon: 'pinterest' %}
             </a>
-            <a href="#" class="w-10 h-10 flex items-center justify-center border border-sage-accent rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share via email">
-              <span class="material-symbols-outlined text-lg">mail</span>
+            <a href="#" class="w-10 h-10 flex items-center justify-center border border-[var(--sage-accent)] rounded-full hover:bg-sage-dark hover:border-sage-dark hover:text-white transition-all" aria-label="Share via email">
+              {% render 'icon-svg', icon: 'mail' %}
             </a>
           </div>
         </div>
