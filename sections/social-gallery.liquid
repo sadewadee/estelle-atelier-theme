@@ -83,7 +83,7 @@
                     <p class="text-[10px] text-muted uppercase tracking-widest">Shop the look</p>
                     <p class="text-xs font-bold text-[var(--text-olive-deep)]">{{ block.settings.product.title }}</p>
                   </div>
-                  <a href="{{ block.settings.product.url }}" class="text-[var(--sage-dark)] material-symbols-outlined text-xl">shopping_bag</a>
+                  <a href="{{ block.settings.product.url }}" class="text-[var(--sage-dark)]  text-xl" aria-label="Shop product">{% render 'icon-svg', icon: 'shopping_bag', size: '24', class: 'text-[var(--sage-dark)]  text-xl' %}</a>
                 </div>
               {% elsif block.settings.link != blank %}
                 <a href="{{ block.settings.link }}" class="mt-3 inline-block bg-white/95 px-4 py-2 rounded-lg text-xs font-bold text-[var(--text-olive-deep)]">

@@ -1,6 +1,7 @@
 {% comment %}
   Estelle Atelier - Breadcrumbs Snippet
   Based on Shopify Dawn theme breadcrumbs component
+  Uses CSS variables from theme settings
 
   Usage:
     {% render 'breadcrumbs' %}
@@ -9,7 +10,7 @@
 {%- unless template == 'index' or template == 'cart' or template == 'list-collections' -%}
   <nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb" data-breadcrumbs>
     <a href="{{ routes.root_url }}" class="breadcrumbs__link link">
-      <span class="material-symbols-outlined breadcrumbs__home-icon" aria-hidden="true">home</span>
+      {% render 'icon-svg', icon: 'home', size: '16', class: 'breadcrumbs__home-icon' %}
       <span class="visually-hidden">{{ 'general.breadcrumbs.home' | t }}</span>
     </a>
 
@@ -53,67 +54,66 @@
 
     {%- endif -%}
   </nav>
+{% endunless %}
 
-  <style>
-    .breadcrumbs {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 0;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
+{% style %}
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    font-size: 0.75rem;
+    letter-spacing: var(--btn-letter-spacing, 0.1em);
+    text-transform: uppercase;
+  }
 
-    .breadcrumbs__link {
-      display: flex;
-      align-items: center;
-      color: var(--color-text-charcoal, #2d312d);
-      transition: color 0.2s ease;
-    }
+  .breadcrumbs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-text-charcoal, #2d312d);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
 
-    .breadcrumbs__link:hover {
-      color: var(--color-sage-dark, #8ba888);
-    }
+  .breadcrumbs__link:hover {
+    color: var(--color-sage-dark, #8ba888);
+    border-bottom-color: var(--color-sage-dark, #8ba888);
+  }
 
-    .breadcrumbs__home-icon {
-      font-size: 1rem;
-    }
+  .breadcrumbs__home-icon {
+    width: 1em;
+    height: 1em;
+  }
 
-    .breadcrumbs__separator {
-      color: var(--color-sage-dark, #8ba888);
-      opacity: 0.5;
-    }
+  .breadcrumbs__separator {
+    color: var(--color-sage-dark, #8ba888);
+    opacity: 0.5;
+  }
 
-    .breadcrumbs__item {
-      color: var(--color-text-charcoal, #2d312d);
-    }
+  .breadcrumbs__item {
+    color: var(--color-text-charcoal, #2d312d);
+  }
 
-    .breadcrumbs__item--current {
-      opacity: 0.7;
-    }
+  .breadcrumbs__item--current {
+    opacity: 0.7;
+  }
 
-    .breadcrumbs a {
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s ease;
-    }
+  .breadcrumbs a {
+    text-decoration: none;
+  }
 
-    .breadcrumbs a:hover {
-      border-bottom-color: var(--color-sage-dark, #8ba888);
-    }
-
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
-{%- endunless -%}
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+{% endstyle %}

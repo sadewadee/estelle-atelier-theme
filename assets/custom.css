@@ -1,47 +1,273 @@
 /* ============================================
    ESTELLE ATELIER - CUSTOM CSS
    Replaces Tailwind CSS dependencies
+   Uses CSS variables from theme.liquid
    ============================================ */
 
-/* CSS Variables - Sage Palette */
-:root {
-  --sage-pale: #f1f4f0;
-  --sage-accent: #e1e8df;
-  --sage-dark: #8ba888;
-  --sage-glow: rgba(139, 168, 136, 0.3);
-  --text-charcoal: #2d312d;
-  --text-olive-deep: #3c443b;
-  --text-muted: #717c70;
-  --border-light: #ecefe9;
+/* ============================================
+   SHADOW UTILITIES (Dynamic from settings)
+   ============================================ */
 
-  /* Dynamic variables from theme settings */
-  --font-heading-family: var(--font-heading-family, 'Playfair Display', serif);
-  --font-heading-weight: var(--font-heading-weight, 400);
-  --font-heading-style: var(--font-heading-style, normal);
-
-  --font-body-family: var(--font-body-family, 'Work Sans', sans-serif);
-  --font-body-weight: var(--font-body-weight, 400);
-  --font-body-style: var(--font-body-style, normal);
-
-  --font-base-size: var(--font-base-size, 16px);
-
-  /* Color theme variables */
-  --color-sage-pale: #f1f4f0;
-  --color-sage-accent: #e1e8df;
-  --color-sage-dark: #8ba888;
-  --color-background: #ffffff;
-  --color-text-charcoal: #2d312d;
-  --color-text-olive-deep: #3c443b;
-  --color-border-light: #ecefe9;
+.shadow-buttons {
+  box-shadow: var(--buttons-shadow-horizontal-offset, 0)
+              var(--buttons-shadow-vertical-offset, 4px)
+              var(--buttons-shadow-blur, 10px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--buttons-shadow-opacity, 0));
 }
 
-/* Reset & Base */
+.shadow-inputs {
+  box-shadow: var(--inputs-shadow-horizontal-offset, 0)
+              var(--inputs-shadow-vertical-offset, 0)
+              var(--inputs-shadow-blur, 0)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--inputs-shadow-opacity, 0));
+}
+
+.shadow-variant-pills {
+  box-shadow: var(--variant-pills-shadow-horizontal-offset, 0)
+              var(--variant-pills-shadow-vertical-offset, 0)
+              var(--variant-pills-shadow-blur, 0)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--variant-pills-shadow-opacity, 0));
+}
+
+.shadow-card {
+  box-shadow: var(--card-shadow-horizontal-offset, 0)
+              var(--card-shadow-vertical-offset, 4px)
+              var(--card-shadow-blur, 15px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--card-shadow-opacity, 0.1));
+}
+
+.shadow-collection-card {
+  box-shadow: var(--collection-card-shadow-horizontal-offset, 0)
+              var(--collection-card-shadow-vertical-offset, 4px)
+              var(--collection-card-shadow-blur, 15px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--collection-card-shadow-opacity, 0.1));
+}
+
+.shadow-blog-card {
+  box-shadow: var(--blog-card-shadow-horizontal-offset, 0)
+              var(--blog-card-shadow-vertical-offset, 4px)
+              var(--blog-card-shadow-blur, 15px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--blog-card-shadow-opacity, 0.1));
+}
+
+.shadow-text-boxes {
+  box-shadow: var(--text-boxes-shadow-horizontal-offset, 0)
+              var(--text-boxes-shadow-vertical-offset, 0)
+              var(--text-boxes-shadow-blur, 0)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--text-boxes-shadow-opacity, 0));
+}
+
+.shadow-media {
+  box-shadow: var(--media-shadow-horizontal-offset, 0)
+              var(--media-shadow-vertical-offset, 0)
+              var(--media-shadow-blur, 0)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--media-shadow-opacity, 0));
+}
+
+.shadow-popup {
+  box-shadow: var(--popup-shadow-horizontal-offset, 0)
+              var(--popup-shadow-vertical-offset, 8px)
+              var(--popup-shadow-blur, 20px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--popup-shadow-opacity, 0.3));
+}
+
+.shadow-drawer {
+  box-shadow: var(--drawer-shadow-horizontal-offset, -8px)
+              var(--drawer-shadow-vertical-offset, 0)
+              var(--drawer-shadow-blur, 25px)
+              rgba(var(--color-text-charcoal, 45, 49, 45), var(--drawer-shadow-opacity, 0.2));
+}
+
+/* ============================================
+   BORDER RADIUS UTILITIES (Dynamic from settings)
+   ============================================ */
+
+.rounded-buttons {
+  border-radius: var(--buttons-radius, 8px);
+}
+
+.rounded-inputs {
+  border-radius: var(--inputs-radius, 4px);
+}
+
+.rounded-variant-pills {
+  border-radius: var(--variant-pills-radius, 40px);
+}
+
+.rounded-card {
+  border-radius: var(--card-radius, 8px);
+}
+
+.rounded-collection-card {
+  border-radius: var(--collection-card-radius, 8px);
+}
+
+.rounded-blog-card {
+  border-radius: var(--blog-card-radius, 8px);
+}
+
+.rounded-text-boxes {
+  border-radius: var(--text-boxes-radius, 8px);
+}
+
+.rounded-media {
+  border-radius: var(--media-radius, 4px);
+}
+
+.rounded-popup {
+  border-radius: var(--popup-radius, 8px);
+}
+
+.rounded-badge {
+  border-radius: var(--badge-radius, 20px);
+}
+
+/* ============================================
+   BORDER UTILITIES (Dynamic from settings)
+   ============================================ */
+
+.border-buttons {
+  border-width: var(--buttons-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--buttons-border-opacity, 1));
+}
+
+.border-inputs {
+  border-width: var(--inputs-border-width, 1px);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--inputs-border-opacity, 0.55));
+}
+
+.border-variant-pills {
+  border-width: var(--variant-pills-border-width, 1px);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--variant-pills-border-opacity, 0.55));
+}
+
+.border-card {
+  border-width: var(--card-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--card-border-opacity, 0.2));
+}
+
+.border-collection-card {
+  border-width: var(--collection-card-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--collection-card-border-opacity, 0.2));
+}
+
+.border-blog-card {
+  border-width: var(--blog-card-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--blog-card-border-opacity, 0.2));
+}
+
+.border-text-boxes {
+  border-width: var(--text-boxes-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--text-boxes-border-opacity, 0.2));
+}
+
+.border-media {
+  border-width: var(--media-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--media-border-opacity, 0.05));
+}
+
+.border-popup {
+  border-width: var(--popup-border-width, 0);
+  border-color: rgba(var(--color-text-charcoal, 45, 49, 45), var(--popup-border-opacity, 0.1));
+}
+
+/* ============================================
+   PAGE WIDTH
+   ============================================ */
+
+.page-width {
+  max-width: var(--page-width, 1400px);
+  margin: 0 auto;
+  padding-left: var(--page-width-margin, 2rem);
+  padding-right: var(--page-width-margin, 2rem);
+}
+
+/* Full width variant */
+.page-width--narrow {
+  max-width: calc(var(--page-width, 1400px) * 0.8);
+  margin: 0 auto;
+  padding-left: var(--page-width-margin, 2rem);
+  padding-right: var(--page-width-margin, 2rem);
+}
+
+/* ============================================
+   SPACING UTILITIES (Dynamic from settings)
+   ============================================ */
+
+.section-spacing {
+  margin-top: var(--spacing-sections, 0);
+}
+
+/* Grid gap - horizontal */
+.grid-gap {
+  gap: var(--spacing-grid-horizontal, 12px);
+}
+
+.grid-gap-vertical {
+  gap: var(--spacing-grid-vertical, 12px);
+}
+
+/* ============================================
+   HOVER EFFECTS (Dynamic from settings)
+   ============================================ */
+
+.hover-vertical-lift:hover,
+.hover-vertical-lift:focus-within {
+  transform: translateY(-4px);
+}
+
+.hover-3d-lift:hover,
+.hover-3d-lift:focus-within {
+  transform: translateY(-4px) rotateX(2deg);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hover-default:hover,
+.hover-default:focus-within {
+  /* No animation */
+}
+
+/* Apply hover effects based on setting */
+body {
+  --hover-animation: var(--animations-hover-elements, 'default');
+}
+
+.hover-animate {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animations-reveal-on-scroll .hover-animate {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ============================================
+   SAGE PALETTE FALLBACKS
+   ============================================ */
+
+:root {
+  --sage-pale: var(--color-sage-pale, #f1f4f0);
+  --sage-accent: var(--color-sage-accent, #e1e8df);
+  --sage-dark: var(--color-sage-dark, #8ba888);
+  --sage-glow: rgba(139, 168, 136, 0.3);
+  --text-charcoal: var(--color-text-charcoal, #2d312d);
+  --text-olive-deep: var(--color-olive-deep, #3c443b);
+  --text-muted: var(--color-text-muted, #717c70);
+  --border-light: var(--color-border-light, #ecefe9);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 html {
-  font-size: var(--font-base-size);
+  font-size: var(--font-base-size, 16px);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -49,9 +275,9 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-body-family);
-  font-weight: var(--font-body-weight);
-  font-style: var(--font-body-style);
+  font-family: var(--font-body-family, 'Work Sans', sans-serif);
+  font-weight: var(--font-body-weight, 400);
+  font-style: var(--font-body-style, normal);
   color: var(--text-charcoal);
   background-color: #ffffff;
   overflow-x: hidden;
@@ -59,10 +285,35 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, .serif {
-  font-family: var(--font-heading-family);
-  font-weight: var(--font-heading-weight);
-  font-style: var(--font-heading-style);
+  font-family: var(--font-heading-family, 'Playfair Display', serif);
+  font-weight: var(--font-heading-weight, 400);
+  font-style: var(--font-heading-style, normal);
   margin: 0;
+}
+
+/* Heading scale */
+h1 {
+  font-size: calc(2.5rem * var(--font-heading-scale, 1));
+}
+
+h2 {
+  font-size: calc(2rem * var(--font-heading-scale, 1));
+}
+
+h3 {
+  font-size: calc(1.5rem * var(--font-heading-scale, 1));
+}
+
+h4 {
+  font-size: calc(1.25rem * var(--font-heading-scale, 1));
+}
+
+h5 {
+  font-size: calc(1.125rem * var(--font-heading-scale, 1));
+}
+
+h6 {
+  font-size: calc(1rem * var(--font-heading-scale, 1));
 }
 
 img, svg {
@@ -321,7 +572,7 @@ button {
 .text-white\/70 { color: rgba(255, 255, 255, 0.7); }
 .text-white\\/80 { color: rgba(255, 255, 255, 0.8); }
 .text-white\\/90 { color: rgba(255, 255, 255, 0.9); }
-.text-white\\/30 { color: rgba(255, 255, 255, 0.3); }
+.text-white\/30 { color: rgba(255, 255, 255, 0.3); }
 .uppercase { text-transform: uppercase; }
 .italic { font-style: italic; }
 .tracking-tight { letter-spacing: -0.025em; }
@@ -718,18 +969,7 @@ input:focus, button:focus {
    SCROLL ANIMATIONS (Dawn-inspired)
    ============================================ */
 
-/* Animation elements - hidden by default, revealed when scrolled into view */
-[data-animate] {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-              transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-[data-animate].is-animated {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Animation elements - handled in theme.liquid when animations_reveal_on_scroll is true */
 
 /* Animation types */
 .animate--fade-in {
@@ -774,4 +1014,104 @@ input:focus, button:focus {
 /* Scroll trigger indicator */
 .scroll-trigger {
   /* Elements that trigger animation when scrolled into view */
+}
+
+/* ============================================
+   CARD STYLES (Dynamic from settings)
+   ============================================ */
+
+.card {
+  text-align: var(--card-text-alignment, left);
+}
+
+.card.card-style-standard {
+  /* Standard card style */
+}
+
+.card.card-style-card {
+  background: var(--sage-pale);
+  border-radius: var(--card-radius, 8px);
+  padding: 1rem;
+}
+
+.collection-card {
+  text-align: var(--collection-card-text-alignment, left);
+}
+
+.collection-card.collection-card-style-standard {
+  /* Standard collection card style */
+}
+
+.collection-card.collection-card-style-card {
+  background: var(--sage-pale);
+  border-radius: var(--collection-card-radius, 8px);
+  padding: 1rem;
+}
+
+.blog-card {
+  text-align: var(--blog-card-text-alignment, left);
+}
+
+.blog-card.blog-card-style-standard {
+  /* Standard blog card style */
+}
+
+.blog-card.blog-card-style-card {
+  background: var(--sage-pale);
+  border-radius: var(--blog-card-radius, 8px);
+  padding: 1rem;
+}
+
+/* ============================================
+   BADGE POSITION (Dynamic from settings)
+   ============================================ */
+
+.badge {
+  position: absolute;
+  z-index: 10;
+}
+
+.badge-position-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.badge-position-bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.badge-position-top-left {
+  top: 0;
+  left: 0;
+}
+
+.badge-position-top-right {
+  top: 0;
+  right: 0;
+}
+
+/* Apply badge position */
+.badge {
+  border-radius: var(--badge-radius, 20px);
+}
+
+.badge:where([data-position*="bottom left"]) {
+  bottom: 0;
+  left: 0;
+}
+
+.badge:where([data-position*="bottom right"]) {
+  bottom: 0;
+  right: 0;
+}
+
+.badge:where([data-position*="top left"]) {
+  top: 0;
+  left: 0;
+}
+
+.badge:where([data-position*="top right"]) {
+  top: 0;
+  right: 0;
 }

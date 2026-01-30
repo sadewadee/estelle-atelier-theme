@@ -1,19 +1,20 @@
 {% comment %}
   Estelle Atelier - Buy Buttons Snippet
   Based on Shopify Dawn theme buy-buttons component
+  Uses CSS variables from theme settings
 
   Usage:
-    {% render 'buy-buttons', product: product %}
+    {% render 'buy-buttons', product: product, show_dynamic_checkout: true %}
 
   Variables:
     - product: Product object (required)
+    - show_dynamic_checkout: Boolean to show dynamic checkout buttons
     - show_gift_card_recipient: Boolean to show gift card recipient form
-    - block: Block object for section settings
 {% endcomment %}
 
 <product-form class="product-form" data-hide-errors="{{ gift_card_recipient_feature }}">
   <div class="product-form__error-message-wrapper" role="alert" hidden>
-    <span class="material-symbols-outlined product-form__error-message-icon" aria-hidden="true">error</span>
+    {% render 'icon-svg', icon: 'error', size: '20', class: 'product-form__error-message-icon' %}
     <span class="product-form__error-message"></span>
   </div>
 
@@ -49,10 +50,10 @@
       -%}
 
       <button
-        id = "ProductSubmitButton-{{ section_id }}"
+        id="ProductSubmitButton-{{ section_id }}"
         type="submit"
         name="add"
-        class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+        class="product-form__submit btn btn-primary{% if show_dynamic_checkout %} btn-secondary{% endif %} w-full"
         {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
           disabled
         {% endif %}
@@ -69,14 +70,14 @@
         </span>
       </button>
 
-      {%- if block.settings.show_dynamic_checkout -%}
+      {%- if show_dynamic_checkout -%}
         {{ form | payment_button }}
       {%- endif -%}
     </div>
   {%- endform -%}
 </product-form>
 
-<style>
+{% style %}
   .product-form {
     width: 100%;
   }
@@ -87,14 +88,16 @@
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     margin-bottom: 1rem;
-    background-color: #fee;
-    border-radius: 4px;
+    background-color: rgba(255, 238, 238, 0.9);
+    border-radius: var(--inputs-radius, 4px);
     font-size: 0.875rem;
-    color: #c33;
+    color: #cc3333;
   }
 
   .product-form__error-message-icon {
-    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
   }
 
   .product-form__buttons {
@@ -105,26 +108,16 @@
 
   .product-form__submit {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     width: 100%;
-    padding: 1rem 2rem;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: white;
-    background-color: var(--color-sage-dark, #8ba888);
-    border: none;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .product-form__submit:hover:not(:disabled) {
-    background-color: var(--color-text-olive-deep, #3c443b);
   }
 
   .product-form__submit:disabled {
@@ -135,10 +128,8 @@
   .product-form__loading-icon {
     position: absolute;
     right: 1rem;
-  }
-
-  .product-form__loading-icon .material-symbols-outlined {
-    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   @keyframes spin {
@@ -150,20 +141,25 @@
     }
   }
 
-  .animate-spin {
+  .product-form__loading-icon .icon-svg {
     animation: spin 1s linear infinite;
   }
 
-  /* Shopfy dynamic checkout button override */
+  /* Shopify dynamic checkout button override */
   .shopify-payment-button {
     width: 100%;
+    border-radius: var(--buttons-radius, 8px) !important;
   }
 
   .shopify-payment-button__button {
     width: 100% !important;
-    border-radius: 4px !important;
+    border-radius: var(--buttons-radius, 8px) !important;
   }
-</style>
+
+  .shopify-payment-button__button--branded {
+    border-width: var(--buttons-border-width, 0) !important;
+  }
+{% endstyle %}
 
 <script>
   // Product Form Handler

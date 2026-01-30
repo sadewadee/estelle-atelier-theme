@@ -1,6 +1,7 @@
 {% comment %}
   Estelle Atelier - Variant Picker Snippet
   Based on Shopify Dawn theme variant-picker component
+  Uses CSS variables from theme settings
 
   Usage:
     {% render 'variant-picker', product: product %}
@@ -38,38 +39,40 @@
         <span class="product-form__input-label--value">{{ selected_value }}</span>
       </legend>
 
-      {%- for value in option.values -%}
-        {%- liquid
-          assign option_disabled = false
+      <div class="product-form__input-options">
+        {%- for value in option.values -%}
+          {%- liquid
+            assign option_disabled = false
 
-          for variant in product.variants
-            if variant.options[forloop.index0] == value
-              unless variant.available
-                assign option_disabled = true
-              endunless
-              break
-            endif
-          endfor
+            for variant in product.variants
+              if variant.options[forloop.index0] == value
+                unless variant.available
+                  assign option_disabled = true
+                endunless
+                break
+              endif
+            endfor
 
-          assign input_id = 'Section-{{ section.id }}-Product-{{ product.id }}-Option{{ opt_index }}-{{ forloop.index0 }}'
-          assign input_name = 'options[{{ option.name }}]'
-        -%}
+            assign input_id = 'Section-{{ section.id }}-Product-{{ product.id }}-Option{{ opt_index }}-{{ forloop.index0 }}'
+            assign input_name = 'options[{{ option.name }}]'
+          -%}
 
-        <input
-          type="radio"
-          id="{{ input_id }}"
-          name="{{ input_name }}"
-          value="{{ value | escape }}"
-          form="{{ product_form_id }}"
-          {% if selected_value == value %}checked="checked"{% endif %}
-          class="product-form__input-radio visually-hidden"
-          {% if option_disabled %}disabled{% endif %}
-        >
+          <input
+            type="radio"
+            id="{{ input_id }}"
+            name="{{ input_name }}"
+            value="{{ value | escape }}"
+            form="{{ product_form_id }}"
+            {% if selected_value == value %}checked="checked"{% endif %}
+            class="product-form__input-radio visually-hidden"
+            {% if option_disabled %}disabled data-disabled="sold-out"{% endif %}
+          >
 
-        <label for="{{ input_id }}" class="product-form__input-label-option {% if option_disabled %}disabled{% endif %}">
-          {{ value }}
-        </label>
-      {%- endfor -%}
+          <label for="{{ input_id }}" class="variant-pill{% if option_disabled %} variant-pill--disabled{% endif %}">
+            <span class="variant-pill__text">{{ value }}</span>
+          </label>
+        {%- endfor -%}
+      </div>
     </fieldset>
   {%- endfor -%}
 
@@ -97,7 +100,7 @@
   </div>
 </noscript>
 
-<style>
+{% style %}
   .product-form__input {
     margin-bottom: 1.5rem;
   }
@@ -115,7 +118,7 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-text-charcoal, #2d312d);
+    color: var(--color-text-olive-deep, #3c443b);
   }
 
   .product-form__input-label--value {
@@ -123,7 +126,14 @@
     opacity: 0.7;
   }
 
-  .product-form__input-label-option {
+  .product-form__input-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Variant Pill Styles - Using theme settings */
+  .variant-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -132,31 +142,74 @@
     padding: 0 1rem;
     font-size: 0.75rem;
     font-weight: 500;
-    border: 1px solid var(--color-sage-accent, #e1e8df);
-    border-radius: 4px;
+    border-width: var(--variant-pills-border-width, 1px);
+    border-style: solid;
+    border-color: rgba(var(--color-text-olive-deep, 60, 68, 59), var(--variant-pills-border-opacity, 0.55));
+    border-radius: var(--variant-pills-radius, 40px);
+    background-color: #ffffff;
+    color: var(--color-text-olive-deep, #3c443b);
     cursor: pointer;
     transition: all 0.2s ease;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    background-color: white;
-    color: var(--color-text-charcoal, #2d312d);
+    box-shadow: var(--variant-pills-shadow-horizontal-offset, 0)
+                var(--variant-pills-shadow-vertical-offset, 0)
+                var(--variant-pills-shadow-blur, 0)
+                rgba(var(--color-text-olive-deep, 60, 68, 59), var(--variant-pills-shadow-opacity, 0));
+    text-decoration: none;
+    user-select: none;
   }
 
-  .product-form__input-label-option:hover:not(.disabled) {
+  .variant-pill:hover:not(.variant-pill--disabled) {
     border-color: var(--color-sage-dark, #8ba888);
     background-color: var(--color-sage-pale, #f1f4f0);
   }
 
-  .product-form__input-radio:checked + .product-form__input-label-option {
+  /* Selected state */
+  .product-form__input-radio:checked + .variant-pill {
     background-color: var(--color-sage-dark, #8ba888);
     border-color: var(--color-sage-dark, #8ba888);
-    color: white;
+    color: #ffffff;
   }
 
-  .product-form__input-label-option.disabled {
+  /* Focus state */
+  .product-form__input-radio:focus-visible + .variant-pill {
+    outline: 2px solid var(--color-sage-dark, #8ba888);
+    outline-offset: 2px;
+  }
+
+  /* Disabled state */
+  .variant-pill--disabled {
     opacity: 0.4;
     cursor: not-allowed;
     text-decoration: line-through;
+  }
+
+  .variant-pill--disabled::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    cursor: not-allowed;
+  }
+
+  /* Visually hidden */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* No JS fallback */
+  .no-js-hidden {
+    display: block;
+  }
+
+  .no-js-hidden .js {
+    display: none !important;
   }
 
   .product-form__noscript {
@@ -170,30 +223,27 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--color-text-olive-deep, #3c443b);
   }
 
   .product-form__noscript select {
     width: 100%;
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
-    border: 1px solid var(--color-sage-accent, #e1e8df);
-    border-radius: 4px;
-    background-color: white;
-    color: var(--color-text-charcoal, #2d312d);
+    font-family: var(--font-body-family, inherit);
+    border-width: var(--inputs-border-width, 1px);
+    border-color: rgba(var(--color-text-olive-deep, 60, 68, 59), var(--inputs-border-opacity, 0.55));
+    border-radius: var(--inputs-radius, 4px);
+    background-color: #ffffff;
+    color: var(--color-text-olive-deep, #3c443b);
+    cursor: pointer;
   }
 
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .product-form__noscript select:focus {
+    outline: 2px solid var(--color-sage-dark, #8ba888);
+    outline-offset: 2px;
   }
-</style>
+{% endstyle %}
 
 <script>
   // Variant Selector
@@ -205,7 +255,6 @@
         super();
 
         this.selectors = {
-          container: '[data-variant-selector]',
           fieldsets: 'fieldset',
           radioInputs: 'input[type="radio"]',
           price: '[data-price]',
@@ -310,7 +359,7 @@
           if (index === 0) return;
 
           const optionInputs = [...option.querySelectorAll('input[type="radio"]')];
-          const previousOptionSelected = this.querySelector('.product-form__input:nth-child(' + index + ') input:checked');
+          const previousOptionSelected = this.querySelector('.product-form__input:nth-child(' + (index + 1) + ') input:checked');
 
           const availableOptions = selectedOptionOneVariants
             .filter(variant => variant.available && variant.option1 === previousOptionSelected.value)
@@ -319,12 +368,16 @@
 
           optionInputs.forEach(input => {
             const label = input.nextElementSibling;
+            const pillText = label.querySelector('.variant-pill__text');
+
             if (availableOptions.includes(input.value)) {
-              label.classList.remove('disabled');
+              label.classList.remove('variant-pill--disabled');
               input.disabled = false;
+              input.removeAttribute('data-disabled');
             } else {
-              label.classList.add('disabled');
+              label.classList.add('variant-pill--disabled');
               input.disabled = true;
+              input.setAttribute('data-disabled', 'sold-out');
             }
           });
         });
