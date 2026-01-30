@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="icon icon-filter-vintage">
+  <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2"/>
+  <path d="M16.24 7.76A5.97 5.97 0 0 0 12 6v-2c2.12 0 4.12.86 5.76 2.41l-1.52 1.35zM7.76 16.24A5.97 5.97 0 0 0 12 18v2c-2.12 0-4.12-.86-5.76-2.41l1.52-1.35z" stroke="currentColor" stroke-width="2"/>
+  <path d="M16.24 16.24l1.42 1.42A9.97 9.97 0 0 0 20 12h-2c0 1.54-.59 3.07-1.76 4.24zM7.76 7.76L6.34 6.34A9.97 9.97 0 0 0 4 12h2c0-1.54.59-3.07 1.76-4.24z" stroke="currentColor" stroke-width="2"/>
+</svg>

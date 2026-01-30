@@ -876,22 +876,40 @@ button {
    ============================================ */
 
 /* ============================================
-   SVG ICON SYSTEM - Shopify Compliant
-   Using inline SVGs instead of external fonts
-   See: snippets/icon-svg.liquid
+   SVG ICON SYSTEM - Shopify Compliant (Dawn pattern)
+   Icons stored in assets/icon-*.svg
+   Usage: {% render 'icon', icon: 'cart', class: 'custom' %}
    ============================================ */
 
-.icon-svg {
+.icon {
   display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
   vertical-align: middle;
-  width: 1em;
-  height: 1em;
-  stroke-width: 2;
   stroke: currentColor;
   fill: none;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Filled icons (like stars) */
+.icon.icon-star-filled,
+.icon[style*="fill: currentColor"] {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Icon sizes */
+.icon-sm { width: 0.75rem; height: 0.75rem; }
+.icon-md { width: 1rem; height: 1rem; }
+.icon-lg { width: 1.5rem; height: 1.5rem; }
+.icon-xl { width: 2rem; height: 2rem; }
+.icon-2xl { width: 2.5rem; height: 2.5rem; }
+.icon-3xl { width: 3rem; height: 3rem; }
+.icon-4xl { width: 3.5rem; height: 3.5rem; }
+.icon-5xl { width: 4.5rem; height: 4.5rem; }
+.icon-6xl { width: 6rem; height: 6rem; }
 
 /* Details/Summary accordion */
 details > summary::-webkit-details-marker {

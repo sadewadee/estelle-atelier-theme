@@ -1,14 +1,18 @@
-{% comment %}
+{%- comment -%}
   Estelle Atelier - Icon Snippet
-  SVG Icon wrapper - delegates to icon-svg.liquid
+  Loads SVG icons from assets/ folder (Dawn pattern)
 
   Usage:
-    {% render 'icon', icon: 'shopping_bag', size: '24', class: 'icon-class' %}
+    {% render 'icon', icon: 'cart' %}
+    {% render 'icon', icon: 'search', class: 'custom-class' %}
 
   Parameters:
-    - icon: Icon name (required) - passed to icon-svg.liquid
-    - size: '16', '20', '24', '32', '40', or custom value in pixels (default: '24')
-    - class: Additional CSS classes
-{% endcomment %}
+    - icon: Icon filename without 'icon-' prefix (required)
+    - class: Additional CSS classes (optional)
+{%- endcomment -%}
 
-{% render 'icon-svg', icon: icon, size: size, class: class %}
+{%- assign icon_file = icon | prepend: 'icon-' | append: '.svg' -%}
+
+<div class="icon {{ class | default: '' }}">
+  {{ icon_file | asset_url | file_img_tag: icon, 'svg icon' }}
+</div>
