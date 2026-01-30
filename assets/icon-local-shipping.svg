@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="icon icon-local-shipping">
-  <path d="M1 3h15v10H1V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M15 6h4l4 4v3h-4V6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="5.5" cy="17.5" r="2.5" stroke="currentColor" stroke-width="2"/>
-  <circle cx="18.5" cy="17.5" r="2.5" stroke="currentColor" stroke-width="2"/>
-</svg>

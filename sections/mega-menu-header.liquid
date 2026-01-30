@@ -1,0 +1,399 @@
+{% comment %}
+  Estelle Atelier - Mega Menu Header Section
+  Full-width mega menu with category links, curated content, and promotional blocks
+
+  Usage:
+    {% section 'mega-menu-header' %}
+{% endcomment %}
+
+{%- liquid
+  assign logo = section.settings.logo
+  assign logo_width = section.settings.logo_width
+  assign menu_main = section.settings.menu_main
+  assign menu_featured = section.settings.menu_featured
+  assign menu_brands = section.settings.menu_brands
+  assign enable_search = section.settings.enable_search
+  assign enable_wishlist = section.settings.enable_wishlist
+-%}
+
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-sage-accent/40" data-mega-menu-header>
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-4 md:py-6">
+    <div class="flex items-center justify-between gap-8">
+
+      {%- comment -%} Logo {%- endcomment -%}
+      <div class="flex items-center gap-3">
+        {%- if logo != blank -%}
+          <a href="{{ routes.root_url }}" class="block" style="max-width: {{ logo_width }}px">
+            <img
+              src="{{ logo | image_url: width: logo_width }}"
+              srcset="{{ logo | image_url: width: logo_width }}, {{ logo | image_url: width: logo_width | times: 2 }} 2x"
+              alt="{{ shop.name }}"
+              width="{{ logo_width }}"
+              height="{{ logo_width | divided_by: logo.aspect_ratio | round }}"
+              loading="lazy"
+              class="h-auto"
+            >
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="flex flex-col items-center">
+            <h1 class="text-[var(--text-charcoal)] text-2xl tracking-[0.2em] serif font-light hover:text-[var(--sage-dark)] transition-colors">{{ shop.name }}</h1>
+            <p class="text-[8px] tracking-[0.8em] uppercase -mt-1 text-[var(--text-muted)]">Atelier</p>
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Main Navigation {%- endcomment -%}
+      <nav class="hidden lg:flex items-center gap-8" role="navigation">
+        {%- for link in linklists[menu_main].links -%}
+          <div class="relative group/menu-item" data-menu-trigger>
+            <a
+              class="nav-link text-[10px] font-medium uppercase tracking-[0.3em] text-[var(--text-charcoal)] flex items-center gap-1 hover:text-[var(--sage-dark)] transition-colors py-4"
+              href="{{ link.url }}"
+              {% if link.links != blank %}aria-haspopup="true" aria-expanded="false"{% endif %}
+            >
+              {{ link.title }}
+              {%- if link.links != blank -%}
+                {% render 'icon-svg', icon: 'expand_more', size: '16' %}
+              {%- endif -%}
+            </a>
+
+            {%- if link.links != blank -%}
+              {%- liquid
+                assign has_featured_image = false
+                assign featured_collection = block.settings.featured_collection
+              -%}
+
+              <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover/menu-item:opacity-100 group-hover/menu-item:visible transition-all duration-300 z-50">
+                <div class="bg-white dark:bg-background-dark border border-sage-accent/30 shadow-xl rounded-lg overflow-hidden min-w-[600px] max-w-[900px]">
+                  <div class="grid grid-cols-12 gap-8 p-8">
+
+                    {%- comment -%} Category Columns from nested links {%- endcomment -%}
+                    {%- assign column_count = 0 -%}
+                    {%- for child_link in link.links limit: 3 -%}
+                      <div class="col-span-3">
+                        <h3 class="text-[var(--sage-dark)] text-xs font-bold uppercase tracking-[0.2em] mb-4">{{ child_link.title }}</h3>
+                        {%- if child_link.links != blank -%}
+                          <ul class="space-y-3">
+                            {%- for grandchild in child_link.links limit: 6 -%}
+                              <li>
+                                <a class="text-[var(--text-charcoal)] text-sm font-light hover:text-[var(--sage-dark)] transition-colors" href="{{ grandchild.url }}">
+                                  {{ grandchild.title }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                      {%- assign column_count = column_count | plus: 1 -%}
+                    {%- endfor -%}
+
+                    {%- comment -%} Featured/Promotional Block {%- endcomment -%}
+                    {%- if section.settings.show_promo_block -%}
+                      <div class="col-span-{{ 12 | minus: column_count | times: 4 }} {{ 12 | minus: column_count | times: 4 }}">
+                        <div class="relative rounded-lg overflow-hidden bg-sage-pale/40 aspect-[3/2] group/promo">
+                          {%- if section.settings.promo_image != blank -%}
+                            <img
+                              src="{{ section.settings.promo_image | image_url: width: 600, height: 400, crop: 'center' }}"
+                              alt="{{ section.settings.promo_title }}"
+                              class="w-full h-full object-cover group-hover/promo:scale-105 transition-transform duration-700"
+                              loading="lazy"
+                            >
+                          {%- endif -%}
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex flex-col justify-end p-6">
+                            <p class="text-white/80 text-[10px] uppercase tracking-[0.3em] font-medium">{{ section.settings.promo_subtitle }}</p>
+                            <h3 class="text-white text-xl md:text-2xl serif font-medium">{{ section.settings.promo_title }}</h3>
+                            {%- if section.settings.promo_cta_link != blank -%}
+                              <a href="{{ section.settings.promo_cta_link }}" class="inline-flex items-center gap-2 mt-3 text-white text-sm font-medium group-hover/promo:gap-3 transition-all">
+                                {{ section.settings.promo_cta_text }}
+                                {% render 'icon-svg', icon: 'arrow_forward', size: '16' %}
+                              </a>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      </div>
+                    {%- endif -%}
+
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </nav>
+
+      {%- comment -%} Right Side Actions {%- endcomment -%}
+      <div class="flex items-center gap-4 md:gap-6">
+
+        {%- comment -%} Search {%- endcomment -%}
+        {%- if enable_search -%}
+          <button class="hidden md:flex items-center gap-2 px-3 py-2 bg-sage-pale/50 rounded-full hover:bg-sage-pale transition-colors" data-search-trigger aria-label="Search">
+            {% render 'icon-svg', icon: 'search', size: '18' %}
+          </button>
+        {%- endif -%}
+
+        {%- comment -%} Account {%- endcomment -%}
+        <a href="{{ routes.account_url }}" class="hidden md:flex items-center justify-center text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors" aria-label="Account">
+          {% render 'icon-svg', icon: 'person', size: '20' %}
+        </a>
+
+        {%- comment -%} Wishlist {%- endcomment -%}
+        {%- if enable_wishlist -%}
+          <a href="{{ pages['wishlist'].url }}" class="hidden md:flex items-center justify-center text-[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors relative" aria-label="Wishlist">
+            {% render 'icon-svg', icon: 'favorite', size: '20' %}
+            <span class="absolute -top-1 -right-1 bg-sage-dark text-white text-[8px] font-medium w-4 h-4 rounded-full flex items-center justify-center hidden" data-wishlist-count>0</span>
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} Cart {%- endcomment -%}
+        <button class="flex items-center justify-center text-[var(--text-charcoal)] relative hover:text-[var(--sage-dark)] transition-colors" data-cart-drawer-toggle aria-label="Cart">
+          {% render 'icon-svg', icon: 'shopping_bag', size: '20' %}
+          <span class="absolute -top-1 -right-1 text-[8px] font-medium" data-cart-count>{{ cart.item_count }}</span>
+        </button>
+
+        {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
+        <button class="lg:hidden flex items-center justify-center text-[var(--text-charcoal)]" data-mobile-menu-trigger aria-label="Menu">
+          {% render 'icon-svg', icon: 'menu', size: '24' %}
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile Menu {%- endcomment -%}
+<div id="MobileMenu" class="fixed inset-0 z-[60] bg-white transform translate-x-full transition-transform duration-500 lg:hidden" data-mobile-menu>
+  <div class="flex flex-col h-full">
+    <div class="flex justify-between items-center px-6 py-5 border-b border-sage-accent/30">
+      <span class="text-[10px] uppercase tracking-[0.3em] font-medium text-[var(--text-charcoal)]">Menu</span>
+      <button type="button" data-mobile-menu-close class="text-[[var(--text-charcoal)] hover:text-[var(--sage-dark)] transition-colors">
+        {% render 'icon-svg', icon: 'close', size: '24' %}
+      </button>
+    </div>
+
+    {%- comment -%} Mobile Navigation {%- endcomment -%}
+    <nav class="flex-1 overflow-y-auto py-6 px-6">
+      <ul class="flex flex-col gap-6">
+        {%- for link in linklists[menu_main].links -%}
+          <li>
+            <details class="group/mobile-menu">
+              <summary class="flex justify-between items-center text-lg serif text-[var(--text-charcoal)] cursor-pointer list-none py-2">
+                <span>{{ link.title }}</span>
+                {%- if link.links != blank -%}
+                  {% render 'icon-svg', icon: 'expand_more', size: '20' %}
+                {%- endif -%}
+              </summary>
+              {%- if link.links != blank -%}
+                <div class="pl-6 mt-2 space-y-3">
+                  {%- for child_link in link.links -%}
+                    <a href="{{ child_link.url }}" class="block text-sm text-[var(--text-muted)] hover:text-[var(--text-charcoal)] transition-colors py-1">
+                      {{ child_link.title }}
+                    </a>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </details>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- comment -%} Mobile Footer Actions {%- endcomment -%}
+    <div class="p-6 border-t border-sage-accent/20 flex flex-col gap-4">
+      <a href="{{ routes.search_url }}" class="flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-[var(--text-charcoal)]">
+        {% render 'icon-svg', icon: 'search', size: '18' %}
+        Search
+      </a>
+      <a href="{{ routes.account_url }}" class="flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-[var(--text-charcoal)]">
+        {% render 'icon-svg', icon: 'person', size: '18' %}
+        Account
+      </a>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Search Overlay {%- endcomment -%}
+{%- if enable_search -%}
+<div id="SearchOverlay" class="fixed inset-0 z-[70] bg-white/95 backdrop-blur-md transform translate-y-full transition-transform duration-300" data-search-overlay>
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-8">
+    <div class="flex items-center gap-4 mb-6">
+      {% render 'icon-svg', icon: 'search', size: '24' %}
+      <input
+        type="search"
+        class="flex-1 bg-transparent border-none text-2xl md:text-3xl serif text-[var(--text-charcoal)] placeholder:text-gray-300 focus:outline-none"
+        placeholder="Search..."
+        data-predictive-search
+      >
+      <button data-search-close class="text-[var(--text-muted)] hover:text-[var(--text-charcoal)]">
+        {% render 'icon-svg', icon: 'close', size: '24' %}
+      </button>
+    </div>
+    <div id="PredictiveSearchResults" class="hidden" data-predictive-search-results></div>
+  </div>
+</div>
+{%- endif -%}
+
+<script>
+  (function() {
+    'use strict';
+
+    // Mobile Menu Toggle
+    const mobileTriggers = document.querySelectorAll('[data-mobile-menu-trigger]');
+    const mobileCloses = document.querySelectorAll('[data-mobile-menu-close]');
+    const mobileMenu = document.querySelector('[data-mobile-menu]');
+
+    function openMobileMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMobileMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      }
+    }
+
+    mobileTriggers.forEach(trigger => trigger.addEventListener('click', openMobileMenu));
+    mobileCloses.forEach(close => close.addEventListener('click', closeMobileMenu));
+
+    // Search Overlay
+    const searchTrigger = document.querySelector('[data-search-trigger]');
+    const searchClose = document.querySelector('[data-search-close]');
+    const searchOverlay = document.querySelector('[data-search-overlay]');
+    const searchInput = searchOverlay?.querySelector('input[type="search"]');
+
+    if (searchTrigger && searchOverlay) {
+      searchTrigger.addEventListener('click', () => {
+        searchOverlay.classList.remove('translate-y-full');
+        if (searchInput) searchInput.focus();
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    if (searchClose && searchOverlay) {
+      searchClose.addEventListener('click', () => {
+        searchOverlay.classList.add('translate-y-full');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Mega Menu Keyboard Navigation
+    const menuTriggers = document.querySelectorAll('[data-menu-trigger]');
+
+    menuTriggers.forEach(trigger => {
+      const link = trigger.querySelector('a');
+      const dropdown = trigger.querySelector('[aria-expanded]');
+
+      link?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isExpanded = link.getAttribute('aria-expanded') === 'true';
+
+          // Close all other dropdowns
+          menuTriggers.forEach(otherTrigger => {
+            if (otherTrigger !== trigger) {
+              const otherLink = otherTrigger.querySelector('a');
+              otherLink?.setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          // Toggle current
+          link.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+
+          if (!isExpanded && dropdown) {
+            dropdown.querySelector('a')?.focus();
+          }
+        }
+      });
+    });
+
+    // Escape key to close all dropdowns
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+        if (searchOverlay) searchOverlay.classList.add('translate-y-full');
+        document.body.style.overflow = '';
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mega menu header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_main",
+      "default": "main-menu",
+      "label": "Main menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "default": true,
+      "label": "Enable search"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_wishlist",
+      "default": true,
+      "label": "Enable wishlist"
+    },
+    {
+      "type": "header",
+      "content": "Featured promotional block"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo_block",
+      "default": false,
+      "label": "Show promotional block"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image",
+      "label": "Promotional image"
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "default": "New Collection",
+      "label": "Promotional title"
+    },
+    {
+      "type": "text",
+      "id": "promo_subtitle",
+      "default": "Spring/Summer 2024",
+      "label": "Promotional subtitle"
+    },
+    {
+      "type": "url",
+      "id": "promo_cta_link",
+      "label": "Promotional CTA link"
+    },
+    {
+      "type": "text",
+      "id": "promo_cta_text",
+      "default": "Shop Now",
+      "label": "Promotional CTA text"
+    }
+  ]
+}
+{% endschema %}

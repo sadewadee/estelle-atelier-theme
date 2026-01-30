@@ -78,7 +78,7 @@
                   {% if block.settings[value_title] != blank %}
                     <div class="text-center">
                       <div class="w-16 h-16 rounded-full bg-[var(--sage-dark)]/10 flex items-center justify-center mx-auto mb-4">
-                        {% render 'icon', icon: block.settings[value_icon] | default: 'diamond', size: 'xl' %}
+                        {% render 'icon-svg', icon: block.settings[value_icon] | default: 'diamond' %}
                       </div>
                       <h3 class="text-[var(--text-olive-deep)] font-bold mb-2">{{ block.settings[value_title] }}</h3>
                       <p class="text-muted text-sm">{{ block.settings[value_text] }}</p>

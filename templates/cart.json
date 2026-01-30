@@ -1,18 +1,39 @@
 {
   "sections": {
-    "header": {
+    "hero": {
       "type": "editorial-hero",
       "settings": {
         "heading": "Shopping Cart",
-        "text": "Review your items before checkout."
+        "text": "Review your items before checkout",
+        "image_position": "right",
+        "content_width": "small",
+        "show_button": false
       }
     },
-    "main-cart": {
-      "type": "main-cart"
+    "main": {
+      "type": "main-cart",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal"
+        },
+        "notes": {
+          "type": "notes"
+        },
+        "discount": {
+          "type": "discount"
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "notes",
+        "discount"
+      ],
+      "settings": {
+      }
     }
   },
   "order": [
-    "header",
-    "main-cart"
+    "hero",
+    "main"
   ]
 }

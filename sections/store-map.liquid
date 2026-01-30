@@ -54,7 +54,7 @@
         <!-- Location & Details -->
         <div class="space-y-6 mb-10">
           <div class="flex items-start gap-4">
-            {% render 'icon', icon: 'map', size: 'lg', class: 'text-muted mt-1' %}
+            {% render 'icon-svg', icon: 'map', class: 'text-muted mt-1' %}
             <div>
               <p class="text-text-olive-deep font-medium mb-1">{{ section.settings.address_title }}</p>
               <p class="text-muted text-sm leading-relaxed">
@@ -64,7 +64,7 @@
           </div>
 
           <div class="flex items-start gap-4">
-            {% render 'icon', icon: 'schedule', size: 'lg', class: 'text-muted mt-1' %}
+            {% render 'icon-svg', icon: 'schedule', class: 'text-muted mt-1' %}
             <div>
               <p class="text-text-olive-deep font-medium mb-1">{{ section.settings.hours_title }}</p>
               <div class="text-muted text-sm space-y-1">
@@ -86,7 +86,7 @@
 
           {% if section.settings.show_phone %}
             <div class="flex items-start gap-4">
-              {% render 'icon', icon: 'phone', size: 'lg', class: 'text-muted mt-1' %}
+              {% render 'icon-svg', icon: 'phone', class: 'text-muted mt-1' %}
               <div>
                 <p class="text-text-olive-deep font-medium mb-1">{{ section.settings.phone_title }}</p>
                 <p class="text-muted text-sm">{{ section.settings.phone_number }}</p>

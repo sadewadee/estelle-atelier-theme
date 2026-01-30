@@ -18,7 +18,7 @@
       {% for block in section.blocks %}
         <div class="flex flex-col items-center text-center px-8 {% if forloop.index != section.settings.columns %}md:border-r border-[var(--text-olive-deep)]/10{% endif %} last:border-r-0 group" {{ block.shopify_attributes }}>
           <div class="mb-6 text-[var(--sage-dark)] transition-transform duration-500 group-hover:scale-110">
-            {% render 'icon', icon: block.settings.icon, size: 'xl' %}
+            {% render 'icon-svg', icon: block.settings.icon %}
           </div>
           <div class="flex flex-col gap-2">
             <h2 class="text-[var(--text-olive-deep)] text-xl font-medium leading-tight serif">

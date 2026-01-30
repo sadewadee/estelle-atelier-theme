@@ -90,14 +90,52 @@
         "heading": "From the Journal",
         "subheading": "Seasonal narratives and atelier insights"
       }
+    },
+    "modular_builder": {
+      "type": "modular-builder",
+      "blocks": {
+        "editorial": {
+          "type": "editorial_block",
+          "settings": {
+            "badge": "Summer '24",
+            "overlay_text": "The Essence of Modern Romanticism",
+            "overlay_link_text": "Explore"
+          }
+        },
+        "product": {
+          "type": "product_spotlight",
+          "settings": {}
+        },
+        "quote": {
+          "type": "quote_block",
+          "settings": {}
+        }
+      },
+      "block_order": ["editorial", "product", "quote"],
+      "settings": {}
+    },
+    "video_hero": {
+      "type": "video-hero",
+      "settings": {
+        "subheading": "NEW COLLECTION",
+        "heading": "Discover Our Latest Designs",
+        "text": "Experience timeless elegance with our curated collection of handcrafted pieces.",
+        "cta_text": "Shop Now",
+        "cta_link": "/collections/all",
+        "overlay_opacity": 40,
+        "content_position": "items-center",
+        "enable_scroll_indicator": true
+      }
     }
   },
   "order": [
     "hero",
+    "video_hero",
     "popular_picks",
-    "winter_event",
     "editorial_split",
     "modern_business_casual",
+    "winter_event",
+    "modular_builder",
     "shop_the_look",
     "journal_posts"
   ]

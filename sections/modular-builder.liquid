@@ -1,0 +1,444 @@
+{% comment %}
+  Estelle Atelier - Modular Builder Section
+  Asymmetrical grid layout with modular content blocks
+
+  Usage:
+    {% section 'modular-builder' %}
+{% endcomment %}
+
+<div class="modular-builder-section py-16 md:py-24 px-4 md:px-10 lg:px-20" data-section-id="{{ section.id }}">
+  <div class="max-w-[1440px] mx-auto">
+    {%- comment -%} Main Grid Container {%- endcomment -%}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      {%- comment -%} Left Column: Large Editorial Block {%- endcomment -%}
+      {%- for block in section.blocks limit: 1 -%}
+        {%- if block.type == 'editorial_block' -%}
+      <div class="lg:col-span-7 {{ block.shopify_attributes }}" {{ block.shopify_attributes }}>
+        <div class="group relative overflow-hidden rounded-xl aspect-[3/4] lg:aspect-auto lg:h-full bg-cover bg-center transition-transform duration-700 ease-out hover:scale-[1.01]"
+             style="background-image: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(20,23,17,0.4) 100%), url('{%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 1200, height: 1600, crop: 'center' }}{%- else -%}{{ 'collection-1' | placeholder_svg_tag: 'w-full h-full' }}{%- endif -%}');">
+          
+          {%- if block.settings.overlay_text != blank -%}
+          <div class="absolute bottom-0 left-0 p-8 w-full">
+            {%- if block.settings.badge != blank -%}
+            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-medium mb-3 uppercase tracking-[0.15em]">
+              {{ block.settings.badge }}
+            </span>
+            {%- endif -%}
+            
+            <{{ block.settings.heading_tag }} class="text-white text-3xl md:text-4xl font-bold leading-tight max-w-md serif">
+              {{ block.settings.overlay_text }}
+            </{{ block.settings.heading_tag }}>
+            
+            {%- if block.settings.overlay_link != blank and block.settings.overlay_link_text != blank -%}
+            <a href="{{ block.settings.overlay_link }}" class="inline-flex items-center gap-2 mt-4 text-white text-sm font-medium group/link">
+              {{ block.settings.overlay_link_text }}
+              {% render 'icon-svg', icon: 'arrow_forward', size: '18' %}
+            </a>
+            {%- endif -%}
+          </div>
+          {%- endif -%}
+        </div>
+      </div>
+      
+      {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      
+      {%- comment -%} Right Column: Modular Blocks {%- endcomment -%}
+      <div class="lg:col-span-5 flex flex-col gap-8">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'product_spotlight' -%}
+              <div class="flex flex-col bg-white/50 dark:bg-white/5 rounded-xl border border-sage-accent/30 overflow-hidden {{ block.shopify_attributes }}">
+                {%- if block.settings.product != blank -%}
+                  {%- assign product = block.settings.product -%}
+                  {%- assign featured_media = product.featured_media -%}
+                  <div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover"
+                       style="background-image: url('{%- if featured_media != blank -%}{{ featured_media | image_url: width: 600, height: 450, crop: 'center' }}{%- endif -%}');">
+                    <a href="{{ product.url }}" class="absolute inset-0" aria-label="{{ product.title }}"></a>
+                  </div>
+                  <div class="flex w-full flex-col gap-2 p-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="text-[var(--text-charcoal)] dark:text-white text-lg font-bold leading-tight">{{ product.title }}</p>
+                        {%- if block.settings.subtitle != blank -%}
+                          <p class="text-[var(--text-muted)] text-sm font-normal mt-1">{{ block.settings.subtitle }}</p>
+                        {%- endif -%}
+                      </div>
+                      <span class="text-lg font-medium">{{ product.price | money }}</span>
+                    </div>
+                    {%- if block.settings.show_rating -%}
+                      <div class="flex items-center gap-1 mt-2">
+                        {%- for i in (1..5) -%}
+                          {% render 'icon-svg', icon: 'star', size: '14', class: 'text-[var(--text-muted)]' %}
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                    <div class="flex items-center justify-between mt-4">
+                      {%- if block.settings.show_button -%}
+                        <a href="{{ product.url }}" class="inline-flex items-center justify-center rounded-lg h-10 px-6 bg-sage-dark text-white text-sm font-medium transition-all hover:bg-sage-dark/80">
+                          {{ block.settings.button_text | default: 'Shop Now' }}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- else -%}
+                  <div class="aspect-[4/3] bg-sage-pale/40 flex items-center justify-center">
+                    <span class="text-[var(--text-muted)]">Select a product</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+            {%- when 'quote_block' -%}
+              <div class="flex flex-col justify-center flex-grow p-8 bg-sage-pale/30 dark:bg-sage-pale/10 rounded-xl border-l-4 border-sage-dark {{ block.shopify_attributes }}">
+                {%- if block.settings.show_quote_icon -%}
+                  <div class="mb-4">
+                    {% render 'icon-svg', icon: 'format_quote', size: '36', class: 'text-sage-dark' %}
+                  </div>
+                {%- endif -%}
+                
+                <blockquote class="text-[var(--text-charcoal)] dark:text-white italic tracking-tight text-2xl md:text-3xl font-light leading-snug pb-4">
+                  "{{ block.settings.quote }}"
+                </blockquote>
+                
+                {%- if block.settings.author != blank -%}
+                  <cite class="text-[var(--text-muted)] text-sm font-normal not-italic">— {{ block.settings.author }}</cite>
+                {%- endif -%}
+                
+                {%- if block.settings.description != blank -%}
+                  <p class="text-[var(--text-muted)] text-base font-normal leading-relaxed mb-6 mt-4">
+                    {{ block.settings.description }}
+                  </p>
+                {%- endif -%}
+                
+                {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                  <a href="{{ block.settings.link_url }}" class="inline-flex items-center gap-2 group text-[var(--text-charcoal)] dark:text-sage-dark text-base font-medium transition-all">
+                    <span class="border-b-2 border-sage-dark pb-1 group-hover:border-sage-dark/50">{{ block.settings.link_text }}</span>
+                    {% render 'icon-svg', icon: 'arrow_forward', size: '20', class: 'transition-transform group-hover:translate-x-1' %}
+                  </a>
+                {%- endif -%}
+              </div>
+
+            {%- when 'image_block' -%}
+              <div class="relative overflow-hidden rounded-xl aspect-[16/9] bg-cover bg-center group {{ block.shopify_attributes }}"
+                   style="background-image: url('{%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 800, height: 450, crop: 'center' }}{%- endif -%}');">
+                {%- if block.settings.overlay_content != blank -%}
+                  <div class="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors"></div>
+                  <div class="absolute inset-0 flex items-center justify-center p-6">
+                    <{{ block.settings.content_heading_tag }} class="text-white text-xl md:text-2xl font-bold text-center">
+                      {{ block.settings.overlay_content }}
+                    </{{ block.settings.content_heading_tag }}>
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.link != blank -%}
+                  <a href="{{ block.settings.link }}" class="absolute inset-0" aria-label="{{ block.settings.overlay_content | default: 'Image block' }}"></a>
+                {%- endif -%}
+              </div>
+
+            {%- when 'text_block' -%}
+              <div class="p-8 bg-white dark:bg-white/5 rounded-xl border border-sage-accent/20 {{ block.shopify_attributes }}">
+                {%- if block.settings.label != blank -%}
+                  <span class="text-xs uppercase tracking-[0.2em] font-medium text-sage-dark mb-3 block">{{ block.settings.label }}</span>
+                {%- endif -%}
+                <{{ block.settings.heading_tag }} class="text-[var(--text-charcoal)] dark:text-white text-xl md:text-2xl font-bold leading-tight mb-4">
+                  {{ block.settings.title }}
+                </{{ block.settings.heading_tag }}>
+                {%- if block.settings.text != blank -%}
+                  <div class="text-[var(--text-muted)] text-base leading-relaxed">
+                    {{ block.settings.text }}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.button_text != blank and block.settings.button_link != blank -%}
+                  <a href="{{ block.settings.button_link }}" class="inline-flex items-center gap-2 mt-6 text-sm font-medium text-sage-dark hover:text-sage-dark/80 transition-colors">
+                    {{ block.settings.button_text }}
+                    {% render 'icon-svg', icon: 'arrow_forward', size: '16' %}
+                  </a>
+                {%- endif -%}
+              </div>
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Footer Tagline {%- endcomment -%}
+    {%- if section.settings.show_footer -%}
+      <div class="mt-12 flex items-center justify-between border-t border-black/5 dark:border-white/5 pt-6">
+        <div class="flex flex-wrap gap-4 md:gap-8 text-[10px] uppercase tracking-[0.15em] font-medium text-[var(--text-muted)]">
+          {%- for i in (1..3) -%}
+            {%- assign tag_key = 'footer_tag_' | append: i -%}
+            {%- if section.settings[tag_key] != blank -%}
+              <span>{{ section.settings[tag_key] }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if section.settings.footer_est_date != blank -%}
+          <div class="hidden md:flex items-center gap-2">
+            <span class="w-8 h-[1px] bg-sage-dark"></span>
+            <span class="text-xs italic">{{ section.settings.footer_est_date }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Modular builder",
+  "tag": "section",
+  "class": "section-modular-builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer",
+      "label": "Show footer tagline",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_tag_1",
+      "label": "Footer tag 1",
+      "default": "Sustainable Materials"
+    },
+    {
+      "type": "text",
+      "id": "footer_tag_2",
+      "label": "Footer tag 2",
+      "default": "Ethical Production"
+    },
+    {
+      "type": "text",
+      "id": "footer_tag_3",
+      "label": "Footer tag 3",
+      "default": "Timeless Design"
+    },
+    {
+      "type": "text",
+      "id": "footer_est_date",
+      "label": "Est. date",
+      "default": "Est. 2024"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "editorial_block",
+      "name": "Editorial block",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Summer '24"
+        },
+        {
+          "type": "text",
+          "id": "overlay_text",
+          "label": "Overlay heading",
+          "default": "The Essence of Modern Romanticism"
+        },
+        {
+          "type": "select",
+          "id": "heading_tag",
+          "label": "Heading tag",
+          "options": [
+            {"value": "h2", "label": "H2"},
+            {"value": "h3", "label": "H3"}
+          ],
+          "default": "h2"
+        },
+        {
+          "type": "url",
+          "id": "overlay_link",
+          "label": "Overlay link"
+        },
+        {
+          "type": "text",
+          "id": "overlay_link_text",
+          "label": "Link text",
+          "default": "Explore"
+        }
+      ]
+    },
+    {
+      "type": "product_spotlight",
+      "name": "Product spotlight",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Limited Edition"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "label": "Show rating stars",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "label": "Show shop button",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now"
+        }
+      ]
+    },
+    {
+      "type": "quote_block",
+      "name": "Quote block",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_quote_icon",
+          "label": "Show quote icon",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Timeless silhouettes designed for the modern romantic, crafted for the conscious soul."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Explore our curated collection of pieces that redefine quiet luxury through soft textures and sustainable craftsmanship."
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Discover the Collection"
+        }
+      ]
+    },
+    {
+      "type": "image_block",
+      "name": "Image block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "overlay_content",
+          "label": "Overlay text"
+        },
+        {
+          "type": "select",
+          "id": "content_heading_tag",
+          "label": "Content tag",
+          "options": [
+            {"value": "h2", "label": "H2"},
+            {"value": "h3", "label": "H3"},
+            {"value": "p", "label": "Paragraph"}
+          ],
+          "default": "h3"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "text_block",
+      "name": "Text block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Our Philosophy"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "We believe in creating pieces that transcend seasons and trends."
+        },
+        {
+          "type": "select",
+          "id": "heading_tag",
+          "label": "Heading tag",
+          "options": [
+            {"value": "h2", "label": "H2"},
+            {"value": "h3", "label": "H3"},
+            {"value": "h4", "label": "H4"}
+          ],
+          "default": "h3"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Modular builder",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "editorial_block"
+        },
+        {
+          "type": "product_spotlight"
+        },
+        {
+          "type": "quote_block"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

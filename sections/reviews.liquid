@@ -30,11 +30,11 @@
         <div class="flex flex-col items-center justify-center p-10 lg:w-1/3">
           <p class="text-text-olive-deep text-6xl font-black leading-tight">{{ section.settings.average_rating }}</p>
           <div class="flex gap-1 my-3">
-            {% render 'icon', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
-            {% render 'icon', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
-            {% render 'icon', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
-            {% render 'icon', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
-            {% render 'icon', icon: 'star_half', class: 'text-[var(--sage-dark)] fill' %}
+            {% render 'icon-svg', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
+            {% render 'icon-svg', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
+            {% render 'icon-svg', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
+            {% render 'icon-svg', icon: 'star', class: 'text-[var(--sage-dark)] fill' %}
+            {% render 'icon-svg', icon: 'star_half', class: 'text-[var(--sage-dark)] fill' %}
           </div>
           <p class="text-muted text-base font-medium">{{ section.settings.total_reviews }} reviews</p>
           <p class="text-xs text-[var(--sage-dark)] mt-2 font-bold bg-[var(--sage-dark)]/10 px-3 py-1 rounded-full">{{ section.settings.recommended_text }}</p>
@@ -61,15 +61,15 @@
           <div class="hidden xl:flex flex-col justify-center p-10 w-1/4 bg-sage-pale/30">
             <div class="space-y-4">
               <div class="flex items-center gap-3">
-                {% render 'icon', icon: 'verified', size: 'md' %}
+                {% render 'icon-svg', icon: 'verified' %}
                 <span class="text-sm font-medium">{{ section.settings.benefit_1_text }}</span>
               </div>
               <div class="flex items-center gap-3">
-                {% render 'icon', icon: 'photo_library', size: 'md' %}
+                {% render 'icon-svg', icon: 'photo_library' %}
                 <span class="text-sm font-medium">{{ section.settings.benefit_2_text }}</span>
               </div>
               <div class="flex items-center gap-3">
-                {% render 'icon', icon: 'update', size: 'md' %}
+                {% render 'icon-svg', icon: 'update' %}
                 <span class="text-sm font-medium">{{ section.settings.benefit_3_text }}</span>
               </div>
             </div>

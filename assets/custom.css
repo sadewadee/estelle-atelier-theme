@@ -876,9 +876,9 @@ button {
    ============================================ */
 
 /* ============================================
-   SVG ICON SYSTEM - Shopify Compliant (Dawn pattern)
-   Icons stored in assets/icon-*.svg
-   Usage: {% render 'icon', icon: 'cart', class: 'custom' %}
+   SVG ICON SYSTEM - Shopify Compliant
+   Inline SVG icons using underscore convention
+   Usage: {% render 'icon-svg', icon: 'shopping_bag', class: 'custom' %}
    ============================================ */
 
 .icon {
